@@ -38,11 +38,14 @@
       }
 
       header {
+        position: relative;
         display: grid;
-        grid-template-columns: 1fr auto;
+        grid-template-columns: 1fr;
         gap: 32px;
         align-items: end;
+        min-height: 250px;
         margin-bottom: 32px;
+        overflow: hidden;
       }
 
       .eyebrow {
@@ -70,16 +73,36 @@
         line-height: 1.45;
       }
 
-      .mark {
-        display: grid;
-        width: 108px;
-        height: 108px;
-        place-items: center;
-        border: 2px solid var(--ink);
-        background: var(--surface);
+      .repo-link {
+        display: inline-flex;
+        margin-top: 22px;
         color: var(--magenta);
-        font-size: 64px;
+        font-size: 16px;
+        font-weight: 800;
+        text-decoration: none;
+      }
+
+      .repo-link:hover {
+        text-decoration: underline;
+      }
+
+      .mark {
+        position: absolute;
+        z-index: 0;
+        top: -86px;
+        right: clamp(10px, 7vw, 90px);
+        color: var(--magenta);
+        font-size: clamp(210px, 24vw, 390px);
         font-weight: 900;
+        line-height: 0.74;
+        letter-spacing: -0.06em;
+        opacity: 0.12;
+        pointer-events: none;
+      }
+
+      header > div:first-child {
+        position: relative;
+        z-index: 1;
       }
 
       .grid {
@@ -154,9 +177,10 @@
         }
 
         .mark {
-          width: 76px;
-          height: 76px;
-          font-size: 46px;
+          top: -48px;
+          right: 6px;
+          font-size: 190px;
+          opacity: 0.1;
         }
       }
     </style>
@@ -167,10 +191,7 @@
         <div>
           <p class="eyebrow">BetterCode GenAI Summit 2026</p>
           <h1>Talk decks and migration demo evidence</h1>
-          <p class="lead">
-            Static single-page HTML artifacts for the conference talks, plus a
-            compact overview of the generated eShop Catalog migration run.
-          </p>
+          <a class="repo-link" href="https://github.com/telekom/better-code">GitHub</a>
         </div>
         <div class="mark" aria-hidden="true">T</div>
       </header>
@@ -225,9 +246,6 @@
         </a>
       </section>
 
-      <footer>
-        No build step required. GitHub Pages can serve these HTML files directly.
-      </footer>
     </main>
   </body>
 </html>

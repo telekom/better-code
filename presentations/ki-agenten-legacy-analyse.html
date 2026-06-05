@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en" data-theme="light">
   <head>
     <meta charset="utf-8" />
@@ -471,6 +471,160 @@
         margin-top: 18px;
         font-size: clamp(26px, 2.4vw, 34px);
         line-height: 1.05;
+      }
+
+
+      .compact-compare {
+        margin-top: 34px;
+      }
+
+      .demo-shot-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+        width: min(1180px, 100%);
+        margin-top: 34px;
+      }
+
+      .demo-shot-card {
+        display: flex;
+        flex-direction: column;
+        min-height: 278px;
+        padding: 18px;
+        border: 1px solid var(--line-strong);
+        background: var(--surface);
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .demo-shot-card h3 {
+        margin-top: 18px;
+        font-size: clamp(22px, 2vw, 28px);
+      }
+
+      .demo-shot-card p {
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.36;
+      }
+
+      .shot-preview {
+        display: grid;
+        place-items: center;
+        aspect-ratio: 16 / 9;
+        border: 1px solid var(--line);
+        background:
+          linear-gradient(135deg, var(--magenta-soft), transparent 68%),
+          repeating-linear-gradient(90deg, color-mix(in srgb, var(--ink) 8%, transparent) 0 1px, transparent 1px 18px),
+          var(--surface-2);
+        color: var(--magenta);
+        font-family: var(--mono);
+        font-size: 24px;
+        font-weight: 700;
+      }
+
+
+      .demo-image-slide {
+        align-items: center;
+      }
+
+      .demo-image-layout {
+        width: min(1180px, 100%);
+        margin-top: 28px;
+      }
+
+      .demo-image-link {
+        display: block;
+        border: 1px solid var(--line-strong);
+        background: var(--surface);
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .demo-image-link img {
+        display: block;
+        width: 100%;
+        max-height: 58vh;
+        object-fit: contain;
+        background: var(--surface-2);
+      }
+
+      .demo-image-caption {
+        display: flex;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 14px 18px;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.35;
+      }
+
+      .demo-image-caption strong {
+        color: var(--ink);
+      }
+
+      .closing-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(360px, 430px);
+        gap: 54px;
+        align-items: start;
+        width: min(1280px, 100%);
+        margin-top: 36px;
+      }
+
+      .compact-learning {
+        margin-top: 0;
+      }
+
+      .qr-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+        justify-items: stretch;
+      }
+
+      .qr-card {
+        display: grid;
+        gap: 14px;
+        justify-items: center;
+        padding: 22px;
+        border: 1px solid var(--line-strong);
+        background: var(--surface);
+        color: var(--ink);
+        text-decoration: none;
+        font-family: var(--mono);
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .qr-card.repo-link {
+        border: 0;
+        background: transparent;
+        padding: 0;
+        justify-items: center;
+        text-transform: none;
+      }
+
+      .qr-card img {
+        width: min(330px, 100%);
+        height: auto;
+        image-rendering: pixelated;
+      }
+
+      .qr-card small {
+        color: var(--muted);
+        font-family: var(--sans);
+        font-size: 17px;
+        font-weight: 700;
+        letter-spacing: 0;
+        line-height: 1.3;
+        text-align: center;
+        text-transform: none;
+        overflow-wrap: anywhere;
       }
 
       .bottom-note {
@@ -2033,10 +2187,10 @@
     </div>
 
     <div class="progress" id="progress"></div>
-    <div class="slide-counter" id="counter">01 / 43</div>
+    <div class="slide-counter" id="counter">01 / 25</div>
 
     <main class="deck" id="deck">
-      <section class="slide active" data-slide="0">
+<section class="slide active" data-slide="0">
         <div class="big-t">T</div>
         <div class="ambient" aria-hidden="true">
           <div class="ring" style="--x: 78%; --y: 26%; --s: 360px"></div>
@@ -2064,7 +2218,7 @@
         <div class="grid-3">
           <article class="card fragment"><span class="num">01</span><h3 data-i18n="s02.c1.h">Reverse Engineering</h3><p data-i18n="s02.c1.p">Recover architecture, behavior, risks, and owners.</p></article>
           <article class="card fragment"><span class="num">02</span><h3 data-i18n="s02.c2.h">Forward Engineering</h3><p data-i18n="s02.c2.p">Derive target design, tests, and migration seams.</p></article>
-          <article class="card fragment"><span class="num">03</span><h3 data-i18n="s02.c3.h">Our deep dive</h3><p data-i18n="s02.c3.p">Claude Code + MCP + Skills + Subagents.</p></article>
+          <article class="card fragment"><span class="num">03</span><h3 data-i18n="s02.c3.h">What you can copy</h3><p data-i18n="s02.c3.p">Pattern matrix, evidence contract, review gate.</p></article>
         </div>
         <aside class="notes">
           Methodology and frame are set; now we show how the technical agent
@@ -2074,7 +2228,7 @@
 
 <section class="slide" data-slide="2">
         <p class="kicker" data-i18n="s03.kicker">Our focus</p>
-        <h2 data-i18n="s03.h2">Not rewrite magic<br /><em>Evidence pipeline</em></h2>
+        <h2 data-i18n="s03.h2">No dump and rewrite<br /><em>evidence pipeline</em></h2>
         <p class="lead" data-i18n="s03.sub">
           The model reasons. The harness controls context, tools, artifacts,
           and gates.
@@ -2101,40 +2255,21 @@
       </section>
 
 <section class="slide" data-slide="3">
-        <p class="kicker" data-i18n="s05.kicker">Real legacy app before code</p>
-        <h2 data-i18n="s05.h2">CatalogService:<br />legacy <em>data-access core</em></h2>
-        <p class="lead" data-i18n="s05.sub">
-          Catalog management in one place: EF6 queries, paging, HiLo keys,
-          image blobs, a mock/SQL swap, and .NET Framework coupling.
+        <p class="kicker" data-i18n="s06.kicker">Context strategy</p>
+        <h2 data-i18n="s06.h2">Do not dump everything<br /><em>build the right context</em></h2>
+        <p class="lead" data-i18n="s06.sub">
+          Better agents are not fed more material up front. They get the right
+          material at the decision point.
         </p>
-        <div class="domain-tangle">
-          <article class="tangle-node core"><span class="tag">Core</span><h3>CatalogService.cs</h3><p data-i18n="s05.core.p">One service owns every catalog read and write, plus its persistence details.</p></article>
-          <article class="tangle-node"><span class="tag" data-i18n="s05.n1.tag">Persistence</span><h3>EF6 DbContext</h3><p data-i18n="s05.n1.p">Eager .Include() loads, SaveChanges, lazy-loading traps.</p></article>
-          <article class="tangle-node"><span class="tag" data-i18n="s05.n2.tag">Keys</span><h3>HiLo generator</h3><p data-i18n="s05.n2.p">App-side primary keys via custom SQL sequences.</p></article>
-          <article class="tangle-node"><span class="tag" data-i18n="s05.n3.tag">Wiring</span><h3>mock vs SQL</h3><p data-i18n="s05.n3.p">Service implementation chosen by config and a DI module.</p></article>
-          <article class="tangle-node"><span class="tag" data-i18n="s05.n4.tag">Framework</span><h3>System.Web MVC</h3><p data-i18n="s05.n4.p">web.config, Global.asax, bundling, IIS coupling.</p></article>
+        <div class="grid-3">
+          <article class="card fragment"><span class="num">01</span><h3 data-i18n="s06.i1.h">Select</h3><p data-i18n="s06.i1.p">Load only the files, tools, skills, and references needed for the current decision.</p></article>
+          <article class="card fragment"><span class="num">02</span><h3 data-i18n="s06.i2.h">Structure</h3><p data-i18n="s06.i2.p">Turn noisy exploration into contracts, artifacts, and open questions.</p></article>
+          <article class="card fragment"><span class="num">03</span><h3 data-i18n="s06.i3.h">Review</h3><p data-i18n="s06.i3.p">Make evidence inspectable so engineers can challenge assumptions before rollout.</p></article>
         </div>
-        <aside class="notes">
-          This is Microsoft's eShopModernizing sample: a real ASP.NET MVC
-          .NET Framework app, not a toy. The tangle is data access, key
-          generation, framework coupling, and config-driven service wiring.
-        </aside>
+        <p class="bottom-note" data-i18n="s06.note">This is the short version. The routing trade-off comes back in depth.</p>
       </section>
 
 <section class="slide" data-slide="4">
-        <p class="kicker" data-i18n="s06.kicker">What the agent must understand</p>
-        <h2 data-i18n="s06.h2">One catalog service needs<br /><em>many evidence layers</em></h2>
-        <div class="context-sources">
-          <article class="source-item fragment"><span>01</span><div><h3 data-i18n="s06.i1.h">Source code</h3><p data-i18n="s06.i1.p">Control flow, data structures, exception paths, dead code.</p></div></article>
-          <article class="source-item fragment"><span>02</span><div><h3 data-i18n="s06.i2.h">Tests</h3><p data-i18n="s06.i2.p">Existing behavior, gaps, brittle fixtures, missing edge cases.</p></div></article>
-          <article class="source-item fragment"><span>03</span><div><h3 data-i18n="s06.i3.h">Architecture</h3><p data-i18n="s06.i3.p">Boundaries, coupling, ownership, deployment topology.</p></div></article>
-          <article class="source-item fragment"><span>04</span><div><h3 data-i18n="s06.i4.h">Runtime</h3><p data-i18n="s06.i4.p">Logs, incidents, feature flags, batch windows, downstream contracts.</p></div></article>
-          <article class="source-item fragment"><span>05</span><div><h3 data-i18n="s06.i5.h">Domain rules</h3><p data-i18n="s06.i5.p">Validation rules, required fields, image/SKU constraints, catalog invariants.</p></div></article>
-          <article class="source-item fragment"><span>06</span><div><h3 data-i18n="s06.i6.h">People context</h3><p data-i18n="s06.i6.p">Who can approve changes, what cannot break, where knowledge lives.</p></div></article>
-        </div>
-      </section>
-
-<section class="slide" data-slide="5">
         <p class="kicker" data-i18n="s07a.kicker">Audience reality check</p>
         <h2 data-i18n="s07a.h2">Why sessions<br /><em>get worse</em></h2>
         <p class="lead" data-i18n="s07a.sub">
@@ -2154,7 +2289,7 @@
         </aside>
       </section>
 
-<section class="slide" data-slide="6">
+<section class="slide" data-slide="5">
         <p class="kicker" data-i18n="s07.kicker">Context mechanics</p>
         <h2 data-i18n="s07.h2">The <em>Context Window</em><br />keeps growing</h2>
         <p class="lead" data-i18n="s07.sub">
@@ -2192,7 +2327,7 @@
         </aside>
       </section>
 
-<section class="slide" data-slide="7">
+<section class="slide" data-slide="6">
         <p class="kicker" data-i18n="s12.kicker">Core trade-off</p>
         <h2 data-i18n="s12.h2">Load everything?<br /><em>Or route on demand?</em></h2>
         <div class="split">
@@ -2217,7 +2352,7 @@
         <aside class="notes">Bridge from context problem to harness design: dynamic context is useful only when outputs are explicit and reviewable.</aside>
       </section>
 
-<section class="slide" data-slide="8">
+<section class="slide" data-slide="7">
         <p class="kicker" data-i18n="s14.kicker">Target architecture</p>
         <h2 data-i18n="s14.h2">Legacy code in<br /><em>decision artifacts</em></h2>
         <div class="phase-band">
@@ -2228,7 +2363,7 @@
         </div>
       </section>
 
-<section class="slide" data-slide="9">
+<section class="slide" data-slide="8">
         <p class="kicker" data-i18n="s15b.kicker">Pattern selection</p>
         <h2 data-i18n="s15b.h2">Which pattern<br /><em>for which job?</em></h2>
         <div class="selection-matrix">
@@ -2237,82 +2372,56 @@
           <div class="matrix-cell head" data-i18n="s15b.h.return">Return</div>
           <div class="matrix-cell" data-i18n="s15b.r1.need">Deterministic capability</div>
           <div class="matrix-cell"><strong>MCP Tool / CLI</strong></div>
-          <div class="matrix-cell" data-i18n="s15b.r1.return">Compact tool result</div>
+          <div class="matrix-cell" data-i18n="s15b.r1.return">Graphify dependency slice</div>
           <div class="matrix-cell" data-i18n="s15b.r2.need">Reusable analysis method</div>
           <div class="matrix-cell"><strong>Skill</strong></div>
-          <div class="matrix-cell" data-i18n="s15b.r2.return">Checklist + output contract</div>
+          <div class="matrix-cell" data-i18n="s15b.r2.return">Catalog risk checklist</div>
           <div class="matrix-cell" data-i18n="s15b.r3.need">Noisy repo exploration</div>
           <div class="matrix-cell"><strong>Subagent</strong></div>
-          <div class="matrix-cell" data-i18n="s15b.r3.return">Evidence Contract</div>
+          <div class="matrix-cell" data-i18n="s15b.r3.return">Referenced evidence contract</div>
           <div class="matrix-cell" data-i18n="s15b.r4.need">Risky action</div>
           <div class="matrix-cell"><strong>Hook / Gate</strong></div>
-          <div class="matrix-cell" data-i18n="s15b.r4.return">Pass/fail + owner review</div>
+          <div class="matrix-cell" data-i18n="s15b.r4.return">CI result + owner review</div>
           <div class="matrix-cell" data-i18n="s15b.r5.need">Final synthesis</div>
           <div class="matrix-cell"><strong>Orchestrator</strong></div>
-          <div class="matrix-cell" data-i18n="s15b.r5.return">Migration decision</div>
+          <div class="matrix-cell" data-i18n="s15b.r5.return">Strangler/rewrite decision</div>
         </div>
+      </section>
+
+<section class="slide" data-slide="9">
+        <p class="kicker" data-i18n="s17.kicker">MCP Gateway</p>
+        <h2 data-i18n="s17.h2">Gateway is governance<br /><em>not context magic</em></h2>
+        <div class="compare">
+          <article class="pane">
+            <h3 data-i18n="s17.before">Wrong expectation</h3>
+            <pre>enable many servers
+reload whole session context
+call it context optimization
+hope the model sorts it out</pre>
+          </article>
+          <article class="pane">
+            <h3 data-i18n="s17.after">Governance role</h3>
+            <pre>central tool catalog
+application-level access
+user and data policy
+auditable tool usage</pre>
+          </article>
+        </div>
+        <p class="bottom-note" data-i18n="s17.note">Gateway config decides which users may access which applications, tools, and evidence sources.</p>
       </section>
 
 <section class="slide" data-slide="10">
-        <p class="kicker" data-i18n="s17.kicker">MCP Gateway</p>
-        <h2 data-i18n="s17.h2">Gateway is governance<br /><em>not magic context</em></h2>
-        <div class="compare">
-          <article class="pane">
-            <h3 data-i18n="s17.before">Bad use</h3>
-            <pre>turn on catalog
-load many MCP servers
-reload whole session context
-call it context optimization</pre>
-          </article>
-          <article class="pane">
-            <h3 data-i18n="s17.after">Good use</h3>
-            <pre>central tool catalog
-container isolation
-security policy
-auditable tool access</pre>
-          </article>
-        </div>
-        <p class="bottom-note" data-i18n="s17.note">Modern harnesses already do dynamic loading. Gateway is valuable when control, isolation and governance matter.</p>
-      </section>
-
-<section class="slide" data-slide="11">
-        <p class="kicker" data-i18n="s18.kicker">Skills</p>
-        <h2 data-i18n="s18.h2">Skills load knowledge<br /><em>just in time</em></h2>
-        <p class="lead" data-i18n="s18.sub">
-          Load method knowledge only when the task matches.
-        </p>
-        <div class="pyramid">
-          <article class="tier fragment" style="--w: 42%">
-            <span class="tag" data-i18n="s18.l1">Level 1 - always loaded</span>
-            <h3>Metadata <em>~50 tokens</em></h3>
-            <p data-i18n="s18.l1p">Agent knows what exists.</p>
-          </article>
-          <article class="tier fragment" style="--w: 62%">
-            <span class="tag" data-i18n="s18.l2">Level 2 - on relevance</span>
-            <h3>SKILL.md <em>~500-2000 tokens</em></h3>
-            <p data-i18n="s18.l2p">Agent understands the method.</p>
-          </article>
-          <article class="tier fragment" style="--w: 82%">
-            <span class="tag" data-i18n="s18.l3">Level 3 - on demand</span>
-            <h3 data-i18n="s18.files">Linked files &amp; references</h3>
-            <p data-i18n="s18.l3p">Agent has the exact material it needs.</p>
-          </article>
-        </div>
-        <p class="bottom-note" data-i18n="s18.note">Capability stays available; instructions stay out of the main window.</p>
-      </section>
-
-<section class="slide" data-slide="12">
         <p class="kicker" data-i18n="s20.kicker">Subagents</p>
         <h2 data-i18n="s20.h2">Subagents create<br />fresh <em>Context Windows</em></h2>
         <div class="window-map">
           <article class="window-frame main"><span class="tag">Main</span><h3 data-i18n="s20.main.h">Orchestrator</h3><p data-i18n="s20.main.p">Keeps interaction, task graph, and synthesis together.</p></article>
           <div class="map-arrow">-&gt;</div>
           <article class="window-frame"><span class="tag">Specialists</span><h3 data-i18n="s20.spec.h">Fresh windows</h3><div class="mini-agent">architecture.extract()</div><div class="mini-agent">dependency.map()</div><div class="mini-agent">test_gap.scan()</div><div class="mini-agent">risk.score()</div></article>
-          <article class="window-frame"><span class="tag">Return</span><h3 data-i18n="s20.return.h">Evidence contract</h3><p data-i18n="s20.return.p">Findings, references, confidence, artifacts.</p></article>
+          <article class="window-frame"><span class="tag">Return</span><h3 data-i18n="s20.return.h">Evidence contract</h3><p data-i18n="s20.return.p">Findings, references, confidence, gaps, artifacts.</p></article>
         </div>
       </section>
 
-<section class="slide" data-slide="13">
+<section class="slide" data-slide="11">
         <p class="kicker" data-i18n="s21.kicker">Subagent trade-offs</p>
         <h2 data-i18n="s21.h2">Delegation buys focus<br />but risks <em>summary loss</em></h2>
         <div class="split">
@@ -2323,60 +2432,62 @@ auditable tool access</pre>
           <div class="divider"></div>
           <article>
             <span class="tag" data-i18n="s21.right.tag">Downsides</span>
-            <ul class="feature-list"><li data-i18n="s21.right.1">Evidence can disappear in summaries.</li><li data-i18n="s21.right.2">Specialists cannot clarify with users.</li><li data-i18n="s21.right.3">Needs strict output contracts.</li></ul>
+            <ul class="feature-list"><li data-i18n="s21.right.1">Evidence can disappear in summaries.</li><li data-i18n="s21.right.2">Specialists cannot clarify with users.</li><li data-i18n="s21.right.3">Repeatable tasks deserve reusable skills.</li></ul>
           </article>
+        </div>
+        <p class="bottom-note" data-i18n="s21.note">Transition: when the method repeats, package the method as a skill.</p>
+      </section>
+
+<section class="slide" data-slide="12">
+        <p class="kicker" data-i18n="s18.kicker">Skills</p>
+        <h2 data-i18n="s18.h2">Skills load knowledge<br /><em>just in time</em></h2>
+        <p class="lead" data-i18n="s18.sub">
+          Repeatable specialist work becomes reusable method knowledge.
+        </p>
+        <div class="pyramid">
+          <article class="tier fragment" style="--w: 42%">
+            <span class="tag" data-i18n="s18.l1">Configured once</span>
+            <h3>Metadata <em>~50 tokens</em></h3>
+            <p data-i18n="s18.l1p">Agent knows which reusable methods exist.</p>
+          </article>
+          <article class="tier fragment" style="--w: 62%">
+            <span class="tag" data-i18n="s18.l2">Called dynamically</span>
+            <h3>SKILL.md <em>on relevance</em></h3>
+            <p data-i18n="s18.l2p">Like a command: load the procedure when the task matches.</p>
+          </article>
+          <article class="tier fragment" style="--w: 82%">
+            <span class="tag" data-i18n="s18.l3">Own context</span>
+            <h3 data-i18n="s18.files">Domain knowledge + templates</h3>
+            <p data-i18n="s18.l3p">References and templates stay out of main context until needed.</p>
+          </article>
+        </div>
+        <p class="bottom-note" data-i18n="s18.note">Many tasks that used to need a specialist subagent can become a reusable skill.</p>
+      </section>
+
+<section class="slide" data-slide="13">
+        <p class="kicker" data-i18n="s22.kicker">Artifact-first review</p>
+        <h2 data-i18n="s22.h2">Artifacts<br />beat optimism</h2>
+        <p class="lead" data-i18n="s22.sub">Artifacts let different engineers inspect different parts of the migration argument.</p>
+        <div class="grid-4">
+          <article class="card fragment"><span class="num">01</span><h3 data-i18n="s22.c1.h">Old codebase</h3><p data-i18n="s22.c1.p">Referenced source, tests, configuration, and runtime assumptions.</p></article>
+          <article class="card fragment"><span class="num">02</span><h3 data-i18n="s22.c2.h">Old architecture map</h3><p data-i18n="s22.c2.p">Current boundaries, dependencies, and operational coupling.</p></article>
+          <article class="card fragment"><span class="num">03</span><h3 data-i18n="s22.c3.h">Target architecture map</h3><p data-i18n="s22.c3.p">Proposed seams, ownership, rollback, and integration contracts.</p></article>
+          <article class="card fragment"><span class="num">04</span><h3 data-i18n="s22.c4.h">Findings &amp; report</h3><p data-i18n="s22.c4.p">Evidence, assumptions, confidence, and post-migration test gaps.</p></article>
         </div>
       </section>
 
 <section class="slide" data-slide="14">
-        <p class="kicker" data-i18n="s22.kicker">Artifact-first subagents</p>
-        <h2 data-i18n="s22.h2">Typed artifacts<br />beat optimism</h2>
-        <div class="grid-4">
-          <article class="card fragment"><span class="num">01</span><h3 data-i18n="s22.c1.h">Architecture Map</h3><p data-i18n="s22.c1.p">Boundaries, dependencies, transaction edges.</p></article>
-          <article class="card fragment"><span class="num">02</span><h3 data-i18n="s22.c2.h">Findings Log</h3><p data-i18n="s22.c2.p">Evidence, source, assumption, confidence.</p></article>
-          <article class="card fragment"><span class="num">03</span><h3 data-i18n="s22.c3.h">Risk Table</h3><p data-i18n="s22.c3.p">Severity, impact, mitigation, owner.</p></article>
-          <article class="card fragment"><span class="num">04</span><h3 data-i18n="s22.c4.h">Test-Gap Report</h3><p data-i18n="s22.c4.p">Missing behavior checks before extraction.</p></article>
+        <p class="kicker" data-i18n="s23.kicker">Quality Hooks</p>
+        <h2 data-i18n="s23.h2">Quality Hooks<br /><em>turn checks into controls</em></h2>
+        <div class="lanes">
+          <article class="lane fragment"><span>ctx</span><h3 data-i18n="s23.l1.h">Inject / enforce context</h3><p data-i18n="s23.l1.p">Load required project state, architecture rules, or migration policy before risky steps.</p></article>
+          <article class="lane fragment"><span>skill</span><h3 data-i18n="s23.l2.h">Force the right skill</h3><p data-i18n="s23.l2.p">Require validation, architecture, or discovery skills for matching tasks.</p></article>
+          <article class="lane fragment"><span>read</span><h3 data-i18n="s23.l3.h">Guard file reads</h3><p data-i18n="s23.l3.p">Detect secrets and sensitive files before they enter the agent context.</p></article>
         </div>
+        <p class="bottom-note" data-i18n="s23.note">Instructions are not controls. Hooks make the harness enforceable.</p>
       </section>
 
 <section class="slide" data-slide="15">
-        <p class="kicker" data-i18n="s23.kicker">Hooks &amp; gates</p>
-        <h2 data-i18n="s23.h2">Risky actions need<br /><em>review gates</em></h2>
-        <div class="lanes">
-          <article class="lane fragment"><span>pre</span><h3 data-i18n="s23.l1.h">Before edits</h3><p data-i18n="s23.l1.p">Baseline tests, dependency scan, rollback path.</p></article>
-          <article class="lane fragment"><span>post</span><h3 data-i18n="s23.l2.h">After generation</h3><p data-i18n="s23.l2.p">Deterministic checks plus behavior diff.</p></article>
-          <article class="lane fragment"><span>gate</span><h3 data-i18n="s23.l3.h">Before decision</h3><p data-i18n="s23.l3.p">Artifacts, test evidence, security review, owner approval.</p></article>
-        </div>
-        <p class="bottom-note" data-i18n="s23.note">Instructions are not controls. Checks are.</p>
-      </section>
-
-<section class="slide" data-slide="16">
-        <p class="kicker" data-i18n="s25.kicker">Demo comparison</p>
-        <h2 data-i18n="s25.h2">Same legacy code<br /><em>two evidence paths</em></h2>
-        <p class="lead" data-i18n="s25.sub">
-          The code stays the same. What changes is how evidence is gathered,
-          structured, and verified.
-        </p>
-        <div class="compare">
-          <article class="pane fragment">
-            <h3>Mode A: broad prompt</h3>
-            <pre><span class="keyword">input</span>: source files + human prompt
-<span class="keyword">process</span>: linear reading, ad-hoc grep, summary
-<span class="keyword">outcome</span>: plausible migration advice
-<span class="keyword">risk</span>: gaps, assumptions, weak traceability</pre>
-          </article>
-          <article class="pane fragment">
-            <h3>Mode B: one-modernizer pipeline</h3>
-            <pre><span class="keyword">input</span>: same eShop Catalog candidate
-<span class="keyword">process</span>: plugin skills + agents + hooks + graphifyy
-<span class="keyword">outcome</span>: graph, spec, ADRs, code, validation report
-<span class="keyword">evidence</span>: 17 rules, 5 flows, 100% spec coverage, CI build</pre>
-          </article>
-        </div>
-        <p class="bottom-note" data-i18n="s25.note">We compare migration judgment, not prompt polish.</p>
-      </section>
-
-<section class="slide" data-slide="17">
         <p class="kicker" data-i18n="s27.kicker">Artifact 1</p>
         <h2 data-i18n="s27.h2">Architecture Map<br /><em>from evidence</em></h2>
         <div class="phase-band">
@@ -2387,71 +2498,29 @@ auditable tool access</pre>
         </div>
       </section>
 
-<section class="slide" data-slide="18">
-        <p class="kicker" data-i18n="s28.kicker">Artifact 2</p>
-        <h2 data-i18n="s28.h2">Risk Table<br />before migration</h2>
-        <div class="risk-evidence-table">
-          <div class="matrix-cell head" data-i18n="s28.h.signal">Signal</div>
-          <div class="matrix-cell head" data-i18n="s28.h.level">Level</div>
-          <div class="matrix-cell head" data-i18n="s28.h.evidence">Evidence</div>
-          <div class="matrix-cell" data-i18n="s28.r1.signal">Coupling</div>
-          <div class="matrix-cell"><strong>high</strong></div>
-          <div class="matrix-cell" data-i18n="s28.r1.evidence">Catalog writes touch EF6, HiLo sequences, image storage and DI wiring.</div>
-          <div class="matrix-cell" data-i18n="s28.r2.signal">Coverage</div>
-          <div class="matrix-cell"><strong>low</strong></div>
-          <div class="matrix-cell" data-i18n="s28.r2.evidence">No local characterization tests cover CatalogService, paging, or persistence behavior.</div>
-          <div class="matrix-cell" data-i18n="s28.r3.signal">Runtime criticality</div>
-          <div class="matrix-cell"><strong>critical</strong></div>
-          <div class="matrix-cell" data-i18n="s28.r3.evidence">Failure breaks catalog reads, writes, and admin product maintenance.</div>
-          <div class="matrix-cell" data-i18n="s28.r4.signal">Owner clarity</div>
-          <div class="matrix-cell"><strong>unclear</strong></div>
-          <div class="matrix-cell" data-i18n="s28.r4.evidence">Catalog and platform teams share DI/config wiring.</div>
-        </div>
-      </section>
-
-<section class="slide" data-slide="19">
-        <p class="kicker" data-i18n="s29.kicker">Artifact 3</p>
-        <h2 data-i18n="s29.h2">Test-Gap Report<br />before extraction</h2>
-        <div class="lanes">
-          <article class="lane fragment"><span>Gap</span><h3 data-i18n="s29.l1.h">Migration gaps</h3><p data-i18n="s29.l1.p">Mock/SQL divergence, HiLo race, missing pagination boundaries.</p></article>
-          <article class="lane fragment"><span>Gap</span><h3 data-i18n="s29.l2.h">Catalog invariants</h3><p data-i18n="s29.l2.p">Required-field validation, brand/type integrity, image-size limits.</p></article>
-          <article class="lane fragment"><span>Gate</span><h3 data-i18n="s29.l3.h">Before extraction</h3><p data-i18n="s29.l3.p">Add characterization tests for every invariant.</p></article>
-        </div>
-      </section>
-
-<section class="slide" data-slide="20">
-        <p class="kicker" data-i18n="s30.kicker">Migration decision</p>
-        <h2 data-i18n="s30.h2">Migration path follows<br /><em>risk evidence</em></h2>
-        <p class="lead" data-i18n="s30.sub">Compare coupling, coverage, runtime risk, ownership, and rollback.</p>
-        <div class="lanes">
-          <article class="lane fragment"><span>01</span><h3>Strangler Fig</h3><p data-i18n="s30.l1.p">Route slices when contracts and rollback are clear.</p></article>
-          <article class="lane fragment"><span>02</span><h3 data-i18n="s30.l2.h">Targeted Rewrite</h3><p data-i18n="s30.l2.p">Rewrite only with explicit invariants and gaps.</p></article>
-          <article class="lane fragment"><span>03</span><h3 data-i18n="s30.l3.h">Automated Refactor</h3><p data-i18n="s30.l3.p">Use where static analysis and tests verify behavior.</p></article>
-        </div>
-      </section>
-
-<section class="slide" data-slide="21">
+<section class="slide" data-slide="16">
         <p class="kicker" data-i18n="s31.kicker">Verification</p>
         <h2 data-i18n="s31.h2">Trust comes from<br /><em>verification layers</em></h2>
         <div class="lanes">
-          <article class="lane fragment"><span>01</span><h3 data-i18n="s31.l1.h">Deterministic checks</h3><p data-i18n="s31.l1.p">Unit, integration, characterization tests.</p></article>
+          <article class="lane fragment"><span>01</span><h3 data-i18n="s31.l1.h">Deterministic checks</h3><p data-i18n="s31.l1.p">Build proven, spec traceability complete, test job still needs follow-up.</p></article>
           <article class="lane fragment"><span>02</span><h3 data-i18n="s31.l2.h">LLM review</h3><p data-i18n="s31.l2.p">Flags semantic deltas; never replaces tests.</p></article>
           <article class="lane fragment"><span>03</span><h3 data-i18n="s31.l3.h">Owner decision</h3><p data-i18n="s31.l3.p">Humans accept risk and approve rollout.</p></article>
         </div>
       </section>
 
-<section class="slide inverse" data-slide="22">
+<section class="slide inverse" data-slide="17">
         <p class="kicker" data-i18n="s32.kicker">Limits and pitfalls</p>
-        <h2 data-i18n="s32.h2">Where the harness<br /><em>still lies</em></h2>
+        <h2 data-i18n="s32.h2">LLMs are always<br /><em>dynamic</em></h2>
+        <p class="lead" data-i18n="s32.sub">The harness reduces risk. It does not make model output deterministic truth.</p>
         <div class="lanes">
-          <article class="lane fragment"><span>01</span><h3 data-i18n="s32.r1.h">Clean artifact</h3><p data-i18n="s32.r1.p">Weak evidence can hide behind a polished table.</p></article>
+          <article class="lane fragment"><span>01</span><h3 data-i18n="s32.r1.h">Polished artifact</h3><p data-i18n="s32.r1.p">Weak evidence can hide behind a clean table.</p></article>
           <article class="lane fragment"><span>02</span><h3 data-i18n="s32.r2.h">Confident summary</h3><p data-i18n="s32.r2.p">Minority findings disappear when the return contract is vague.</p></article>
           <article class="lane fragment"><span>03</span><h3 data-i18n="s32.r3.h">Passing syntax</h3><p data-i18n="s32.r3.p">Business invariants can still be broken.</p></article>
         </div>
         <p class="bottom-note" data-i18n="s32.note">The fix is not more confidence. The fix is stronger evidence and explicit review.</p>
       </section>
 
-<section class="slide" data-slide="23">
+<section class="slide" data-slide="18">
         <p class="kicker" data-i18n="s33.kicker">Design principles &amp; learnings</p>
         <h2 data-i18n="s33.h2">Build the<br /><em>analysis harness</em></h2>
         <div class="learning-grid">
@@ -2464,7 +2533,55 @@ auditable tool access</pre>
         <p class="bottom-note" data-i18n="s33.note">Invest in harness patterns, not bigger prompts.</p>
       </section>
 
-<section class="slide inverse" data-slide="24">
+<section class="slide demo-image-slide" data-slide="19">
+        <p class="kicker" data-i18n="s36a.kicker">Demo evidence</p>
+        <h2 data-i18n="s36a.h2">Demo run<br /><em>overview</em></h2>
+        <p class="lead" data-i18n="s36a.sub">Start with the run summary: what executed, what passed, and which artifacts exist.</p>
+        <div class="demo-image-layout">
+          <a class="demo-image-link" href="migration-run-overview.html">
+            <img src="../tmp/1-overview.png" alt="Demo run overview screenshot" />
+            <div class="demo-image-caption"><strong data-i18n="s36a.cta">Open run overview</strong><span data-i18n="s36a.note">Pipeline status and generated evidence.</span></div>
+          </a>
+        </div>
+      </section>
+
+<section class="slide demo-image-slide" data-slide="20">
+        <p class="kicker" data-i18n="s36b.kicker">Demo evidence</p>
+        <h2 data-i18n="s36b.h2">Pipeline<br /><em>from discovery to validation</em></h2>
+        <p class="lead" data-i18n="s36b.sub">The run is not a single prompt. It is a staged workflow with explicit outputs.</p>
+        <div class="demo-image-layout">
+          <a class="demo-image-link" href="migration-run-overview.html">
+            <img src="../tmp/2-pipeline.png" alt="Pipeline screenshot" />
+            <div class="demo-image-caption"><strong data-i18n="s36b.cta">Open pipeline view</strong><span data-i18n="s36b.note">Discovery, assessment, architecture, implementation, validation.</span></div>
+          </a>
+        </div>
+      </section>
+
+<section class="slide demo-image-slide" data-slide="21">
+        <p class="kicker" data-i18n="s36c.kicker">Demo evidence</p>
+        <h2 data-i18n="s36c.h2">Specs &amp; target<br /><em>before code</em></h2>
+        <p class="lead" data-i18n="s36c.sub">The target shape is captured as artifacts before implementation claims are trusted.</p>
+        <div class="demo-image-layout">
+          <a class="demo-image-link" href="../demo/eShopModernizing/eShopLegacyMVCSolution/.migration/architect/catalog-item-management/blueprint.json">
+            <img src="../tmp/3-specs-target.png" alt="Specs and target screenshot" />
+            <div class="demo-image-caption"><strong data-i18n="s36c.cta">Open target blueprint</strong><span data-i18n="s36c.note">Specs, target design, and migration assumptions.</span></div>
+          </a>
+        </div>
+      </section>
+
+<section class="slide demo-image-slide" data-slide="22">
+        <p class="kicker" data-i18n="s36d.kicker">Demo evidence</p>
+        <h2 data-i18n="s36d.h2">Evidence artifacts<br /><em>not just prose</em></h2>
+        <p class="lead" data-i18n="s36d.sub">The result is inspectable: reports, references, checks, and gaps survive the chat.</p>
+        <div class="demo-image-layout">
+          <a class="demo-image-link" href="../demo/eShopModernizing/eShopLegacyMVCSolution/.migration/validate/catalog-item-management/report.md">
+            <img src="../tmp/3-artifacts.png" alt="Evidence artifacts screenshot" />
+            <div class="demo-image-caption"><strong data-i18n="s36d.cta">Open validation report</strong><span data-i18n="s36d.note">Example artifacts and validation evidence.</span></div>
+          </a>
+        </div>
+      </section>
+
+<section class="slide inverse" data-slide="23">
         <div class="big-t">T</div>
         <p class="kicker" data-i18n="s34.kicker">Live demo</p>
         <h1 data-i18n="s34.h1"><em>Demo</em><br />eShop Catalog</h1>
@@ -2479,6 +2596,23 @@ auditable tool access</pre>
           <div><span>5</span><b data-i18n="s34.s5">Review Gate</b></div>
         </div>
         <div class="badge" data-i18n="s34.badge">Live agent workflow</div>
+      </section>
+
+<section class="slide" data-slide="24">
+        <p class="kicker" data-i18n="s35.kicker">Closing</p>
+        <h2 data-i18n="s35.h2">Fazit</h2>
+        <div class="closing-layout">
+          <div class="learning-grid compact-learning">
+            <article class="learning fragment"><span>01</span><div><h3 data-i18n="s35.l1.h">Dynamic context</h3><p data-i18n="s35.l1.p">Load tools, files, and skills when a decision needs them.</p></div></article>
+            <article class="learning fragment"><span>02</span><div><h3 data-i18n="s35.l2.h">Contracts &amp; artifacts</h3><p data-i18n="s35.l2.p">Every finding returns references, confidence, assumptions, and gaps.</p></div></article>
+            <article class="learning fragment"><span>03</span><div><h3 data-i18n="s35.l3.h">Evidence-based results</h3><p data-i18n="s35.l3.p">Tests, build evidence, security checks, and owner review carry the risk decision.</p></div></article>
+          </div>
+          <div class="qr-row">
+            <a class="qr-card" href="https://telekom.github.io/better-code/"><img alt="QR code to better-code hub" src="https://api.qrserver.com/v1/create-qr-code/?size=420x420&amp;margin=12&amp;data=https%3A%2F%2Ftelekom.github.io%2Fbetter-code%2F" /></a>
+            <a class="qr-card repo-link" href="https://telekom.github.io/better-code/"><small>telekom.github.io/better-code/</small></a>
+          </div>
+        </div>
+        <p class="bottom-note" data-i18n="s35.note">Context &amp; Harness are Keys to success.</p>
       </section>
     </main>
 
@@ -2495,10 +2629,10 @@ auditable tool access</pre>
           "s02.c1.p": "Architektur, Verhalten, Risiken und Owner rekonstruieren.",
           "s02.c2.h": "Forward Engineering",
           "s02.c2.p": "Zielbild, Tests und Migrationsschnitt ableiten.",
-          "s02.c3.h": "Unser Deep Dive",
-          "s02.c3.p": "Claude Code + MCP + Skills + Subagents.",
+          "s02.c3.h": "Was ihr kopieren könnt",
+          "s02.c3.p": "Pattern Matrix, Evidence Contract, Review Gate.",
           "s03.kicker": "Unser Fokus",
-          "s03.h2": "Keine Rewrite-Magie<br><em>Evidenz-Pipeline</em>",
+          "s03.h2": "Kein Dump und Rewrite<br><em>Evidenz-Pipeline</em>",
           "s03.sub": "Das Modell denkt. Der Harness kontrolliert Context, Tools, Artefakte und Gates.",
           "s03.left.tag": "Was wir vermeiden",
           "s03.left.1": "Repo Dump, Tool Dump, vages Ziel.",
@@ -2521,14 +2655,14 @@ auditable tool access</pre>
           "s05.n3.p": "Service-Implementierung per Config und DI-Modul gewählt.",
           "s05.n4.tag": "Framework",
           "s05.n4.p": "web.config, Global.asax, Bundling, IIS-Kopplung.",
-          "s06.kicker": "Was der Agent verstehen muss",
-          "s06.h2": "Ein Catalog-Service braucht<br><em>viele Evidenzschichten</em>",
-          "s06.i1.h": "Source Code",
-          "s06.i1.p": "Control Flow, Datenstrukturen, Exception-Pfade, Dead Code.",
-          "s06.i2.h": "Tests",
-          "s06.i2.p": "Bestehendes Verhalten, Lücken, brüchige Fixtures, fehlende Edge Cases.",
-          "s06.i3.h": "Architektur",
-          "s06.i3.p": "Grenzen, Kopplung, Ownership, Deployment-Topologie.",
+          "s06.kicker": "Context-Strategie",
+          "s06.h2": "Nicht alles dumpen<br><em>richtigen Context bauen</em>",
+          "s06.i1.h": "Auswählen",
+          "s06.i1.p": "Nur Files, Tools, Skills und Referenzen laden, die die aktuelle Entscheidung braucht.",
+          "s06.i2.h": "Strukturieren",
+          "s06.i2.p": "Laute Exploration in Contracts, Artefakte und offene Fragen überführen.",
+          "s06.i3.h": "Reviewen",
+          "s06.i3.p": "Evidenz prüfbar machen, damit Engineers Annahmen vor Rollout challengen können.",
           "s06.i4.h": "Runtime",
           "s06.i4.p": "Logs, Incidents, Feature Flags, Batch Windows, Downstream Contracts.",
           "s06.i5.h": "Domänen-Regeln",
@@ -2691,15 +2825,15 @@ auditable tool access</pre>
           "s15b.h.use": "Nimm",
           "s15b.h.return": "Gib zurück",
           "s15b.r1.need": "Deterministische Capability",
-          "s15b.r1.return": "Kompaktes Tool Result",
+          "s15b.r1.return": "Graphify Dependency Slice",
           "s15b.r2.need": "Wiederverwendbare Analyse-Methode",
-          "s15b.r2.return": "Checkliste + Output Contract",
+          "s15b.r2.return": "Catalog Risk Checklist",
           "s15b.r3.need": "Laute Repo-Exploration",
-          "s15b.r3.return": "Evidence Contract",
+          "s15b.r3.return": "Referenzierter Evidence Contract",
           "s15b.r4.need": "Riskante Aktion",
-          "s15b.r4.return": "Pass/fail + Owner Review",
+          "s15b.r4.return": "CI Result + Owner Review",
           "s15b.r5.need": "Finale Synthese",
-          "s15b.r5.return": "Migrationsentscheidung",
+          "s15b.r5.return": "Strangler/Rewrite-Entscheidung",
           "s16.kicker": "Orchestrator",
           "s16.h2": "Orchestrator schützt<br>den <em>Main Context</em>",
           "s16.l1.h": "Zerlegen",
@@ -2710,20 +2844,20 @@ auditable tool access</pre>
           "s16.l3.p": "Eine Empfehlung mit Confidence und Lücken.",
           "s17.kicker": "MCP Gateway",
           "s17.h2": "Gateway ist Governance<br><em>nicht Context-Magie</em>",
-          "s17.before": "Schlechter Einsatz",
-          "s17.after": "Guter Einsatz",
-          "s17.note": "Moderne Harnesses laden Tools bereits dynamisch. Gateway lohnt sich, wenn Kontrolle, Isolation und Governance wichtig sind.",
+          "s17.before": "Falsche Erwartung",
+          "s17.after": "Governance-Rolle",
+          "s17.note": "Gateway-Konfiguration entscheidet, welche Nutzer welche Applikationen, Tools und Evidenzquellen nutzen dürfen.",
           "s18.kicker": "Skills",
           "s18.h2": "Skills laden Wissen<br><em>just in time</em>",
-          "s18.sub": "Methodenwissen erst laden, wenn die Aufgabe passt.",
-          "s18.l1": "Level 1 - immer geladen",
-          "s18.l1p": "Agent weiß, was existiert.",
-          "s18.l2": "Level 2 - bei Relevanz",
-          "s18.l2p": "Agent versteht die Methode.",
-          "s18.l3": "Level 3 - bei Bedarf",
-          "s18.files": "Verlinkte Dateien & Referenzen",
-          "s18.l3p": "Agent hat das exakte Material, das er braucht.",
-          "s18.note": "Capability bleibt verfügbar; Instruktionen bleiben aus dem Main Window.",
+          "s18.sub": "Wiederholbare Spezialistenarbeit wird wiederverwendbares Methodenwissen.",
+          "s18.l1": "Einmal konfiguriert",
+          "s18.l1p": "Agent weiß, welche wiederverwendbaren Methoden existieren.",
+          "s18.l2": "Dynamisch aufgerufen",
+          "s18.l2p": "Wie ein Command: Prozedur laden, wenn die Aufgabe passt.",
+          "s18.l3": "Eigener Context",
+          "s18.files": "Domänenwissen + Templates",
+          "s18.l3p": "Referenzen und Templates bleiben bis zum Bedarf aus dem Main Context.",
+          "s18.note": "Viele Aufgaben, die früher einen Spezialisten-Subagent brauchten, können ein wiederverwendbarer Skill werden.",
           "s19.kicker": "Skill-Beispiel",
           "s19.h2": "Ein Skill ist<br><em>ein Migrations-Checkplan</em>",
           "s19.sub": "Der Skill bringt Ablauf, Entscheidungskriterien und erwartete Outputs mit.",
@@ -2733,7 +2867,7 @@ auditable tool access</pre>
           "s20.main.p": "Hält Interaktion, Task Graph und Synthese zusammen.",
           "s20.spec.h": "Frische Fenster",
           "s20.return.h": "Evidenz-Contract",
-          "s20.return.p": "Findings, Referenzen, Confidence, Artefakte.",
+          "s20.return.p": "Findings, Referenzen, Confidence, Lücken, Artefakte.",
           "s21.kicker": "Subagent Trade-offs",
           "s21.h2": "Delegation kauft Fokus<br>mit Risiko <em>Summary Loss</em>",
           "s21.left.tag": "Vorteile",
@@ -2743,7 +2877,7 @@ auditable tool access</pre>
           "s21.right.tag": "Nachteile",
           "s21.right.1": "Evidenz kann in Summaries verschwinden.",
           "s21.right.2": "Spezialisten können nicht klären.",
-          "s21.right.3": "Braucht strikte Output Contracts.",
+          "s21.right.3": "Wiederholbare Aufgaben gehören in Skills.",
           "s21b.kicker": "Subagent Design",
           "s21b.h2": "Collaboration schlägt<br><em>blinde Delegation</em>",
           "s21b.left.h": "Delegation",
@@ -2768,25 +2902,25 @@ auditable tool access</pre>
           "s21d.s2": "Evidenz kommt zurück",
           "s21d.s2p": "Relevante Snippets, Zitate und offene Fragen.",
           "s21d.note": "Der Main Context hält die Entscheidungsstory, nicht jedes rohe Tool Result.",
-          "s22.kicker": "Artifact-first Subagents",
-          "s22.h2": "Typisierte Artefakte<br>schlagen Optimismus",
-          "s22.c1.h": "Architecture Map",
-          "s22.c1.p": "Grenzen, Dependencies, Transaktionskanten.",
-          "s22.c2.h": "Findings Log",
-          "s22.c2.p": "Evidenz, Quelle, Annahme, Confidence.",
-          "s22.c3.h": "Risk Table",
-          "s22.c3.p": "Severity, Impact, Mitigation, Owner.",
-          "s22.c4.h": "Test-Gap Report",
-          "s22.c4.p": "Fehlende Verhaltenschecks vor der Extraction.",
-          "s23.kicker": "Hooks & Gates",
-          "s23.h2": "Riskante Aktionen brauchen<br><em>Review Gates</em>",
-          "s23.l1.h": "Vor Edits",
-          "s23.l1.p": "Baseline Tests, Dependency Scan, Rollback-Pfad.",
-          "s23.l2.h": "Nach Generierung",
-          "s23.l2.p": "Deterministische Checks plus Behavior Diff.",
-          "s23.l3.h": "Vor Entscheidung",
-          "s23.l3.p": "Artefakte, Test-Evidenz, Security Review, Owner Approval.",
-          "s23.note": "Instruktionen sind keine Kontrolle. Checks sind Kontrolle.",
+          "s22.kicker": "Artifact-first Review",
+          "s22.h2": "Artefakte<br>schlagen Optimismus",
+          "s22.c1.h": "Alte Codebase",
+          "s22.c1.p": "Referenzierter Source, Tests, Config und Runtime-Annahmen.",
+          "s22.c2.h": "Alte Architecture Map",
+          "s22.c2.p": "Aktuelle Grenzen, Dependencies und operative Kopplung.",
+          "s22.c3.h": "Target Architecture Map",
+          "s22.c3.p": "Ziel-Schnitt, Ownership, Rollback und Integrations-Contracts.",
+          "s22.c4.h": "Findings & Report",
+          "s22.c4.p": "Evidenz, Annahmen, Confidence und Test-Gaps nach der Migration.",
+          "s23.kicker": "Quality Hooks",
+          "s23.h2": "Quality Hooks<br><em>machen Checks zu Controls</em>",
+          "s23.l1.h": "Context injizieren / erzwingen",
+          "s23.l1.p": "Projektstatus, Architekturregeln oder Migrationspolicy vor riskanten Schritten laden.",
+          "s23.l2.h": "Richtigen Skill erzwingen",
+          "s23.l2.p": "Validation-, Architektur- oder Discovery-Skills für passende Aufgaben verlangen.",
+          "s23.l3.h": "File Reads schützen",
+          "s23.l3.p": "Secrets und sensible Dateien erkennen, bevor sie in den Agent Context gelangen.",
+          "s23.note": "Instruktionen sind keine Kontrolle. Hooks machen den Harness erzwingbar.",
           "s24.h2": "CatalogService als<br><em>Agent Workflow</em>",
           "s25.kicker": "Demo-Vergleich",
           "s25.h2": "Gleicher Legacy-Code<br><em>zwei Evidenzpfade</em>",
@@ -2842,14 +2976,14 @@ auditable tool access</pre>
           "s31.kicker": "Verifikation",
           "s31.h2": "Vertrauen entsteht durch<br><em>Verification Layers</em>",
           "s31.l1.h": "Deterministische Checks",
-          "s31.l1.p": "Unit-, Integrations- und Characterization-Tests.",
+          "s31.l1.p": "Build bewiesen, Spec Traceability vollständig, Test Job braucht noch Follow-up.",
           "s31.l2.h": "LLM Review",
           "s31.l2.p": "Markiert semantische Deltas; ersetzt nie Tests.",
           "s31.l3.h": "Owner-Entscheidung",
           "s31.l3.p": "Menschen akzeptieren Risiko und geben Rollout frei.",
           "s32.kicker": "Grenzen und Fallstricke",
-          "s32.h2": "Wo der Harness<br><em>trotzdem lügt</em>",
-          "s32.r1.h": "Sauberes Artefakt",
+          "s32.h2": "LLMs sind immer<br><em>dynamisch</em>",
+          "s32.r1.h": "Poliertes Artefakt",
           "s32.r1.p": "Schwache Evidenz kann hinter einer polierten Tabelle verschwinden.",
           "s32.r2.h": "Sichere Summary",
           "s32.r2.p": "Minderheitsbefunde verschwinden, wenn der Return Contract vage ist.",
@@ -2877,6 +3011,40 @@ auditable tool access</pre>
           "s33.l5.h": "Menschen besitzen Risiko",
           "s33.l5.p": "Teams genehmigen und betreiben.",
           "s33.note": "Investiert in Harness Patterns, nicht in größere Prompts.",
+          "s06.sub": "Bessere Agents bekommen nicht mehr Material vorab. Sie bekommen das richtige Material am Entscheidungspunkt.",
+          "s06.note": "Das ist die Kurzversion. Der Routing-Trade-off kommt später tiefer.",
+          "s21.note": "Überleitung: Wenn sich die Methode wiederholt, wird sie als Skill paketiert.",
+          "s22.sub": "Artefakte lassen verschiedene Engineers verschiedene Teile der Migrationsargumentation prüfen.",
+          "s32.sub": "Der Harness reduziert Risiko. Er macht Modelloutput nicht zu deterministischer Wahrheit.",
+          "s35.kicker": "Abschluss",
+          "s35.h2": "Fazit",
+          "s35.l1.h": "Dynamic Context",
+          "s35.l1.p": "Tools, Dateien und Skills erst laden, wenn eine Entscheidung sie braucht.",
+          "s35.l2.h": "Contracts & Artefakte",
+          "s35.l2.p": "Jedes Finding liefert Referenzen, Confidence, Annahmen und Lücken.",
+          "s35.l3.h": "Evidence-based Results",
+          "s35.l3.p": "Tests, Build-Evidenz, Security Checks und Owner Review tragen die Risikoentscheidung.",
+          "s35.note": "Context & Harness are Keys to success.",
+          "s36a.kicker": "Demo-Evidenz",
+          "s36a.h2": "Demo Run<br><em>Overview</em>",
+          "s36a.sub": "Start mit der Run-Zusammenfassung: was lief, was bestanden hat und welche Artefakte existieren.",
+          "s36a.cta": "Run Overview öffnen",
+          "s36a.note": "Pipeline-Status und generierte Evidenz.",
+          "s36b.kicker": "Demo-Evidenz",
+          "s36b.h2": "Pipeline<br><em>von Discovery bis Validation</em>",
+          "s36b.sub": "Der Run ist kein einzelner Prompt. Er ist ein gestufter Workflow mit expliziten Outputs.",
+          "s36b.cta": "Pipeline View öffnen",
+          "s36b.note": "Discovery, Assessment, Architektur, Implementierung, Validierung.",
+          "s36c.kicker": "Demo-Evidenz",
+          "s36c.h2": "Specs & Target<br><em>vor Code</em>",
+          "s36c.sub": "Das Zielbild wird als Artefakt festgehalten, bevor Implementierungsclaims Vertrauen bekommen.",
+          "s36c.cta": "Target Blueprint öffnen",
+          "s36c.note": "Specs, Target Design und Migrationsannahmen.",
+          "s36d.kicker": "Demo-Evidenz",
+          "s36d.h2": "Evidence Artifacts<br><em>nicht nur Prosa</em>",
+          "s36d.sub": "Das Ergebnis ist prüfbar: Reports, Referenzen, Checks und Lücken überleben den Chat.",
+          "s36d.cta": "Validation Report öffnen",
+          "s36d.note": "Beispielartefakte und Validation Evidence.",
           "s34.kicker": "Live Demo",
           "s34.h1": "<em>Demo</em><br>eShop Catalog",
           "s34.sub": "Ein Catalog-Service. Fünf Artefakte. Ein Review Gate.",
@@ -3013,3 +3181,4 @@ auditable tool access</pre>
     </script>
   </body>
 </html>
+
