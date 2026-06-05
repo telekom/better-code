@@ -6,16 +6,18 @@ The repository is intentionally HTML-only for the presentation layer: every deck
 can be opened directly in a browser and deployed to GitHub Pages without Bun,
 Vite, Node, or a build step.
 
+Deployed site: [https://telekom.github.io/better-code/](https://telekom.github.io/better-code/)
+
 ## Presentations
 
 | Page | Speakers | Source talk title |
 | --- | --- | --- |
-| [KI-Agenten f&uuml;r Legacy-Analyse](./presentations/ki-agenten-legacy-analyse.html) | Adit & Lars | KI-Agenten f&uuml;r Legacy-Analyse: MCP, Skills und dynamischer Kontext in der Praxis |
-| [Context Engineering](./presentations/context-engineering.html) | Adit & Lars | Supporting context material for the main talk |
-| [KI in der Praxis: Legacy-Systeme modernisieren](./presentations/ki-modernisierung-legacy-systeme.html) | Laura & Sigrid | KI in der Praxis: Strategien zur Modernisierung komplexer Legacy-Systeme |
-| [Catalog Migration Run Overview](./presentations/migration-run-overview.html) | Demo artifact | Visual overview of the one-modernizer migration run |
+| [KI-Agenten f&uuml;r Legacy-Analyse](https://telekom.github.io/better-code/presentations/ki-agenten-legacy-analyse.html) | Adit & Lars | KI-Agenten f&uuml;r Legacy-Analyse: MCP, Skills und dynamischer Kontext in der Praxis |
+| [Context Engineering](https://telekom.github.io/better-code/presentations/context-engineering.html) | Adit & Lars | Supporting context material for the main talk |
+| [KI in der Praxis: Legacy-Systeme modernisieren](https://telekom.github.io/better-code/presentations/ki-modernisierung-legacy-systeme.html) | Laura & Sigrid | KI in der Praxis: Strategien zur Modernisierung komplexer Legacy-Systeme |
+| [Catalog Migration Run Overview](https://telekom.github.io/better-code/presentations/migration-run-overview.html) | Demo artifact | Visual overview of the one-modernizer migration run |
 
-Start from [index.html](./index.html) for the overview page.
+Start from the [deployed overview page](https://telekom.github.io/better-code/).
 
 ## Live Demo
 
