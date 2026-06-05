@@ -1,0 +1,395 @@
+{
+  "feature": "catalog-item-management",
+  "version": "1.0",
+  "extracted_from": ".migration/assess/features/catalog-item-management.md",
+  "modules": ["web-controllers", "catalog-services", "domain-model", "views-and-static"],
+  "migration_strategy": "Refactor",
+  "target_platform": ".NET 8 / ASP.NET Core MVC + EF Core",
+  "business_rules": [
+    {
+      "id": "BR-001",
+      "description": "Catalog item Name is required.",
+      "type": "validation",
+      "condition": "catalogItem.Name is null or empty",
+      "action": "ModelState invalid; reject create/edit and redisplay form",
+      "source": "src/eShopLegacyMVC/Models/CatalogItem.cs:16-17",
+      "confidence": "clear",
+      "dependencies": [],
+      "data_fields": ["CatalogItem.Name"]
+    },
+    {
+      "id": "BR-002",
+      "description": "Price must be a positive number, at most 1,000,000, with a maximum of two decimal places, treated as currency.",
+      "type": "validation",
+      "condition": "Price not matching ^\\d+(\\.\\d{0,2})*$ OR Price outside [0, 1000000]",
+      "action": "ModelState invalid; reject with message 'The field Price must be a positive number with maximum two decimals.'",
+      "source": "src/eShopLegacyMVC/Models/CatalogItem.cs:22-25",
+      "confidence": "clear",
+      "dependencies": [],
+      "data_fields": ["CatalogItem.Price"]
+    },
+    {
+      "id": "BR-003",
+      "description": "AvailableStock must be between 0 and 10,000,000.",
+      "type": "validation",
+      "condition": "AvailableStock < 0 OR AvailableStock > 10000000",
+      "action": "ModelState invalid with message 'The field Stock must be between 0 and 10 million.'",
+      "source": "src/eShopLegacyMVC/Models/CatalogItem.cs:45-47",
+      "confidence": "clear",
+      "dependencies": [],
+      "data_fields": ["CatalogItem.AvailableStock"]
+    },
+    {
+      "id": "BR-004",
+      "description": "RestockThreshold must be between 0 and 10,000,000.",
+      "type": "validation",
+      "condition": "RestockThreshold < 0 OR RestockThreshold > 10000000",
+      "action": "ModelState invalid with message 'The field Restock must be between 0 and 10 million.'",
+      "source": "src/eShopLegacyMVC/Models/CatalogItem.cs:50-52",
+      "confidence": "clear",
+      "dependencies": [],
+      "data_fields": ["CatalogItem.RestockThreshold"]
+    },
+    {
+      "id": "BR-005",
+      "description": "MaxStockThreshold must be between 0 and 10,000,000.",
+      "type": "validation",
+      "condition": "MaxStockThreshold < 0 OR MaxStockThreshold > 10000000",
+      "action": "ModelState invalid with message 'The field Max stock must be between 0 and 10 million.'",
+      "source": "src/eShopLegacyMVC/Models/CatalogItem.cs:55-57",
+      "confidence": "clear",
+      "dependencies": [],
+      "data_fields": ["CatalogItem.MaxStockThreshold"]
+    },
+    {
+      "id": "BR-006",
+      "description": "Details, Edit, and Delete GET requests require a non-null id.",
+      "type": "validation",
+      "condition": "id == null",
+      "action": "Return HTTP 400 BadRequest",
+      "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:34-37",
+      "confidence": "clear",
+      "dependencies": [],
+      "data_fields": ["CatalogItem.Id"]
+    },
+    {
+      "id": "BR-007",
+      "description": "When a requested catalog item id does not exist, return Not Found.",
+      "type": "routing",
+      "condition": "service.FindCatalogItem(id) returns null",
+      "action": "Return HTTP 404 (HttpNotFound)",
+      "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:39-42",
+      "confidence": "clear",
+      "dependencies": ["BR-006"],
+      "data_fields": ["CatalogItem.Id"]
+    },
+    {
+      "id": "BR-008",
+      "description": "Catalog listing is paginated: items ordered by Id, skipping pageSize*pageIndex and taking pageSize; brand and type are eager-loaded.",
+      "type": "calculation",
+      "condition": "GetCatalogItemsPaginated(pageSize, pageIndex)",
+      "action": "Return items ordered by Id with Skip(pageSize*pageIndex).Take(pageSize), including CatalogBrand and CatalogType",
+      "source": "src/eShopLegacyMVC/Services/CatalogService.cs:25-31",
+      "confidence": "clear",
+      "dependencies": [],
+      "data_fields": ["CatalogItem.Id", "CatalogItem.CatalogBrand", "CatalogItem.CatalogType"]
+    },
+    {
+      "id": "BR-009",
+      "description": "Total page count is the ceiling of total items divided by page size.",
+      "type": "calculation",
+      "condition": "constructing PaginatedItemsViewModel",
+      "action": "TotalPages = ceil(count / pageSize)",
+      "source": "src/eShopLegacyMVC/ViewModel/PaginatedItemsViewModel.cs:23",
+      "confidence": "clear",
+      "dependencies": ["BR-008"],
+      "data_fields": ["PaginatedItemsViewModel.TotalPages", "PaginatedItemsViewModel.TotalItems", "PaginatedItemsViewModel.ItemsPerPage"]
+    },
+    {
+      "id": "BR-010",
+      "description": "Each catalog item's PictureUri is computed from the GetPicRouteTemplate route using the item's Id and the request scheme; it is not stored.",
+      "type": "transformation",
+      "condition": "rendering an item to a view",
+      "action": "item.PictureUri = Url.RouteUrl('GetPicRouteTemplate', { catalogItemId = item.Id }, request scheme)",
+      "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:160-163",
+      "confidence": "clear",
+      "dependencies": [],
+      "data_fields": ["CatalogItem.PictureUri", "CatalogItem.Id"]
+    },
+    {
+      "id": "BR-011",
+      "description": "On create, a new catalog item's Id is assigned from the HiLo generator before insertion (Id is application-assigned, not database identity).",
+      "type": "state-transition",
+      "condition": "CreateCatalogItem(catalogItem)",
+      "action": "catalogItem.Id = indexGenerator.GetNextSequenceValue(db); add and SaveChanges",
+      "source": "src/eShopLegacyMVC/Services/CatalogService.cs:51-56",
+      "confidence": "clear",
+      "dependencies": ["BR-016"],
+      "data_fields": ["CatalogItem.Id"]
+    },
+    {
+      "id": "BR-012",
+      "description": "Create, Edit, and Delete POST actions require a valid anti-forgery token and bind only an explicit allow-list of fields (overposting protection).",
+      "type": "authorization",
+      "condition": "HTTP POST to Create/Edit/Delete",
+      "action": "Validate anti-forgery token; bind only Id,Name,Description,Price,PictureFileName,CatalogTypeId,CatalogBrandId,AvailableStock,RestockThreshold,MaxStockThreshold,OnReorder",
+      "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:60-62",
+      "confidence": "clear",
+      "dependencies": [],
+      "data_fields": ["CatalogItem.Id", "CatalogItem.Name", "CatalogItem.Price"]
+    },
+    {
+      "id": "BR-013",
+      "description": "Create and Edit persist changes only when ModelState is valid; otherwise the form is redisplayed with brand/type dropdowns.",
+      "type": "routing",
+      "condition": "ModelState.IsValid",
+      "action": "If valid: persist and redirect to Index. If invalid: repopulate ViewBag SelectLists and return the view with the submitted item.",
+      "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:65-73",
+      "confidence": "clear",
+      "dependencies": ["BR-001", "BR-002", "BR-003", "BR-004", "BR-005"],
+      "data_fields": ["CatalogItem.CatalogBrandId", "CatalogItem.CatalogTypeId"]
+    },
+    {
+      "id": "BR-014",
+      "description": "A new catalog item defaults its PictureFileName to 'dummy.png'.",
+      "type": "transformation",
+      "condition": "new CatalogItem() constructed",
+      "action": "PictureFileName = DefaultPictureName ('dummy.png')",
+      "source": "src/eShopLegacyMVC/Models/CatalogItem.cs:8-13",
+      "confidence": "clear",
+      "dependencies": [],
+      "data_fields": ["CatalogItem.PictureFileName"]
+    },
+    {
+      "id": "BR-015",
+      "description": "Update replaces the catalog item: EF marks the entity Modified and saves; the mock replaces the item in its in-memory list by Id.",
+      "type": "state-transition",
+      "condition": "UpdateCatalogItem(catalogItem)",
+      "action": "EF: db.Entry(item).State = Modified; SaveChanges. Mock: replace existing item at its index.",
+      "source": "src/eShopLegacyMVC/Services/CatalogService.cs:58-62",
+      "confidence": "clear",
+      "dependencies": [],
+      "data_fields": ["CatalogItem.Id"]
+    },
+    {
+      "id": "BR-016",
+      "description": "HiLo id allocation fetches the next value from the catalog_hilo SQL sequence and hands out 10 consecutive ids per database round-trip, guarded by a lock.",
+      "type": "calculation",
+      "condition": "GetNextSequenceValue(db)",
+      "action": "If no remaining lo ids: read 'SELECT NEXT VALUE FOR catalog_hilo', cache and return; otherwise increment and return the cached id. HiLoIncrement = 10.",
+      "source": "src/eShopLegacyMVC/Models/CatalogItemHiLoGenerator.cs:11-33",
+      "confidence": "clear",
+      "dependencies": [],
+      "data_fields": ["CatalogItem.Id"]
+    },
+    {
+      "id": "BR-017",
+      "description": "Delete removes the catalog item found by id, then redirects to the listing.",
+      "type": "state-transition",
+      "condition": "DeleteConfirmed(id) POST",
+      "action": "item = FindCatalogItem(id); RemoveCatalogItem(item); redirect to Index",
+      "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:134-139",
+      "confidence": "clear",
+      "dependencies": ["BR-007"],
+      "data_fields": ["CatalogItem.Id"]
+    }
+  ],
+  "data_model": [
+    {
+      "name": "CatalogItem",
+      "source": "src/eShopLegacyMVC/Models/CatalogItem.cs:6-63",
+      "fields": [
+        {"name": "Id", "type": "int", "target_type": "int", "nullable": false, "constraints": ["PRIMARY KEY", "DatabaseGenerated(None)"], "used_by_rules": ["BR-006", "BR-007", "BR-008", "BR-011", "BR-015", "BR-016", "BR-017"], "description": "Application-assigned identifier (HiLo). Mapped to Catalog table.Id"},
+        {"name": "Name", "type": "string", "target_type": "string", "nullable": false, "constraints": ["NOT NULL", "MaxLength(50)"], "used_by_rules": ["BR-001"], "description": "Product name"},
+        {"name": "Description", "type": "string", "target_type": "string", "nullable": true, "constraints": [], "used_by_rules": [], "description": "Product description"},
+        {"name": "Price", "type": "decimal", "target_type": "decimal(18,2)", "nullable": false, "constraints": ["NOT NULL", "Range(0,1000000)", "<=2 decimals"], "used_by_rules": ["BR-002"], "description": "Unit price, currency"},
+        {"name": "PictureFileName", "type": "string", "target_type": "string", "nullable": false, "constraints": ["NOT NULL", "default 'dummy.png'"], "used_by_rules": ["BR-014"], "description": "Picture file name (default dummy.png)"},
+        {"name": "PictureUri", "type": "string", "target_type": "string", "nullable": true, "constraints": ["NotMapped (Ignore)"], "used_by_rules": ["BR-010"], "description": "Computed image URL; not persisted"},
+        {"name": "CatalogTypeId", "type": "int", "target_type": "int", "nullable": false, "constraints": ["FOREIGN KEY -> CatalogType.Id", "NOT NULL"], "used_by_rules": ["BR-013"], "description": "FK to catalog type"},
+        {"name": "CatalogType", "type": "CatalogType", "target_type": "CatalogType", "nullable": false, "constraints": ["Required navigation"], "used_by_rules": ["BR-008"], "description": "Navigation to type"},
+        {"name": "CatalogBrandId", "type": "int", "target_type": "int", "nullable": false, "constraints": ["FOREIGN KEY -> CatalogBrand.Id", "NOT NULL"], "used_by_rules": ["BR-013"], "description": "FK to catalog brand"},
+        {"name": "CatalogBrand", "type": "CatalogBrand", "target_type": "CatalogBrand", "nullable": false, "constraints": ["Required navigation"], "used_by_rules": ["BR-008"], "description": "Navigation to brand"},
+        {"name": "AvailableStock", "type": "int", "target_type": "int", "nullable": false, "constraints": ["Range(0,10000000)"], "used_by_rules": ["BR-003"], "description": "Quantity in stock"},
+        {"name": "RestockThreshold", "type": "int", "target_type": "int", "nullable": false, "constraints": ["Range(0,10000000)"], "used_by_rules": ["BR-004"], "description": "Stock level at which to reorder"},
+        {"name": "MaxStockThreshold", "type": "int", "target_type": "int", "nullable": false, "constraints": ["Range(0,10000000)"], "used_by_rules": ["BR-005"], "description": "Maximum stock capacity"},
+        {"name": "OnReorder", "type": "bool", "target_type": "bool", "nullable": false, "constraints": [], "used_by_rules": [], "description": "True if item is on reorder"}
+      ],
+      "relationships": [
+        {"to": "CatalogBrand", "type": "many-to-one", "foreign_key": "CatalogBrandId"},
+        {"to": "CatalogType", "type": "many-to-one", "foreign_key": "CatalogTypeId"}
+      ]
+    },
+    {
+      "name": "CatalogBrand",
+      "source": "src/eShopLegacyMVC/Models/CatalogBrand.cs:8-12",
+      "fields": [
+        {"name": "Id", "type": "int", "target_type": "int", "nullable": false, "constraints": ["PRIMARY KEY"], "used_by_rules": ["BR-008"], "description": "Brand identifier"},
+        {"name": "Brand", "type": "string", "target_type": "string", "nullable": false, "constraints": ["NOT NULL", "MaxLength(100)"], "used_by_rules": [], "description": "Brand name"}
+      ],
+      "relationships": [
+        {"to": "CatalogItem", "type": "one-to-many", "foreign_key": "CatalogBrandId"}
+      ]
+    },
+    {
+      "name": "CatalogType",
+      "source": "src/eShopLegacyMVC/Models/CatalogType.cs:8-12",
+      "fields": [
+        {"name": "Id", "type": "int", "target_type": "int", "nullable": false, "constraints": ["PRIMARY KEY"], "used_by_rules": ["BR-008"], "description": "Type identifier"},
+        {"name": "Type", "type": "string", "target_type": "string", "nullable": false, "constraints": ["NOT NULL", "MaxLength(100)"], "used_by_rules": [], "description": "Type name"}
+      ],
+      "relationships": [
+        {"to": "CatalogItem", "type": "one-to-many", "foreign_key": "CatalogTypeId"}
+      ]
+    },
+    {
+      "name": "PaginatedItemsViewModel",
+      "source": "src/eShopLegacyMVC/ViewModel/PaginatedItemsViewModel.cs:6-26",
+      "fields": [
+        {"name": "ActualPage", "type": "int", "target_type": "int", "nullable": false, "constraints": [], "used_by_rules": [], "description": "Current page index"},
+        {"name": "ItemsPerPage", "type": "int", "target_type": "int", "nullable": false, "constraints": [], "used_by_rules": ["BR-009"], "description": "Page size"},
+        {"name": "TotalItems", "type": "long", "target_type": "long", "nullable": false, "constraints": [], "used_by_rules": ["BR-009"], "description": "Total item count"},
+        {"name": "TotalPages", "type": "int", "target_type": "int", "nullable": false, "constraints": [], "used_by_rules": ["BR-009"], "description": "Computed total pages"},
+        {"name": "Data", "type": "IEnumerable<CatalogItem>", "target_type": "IEnumerable<CatalogItem>", "nullable": false, "constraints": [], "used_by_rules": ["BR-008"], "description": "Items on the current page"}
+      ],
+      "relationships": []
+    }
+  ],
+  "flows": [
+    {
+      "id": "FLOW-001",
+      "name": "Browse catalog (paginated listing)",
+      "trigger": "HTTP GET /Catalog/Index?pageSize&pageIndex (default pageSize=10, pageIndex=0)",
+      "steps": [
+        {"seq": 1, "action": "Controller receives pageSize/pageIndex (defaults 10/0)", "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:22-24", "calls": [], "reads": [], "writes": [], "rules": []},
+        {"seq": 2, "action": "Service queries total count and a page of items ordered by Id, eager-loading brand and type", "source": "src/eShopLegacyMVC/Services/CatalogService.cs:21-35", "calls": ["CatalogDBContext"], "reads": ["CatalogItem", "CatalogBrand", "CatalogType"], "writes": [], "rules": ["BR-008", "BR-009"]},
+        {"seq": 3, "action": "Controller computes PictureUri for each item", "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:152-158", "calls": [], "reads": ["CatalogItem"], "writes": ["CatalogItem.PictureUri"], "rules": ["BR-010"]},
+        {"seq": 4, "action": "Return Index view with PaginatedItemsViewModel", "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:27", "calls": [], "reads": [], "writes": [], "rules": []}
+      ],
+      "error_paths": []
+    },
+    {
+      "id": "FLOW-002",
+      "name": "View item details",
+      "trigger": "HTTP GET /Catalog/Details/{id}",
+      "steps": [
+        {"seq": 1, "action": "Validate id is not null", "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:34-37", "calls": [], "reads": [], "writes": [], "rules": ["BR-006"]},
+        {"seq": 2, "action": "Find catalog item by id (eager-load brand/type)", "source": "src/eShopLegacyMVC/Services/CatalogService.cs:37-40", "calls": ["CatalogDBContext"], "reads": ["CatalogItem"], "writes": [], "rules": ["BR-007"]},
+        {"seq": 3, "action": "Compute PictureUri and return Details view", "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:43-45", "calls": [], "reads": ["CatalogItem"], "writes": ["CatalogItem.PictureUri"], "rules": ["BR-010"]}
+      ],
+      "error_paths": [
+        {"at_step": 1, "condition": "id == null", "action": "Return HTTP 400 BadRequest", "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:34-37"},
+        {"at_step": 2, "condition": "item not found", "action": "Return HTTP 404", "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:39-42"}
+      ]
+    },
+    {
+      "id": "FLOW-003",
+      "name": "Create catalog item",
+      "trigger": "HTTP POST /Catalog/Create (anti-forgery, bound allow-list)",
+      "steps": [
+        {"seq": 1, "action": "Validate anti-forgery token and bind allow-listed fields", "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:60-62", "calls": [], "reads": [], "writes": [], "rules": ["BR-012"]},
+        {"seq": 2, "action": "Validate model (name, price, stock ranges)", "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:65", "calls": [], "reads": ["CatalogItem"], "writes": [], "rules": ["BR-001", "BR-002", "BR-003", "BR-004", "BR-005", "BR-013"]},
+        {"seq": 3, "action": "Assign Id from HiLo and persist new item", "source": "src/eShopLegacyMVC/Services/CatalogService.cs:51-56", "calls": ["CatalogItemHiLoGenerator", "CatalogDBContext"], "reads": ["catalog_hilo sequence"], "writes": ["CatalogItem"], "rules": ["BR-011", "BR-016"]},
+        {"seq": 4, "action": "Redirect to Index", "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:68", "calls": [], "reads": [], "writes": [], "rules": []}
+      ],
+      "error_paths": [
+        {"at_step": 2, "condition": "ModelState invalid", "action": "Repopulate brand/type SelectLists and redisplay Create view with submitted values", "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:71-73"}
+      ]
+    },
+    {
+      "id": "FLOW-004",
+      "name": "Edit catalog item",
+      "trigger": "HTTP POST /Catalog/Edit (anti-forgery, bound allow-list)",
+      "steps": [
+        {"seq": 1, "action": "Validate anti-forgery token and bind allow-listed fields", "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:98-100", "calls": [], "reads": [], "writes": [], "rules": ["BR-012"]},
+        {"seq": 2, "action": "Validate model", "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:103", "calls": [], "reads": ["CatalogItem"], "writes": [], "rules": ["BR-001", "BR-002", "BR-003", "BR-004", "BR-005", "BR-013"]},
+        {"seq": 3, "action": "Mark entity Modified and save", "source": "src/eShopLegacyMVC/Services/CatalogService.cs:58-62", "calls": ["CatalogDBContext"], "reads": [], "writes": ["CatalogItem"], "rules": ["BR-015"]},
+        {"seq": 4, "action": "Redirect to Index", "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:106", "calls": [], "reads": [], "writes": [], "rules": []}
+      ],
+      "error_paths": [
+        {"at_step": 2, "condition": "ModelState invalid", "action": "Repopulate SelectLists and redisplay Edit view", "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:108-110"}
+      ]
+    },
+    {
+      "id": "FLOW-005",
+      "name": "Delete catalog item",
+      "trigger": "HTTP POST /Catalog/Delete/{id} (anti-forgery)",
+      "steps": [
+        {"seq": 1, "action": "Validate anti-forgery token", "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:132-133", "calls": [], "reads": [], "writes": [], "rules": ["BR-012"]},
+        {"seq": 2, "action": "Find item by id and remove it", "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:134-138", "calls": ["CatalogDBContext"], "reads": ["CatalogItem"], "writes": ["CatalogItem"], "rules": ["BR-017"]},
+        {"seq": 3, "action": "Redirect to Index", "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:139", "calls": [], "reads": [], "writes": [], "rules": []}
+      ],
+      "error_paths": []
+    }
+  ],
+  "errors": [
+    {
+      "id": "ERR-001",
+      "trigger": "Details/Edit/Delete GET called with null id",
+      "handling": "Return HttpStatusCodeResult(HttpStatusCode.BadRequest)",
+      "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:34-37",
+      "severity": "warning",
+      "recovery": "Client must supply a valid id",
+      "user_impact": "HTTP 400 response"
+    },
+    {
+      "id": "ERR-002",
+      "trigger": "Requested catalog item id does not exist",
+      "handling": "Return HttpNotFound()",
+      "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:39-42",
+      "severity": "warning",
+      "recovery": "None; item not present",
+      "user_impact": "HTTP 404 response"
+    },
+    {
+      "id": "ERR-003",
+      "trigger": "Create/Edit submitted with invalid model (failed validation rules)",
+      "handling": "Repopulate brand/type SelectLists and redisplay the form with validation messages",
+      "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:71-73",
+      "severity": "info",
+      "recovery": "User corrects input and resubmits",
+      "user_impact": "Form redisplayed with inline validation errors"
+    },
+    {
+      "id": "ERR-004",
+      "trigger": "Unhandled exception during an action (e.g., EF SaveChanges failure)",
+      "handling": "Global HandleErrorAttribute renders the shared Error view (no per-action try/catch)",
+      "source": "src/eShopLegacyMVC/App_Start/FilterConfig.cs:10",
+      "severity": "critical",
+      "recovery": "None automatic; request fails",
+      "user_impact": "Generic error page"
+    }
+  ],
+  "test_cases": [
+    {"id": "TC-001", "description": "Create rejects an item with empty Name", "covers_rules": ["BR-001", "BR-013"], "covers_flow": "FLOW-003", "input": {"CatalogItem": {"Name": "", "Price": 10, "CatalogBrandId": 2, "CatalogTypeId": 1}}, "expected_output": {"persisted": false, "redisplays_form": true}, "type": "negative", "preconditions": "None"},
+    {"id": "TC-002", "description": "Create accepts a valid item and assigns an Id", "covers_rules": ["BR-001", "BR-002", "BR-011"], "covers_flow": "FLOW-003", "input": {"CatalogItem": {"Name": "Test Mug", "Price": 8.50, "CatalogBrandId": 2, "CatalogTypeId": 1, "AvailableStock": 100}}, "expected_output": {"persisted": true, "id_assigned": true, "redirect": "Index"}, "type": "integration", "preconditions": "Brand 2 and Type 1 exist"},
+    {"id": "TC-003", "description": "Price with three decimals is rejected", "covers_rules": ["BR-002"], "covers_flow": "FLOW-003", "input": {"CatalogItem": {"Name": "X", "Price": 9.999}}, "expected_output": {"valid": false}, "type": "negative", "preconditions": "None"},
+    {"id": "TC-004", "description": "Price above 1,000,000 is rejected (boundary). NOTE: uses 1000001 because [Range(0,1000000)] has int bounds and rounds 1000000.01 down to 1000000 (legacy parity quirk — see unknowns).", "covers_rules": ["BR-002"], "covers_flow": "FLOW-003", "input": {"CatalogItem": {"Name": "X", "Price": 1000001}}, "expected_output": {"valid": false}, "type": "boundary", "preconditions": "None"},
+    {"id": "TC-005", "description": "Price exactly 1,000,000 with two decimals is accepted (boundary)", "covers_rules": ["BR-002"], "covers_flow": "FLOW-003", "input": {"CatalogItem": {"Name": "X", "Price": 1000000.00, "CatalogBrandId": 2, "CatalogTypeId": 1}}, "expected_output": {"valid": true}, "type": "boundary", "preconditions": "Brand 2, Type 1 exist"},
+    {"id": "TC-006", "description": "AvailableStock above 10,000,000 is rejected (boundary)", "covers_rules": ["BR-003"], "covers_flow": "FLOW-003", "input": {"CatalogItem": {"Name": "X", "Price": 1, "AvailableStock": 10000001}}, "expected_output": {"valid": false}, "type": "boundary", "preconditions": "None"},
+    {"id": "TC-007", "description": "RestockThreshold negative is rejected", "covers_rules": ["BR-004"], "covers_flow": "FLOW-003", "input": {"CatalogItem": {"Name": "X", "Price": 1, "RestockThreshold": -1}}, "expected_output": {"valid": false}, "type": "negative", "preconditions": "None"},
+    {"id": "TC-008", "description": "MaxStockThreshold above limit is rejected", "covers_rules": ["BR-005"], "covers_flow": "FLOW-003", "input": {"CatalogItem": {"Name": "X", "Price": 1, "MaxStockThreshold": 10000001}}, "expected_output": {"valid": false}, "type": "boundary", "preconditions": "None"},
+    {"id": "TC-009", "description": "Details with null id returns 400", "covers_rules": ["BR-006"], "covers_flow": "FLOW-002", "input": {"id": null}, "expected_output": {"http_status": 400}, "type": "negative", "preconditions": "None"},
+    {"id": "TC-010", "description": "Details with non-existent id returns 404", "covers_rules": ["BR-007"], "covers_flow": "FLOW-002", "input": {"id": 99999}, "expected_output": {"http_status": 404}, "type": "negative", "preconditions": "Item 99999 does not exist"},
+    {"id": "TC-011", "description": "Details with valid id returns the item with computed PictureUri", "covers_rules": ["BR-007", "BR-010"], "covers_flow": "FLOW-002", "input": {"id": 1}, "expected_output": {"http_status": 200, "picture_uri_present": true}, "type": "integration", "preconditions": "Item 1 exists"},
+    {"id": "TC-012", "description": "Index returns a page of at most pageSize items ordered by Id", "covers_rules": ["BR-008"], "covers_flow": "FLOW-001", "input": {"pageSize": 10, "pageIndex": 0}, "expected_output": {"max_items": 10, "ordered_by_id": true}, "type": "integration", "preconditions": "At least 1 item exists"},
+    {"id": "TC-013", "description": "TotalPages is ceil(count/pageSize): 12 items, pageSize 10 => 2 pages", "covers_rules": ["BR-009"], "covers_flow": "FLOW-001", "input": {"count": 12, "pageSize": 10}, "expected_output": {"TotalPages": 2}, "type": "unit", "preconditions": "None"},
+    {"id": "TC-014", "description": "New CatalogItem defaults PictureFileName to dummy.png", "covers_rules": ["BR-014"], "covers_flow": "FLOW-003", "input": {"CatalogItem": {}}, "expected_output": {"PictureFileName": "dummy.png"}, "type": "unit", "preconditions": "None"},
+    {"id": "TC-015", "description": "Edit persists changes for a valid model and redirects", "covers_rules": ["BR-015", "BR-013"], "covers_flow": "FLOW-004", "input": {"CatalogItem": {"Id": 1, "Name": "Renamed", "Price": 12, "CatalogBrandId": 2, "CatalogTypeId": 1}}, "expected_output": {"persisted": true, "redirect": "Index"}, "type": "integration", "preconditions": "Item 1 exists"},
+    {"id": "TC-016", "description": "HiLo hands out 10 consecutive ids per sequence fetch", "covers_rules": ["BR-016"], "covers_flow": "FLOW-003", "input": {"first_sequence_value": 100, "allocations": 10}, "expected_output": {"ids": [100, 101, 102, 103, 104, 105, 106, 107, 108, 109], "db_fetches": 1}, "type": "unit", "preconditions": "catalog_hilo next value = 100"},
+    {"id": "TC-017", "description": "Delete removes the item and redirects to Index", "covers_rules": ["BR-017"], "covers_flow": "FLOW-005", "input": {"id": 1}, "expected_output": {"removed": true, "redirect": "Index"}, "type": "integration", "preconditions": "Item 1 exists"},
+    {"id": "TC-018", "description": "Create POST without a valid anti-forgery token is rejected", "covers_rules": ["BR-012"], "covers_flow": "FLOW-003", "input": {"antiforgery": "missing"}, "expected_output": {"rejected": true}, "type": "negative", "preconditions": "None"}
+  ],
+  "external_interfaces": [
+    {"type": "DB", "target": "Catalog table (CatalogDBContext)", "protocol": "SQL", "direction": "bidirectional", "source": "src/eShopLegacyMVC/Models/CatalogDBContext.cs:14-18", "data_format": "relational"},
+    {"type": "DB", "target": "catalog_hilo sequence", "protocol": "SQL", "direction": "inbound", "source": "src/eShopLegacyMVC/Models/CatalogItemHiLoGenerator.cs:22", "data_format": "bigint sequence value"},
+    {"type": "Screen", "target": "Catalog Razor views (Index/Details/Create/Edit/Delete)", "protocol": "HTTP", "direction": "bidirectional", "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:22-139", "data_format": "HTML"},
+    {"type": "API", "target": "PicController route GetPicRouteTemplate (items/{id}/pic) for PictureUri generation", "protocol": "HTTP", "direction": "outbound", "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:162", "data_format": "URL"}
+  ],
+  "unknowns": [
+    {"description": "Price regex ^\\d+(\\.\\d{0,2})*$ allows repeated decimal groups (e.g. '1.99.99' partially), which is looser than the intended single 2-decimal value.", "source": "src/eShopLegacyMVC/Models/CatalogItem.cs:22", "impact": "Target validation must decide whether to preserve the loose regex or enforce a strict single 2-decimal rule; behavioral difference on edge inputs."},
+    {"description": "Price uses [Range(0, 1000000)] with INT bounds, so RangeAttribute converts the decimal value to int before comparing — 1000000.01 rounds to 1000000 and passes validation, even though the stored decimal keeps the .01. The 'max 1,000,000' rule is therefore not strictly enforced at sub-unit precision.", "source": "src/eShopLegacyMVC/Models/CatalogItem.cs:23", "impact": "Discovered via test TC-004. Preserved for parity. If strict enforcement is desired, change to [Range(typeof(decimal), \"0\", \"1000000\")]; this is a behavioral change and should be a deliberate post-migration decision."},
+    {"description": "No optimistic concurrency token or explicit error handling around EF SaveChanges on Update/Delete/Create.", "source": "src/eShopLegacyMVC/Services/CatalogService.cs:58-67", "impact": "Concurrent edits silently last-write-wins; migration may need a rowversion/ETag if concurrency matters."},
+    {"description": "CatalogServiceMock.ComposeCatalogItems mutates the static PreconfiguredData lists by assigning navigation properties on every paginated call.", "source": "src/eShopLegacyMVC/Services/CatalogServiceMock.cs:73-82", "impact": "Mock-mode cross-request state bleed; target test double must avoid shared mutable static state."},
+    {"description": "HiLo generator caches id state in a process singleton; correctness under scale-out depends on the DB sequence being the single source.", "source": "src/eShopLegacyMVC/Models/CatalogItemHiLoGenerator.cs:12-14", "impact": "Multi-instance deployment could produce id gaps or contention; choose EF Core HiLo or DB identity deliberately."}
+  ]
+}

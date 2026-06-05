@@ -1,0 +1,235 @@
+{
+  "feature": "catalog-item-management",
+  "entries": [
+    {
+      "id": "T-001",
+      "status": "completed",
+      "spec_refs": [
+        "CatalogItem",
+        "BR-014",
+        "BR-001",
+        "BR-002",
+        "BR-003",
+        "BR-004",
+        "BR-005"
+      ],
+      "target_file": "eShopModernized.Catalog/Models/CatalogItem.cs",
+      "layer": "data"
+    },
+    {
+      "id": "T-002",
+      "status": "completed",
+      "spec_refs": [
+        "CatalogBrand"
+      ],
+      "target_file": "eShopModernized.Catalog/Models/CatalogBrand.cs",
+      "layer": "data"
+    },
+    {
+      "id": "T-003",
+      "status": "completed",
+      "spec_refs": [
+        "CatalogType"
+      ],
+      "target_file": "eShopModernized.Catalog/Models/CatalogType.cs",
+      "layer": "data"
+    },
+    {
+      "id": "T-004",
+      "status": "completed",
+      "spec_refs": [
+        "PaginatedItemsViewModel",
+        "BR-009"
+      ],
+      "target_file": "eShopModernized.Catalog/ViewModel/PaginatedItemsViewModel.cs",
+      "layer": "api"
+    },
+    {
+      "id": "T-015",
+      "status": "completed",
+      "spec_refs": [
+        "ERR-004"
+      ],
+      "target_file": "eShopModernized.Catalog/Middleware/GlobalExceptionHandlerMiddleware.cs",
+      "layer": "cross-cutting"
+    },
+    {
+      "id": "T-017",
+      "status": "completed",
+      "spec_refs": [
+        "TC-001",
+        "TC-003",
+        "TC-004",
+        "TC-005",
+        "TC-006",
+        "TC-007",
+        "TC-008",
+        "TC-014"
+      ],
+      "target_file": "eShopModernized.Catalog.Tests/CatalogItemValidationTests.cs",
+      "layer": "test"
+    },
+    {
+      "id": "T-020",
+      "status": "completed",
+      "spec_refs": [
+        "TC-013"
+      ],
+      "target_file": "eShopModernized.Catalog.Tests/PaginatedItemsViewModelTests.cs",
+      "layer": "test"
+    },
+    {
+      "id": "T-005",
+      "status": "completed",
+      "spec_refs": [
+        "CatalogItem"
+      ],
+      "target_file": "eShopModernized.Catalog/Models/Config/CatalogItemConfig.cs",
+      "layer": "infrastructure"
+    },
+    {
+      "id": "T-006",
+      "status": "completed",
+      "spec_refs": [
+        "CatalogBrand"
+      ],
+      "target_file": "eShopModernized.Catalog/Models/Config/CatalogBrandConfig.cs",
+      "layer": "infrastructure"
+    },
+    {
+      "id": "T-007",
+      "status": "completed",
+      "spec_refs": [
+        "CatalogType"
+      ],
+      "target_file": "eShopModernized.Catalog/Models/Config/CatalogTypeConfig.cs",
+      "layer": "infrastructure"
+    },
+    {
+      "id": "T-008",
+      "status": "completed",
+      "spec_refs": [
+        "CatalogItem"
+      ],
+      "target_file": "eShopModernized.Catalog/Models/Infrastructure/PreconfiguredData.cs",
+      "layer": "infrastructure"
+    },
+    {
+      "id": "T-009",
+      "status": "completed",
+      "spec_refs": [
+        "CatalogItem",
+        "BR-016"
+      ],
+      "target_file": "eShopModernized.Catalog/Models/CatalogDBContext.cs",
+      "layer": "infrastructure"
+    },
+    {
+      "id": "T-010",
+      "status": "completed",
+      "spec_refs": [
+        "BR-016"
+      ],
+      "target_file": "eShopModernized.Catalog/Models/Infrastructure/CatalogIdGenerator.cs",
+      "layer": "data"
+    },
+    {
+      "id": "T-011",
+      "status": "completed",
+      "spec_refs": [
+        "FLOW-002"
+      ],
+      "target_file": "eShopModernized.Catalog/Services/ICatalogService.cs",
+      "layer": "domain"
+    },
+    {
+      "id": "T-012",
+      "status": "completed",
+      "spec_refs": [
+        "BR-008",
+        "FLOW-002",
+        "BR-011",
+        "BR-015",
+        "BR-017"
+      ],
+      "target_file": "eShopModernized.Catalog/Services/CatalogService.cs",
+      "layer": "domain"
+    },
+    {
+      "id": "T-013",
+      "status": "completed",
+      "spec_refs": [
+        "BR-008",
+        "BR-011",
+        "BR-015",
+        "BR-017"
+      ],
+      "target_file": "eShopModernized.Catalog/Services/CatalogServiceMock.cs",
+      "layer": "domain"
+    },
+    {
+      "id": "T-014",
+      "status": "completed",
+      "spec_refs": [
+        "FLOW-001",
+        "BR-010",
+        "FLOW-002",
+        "BR-006",
+        "BR-007",
+        "ERR-001",
+        "ERR-002",
+        "FLOW-003",
+        "BR-012",
+        "BR-013",
+        "ERR-003",
+        "FLOW-004",
+        "FLOW-005",
+        "BR-017"
+      ],
+      "target_file": "eShopModernized.Catalog/Controllers/CatalogController.cs",
+      "layer": "api"
+    },
+    {
+      "id": "T-018",
+      "status": "completed",
+      "spec_refs": [
+        "TC-002",
+        "TC-012",
+        "TC-015",
+        "TC-017"
+      ],
+      "target_file": "eShopModernized.Catalog.Tests/CatalogServiceTests.cs",
+      "layer": "test"
+    },
+    {
+      "id": "T-019",
+      "status": "completed",
+      "spec_refs": [
+        "TC-009",
+        "TC-010",
+        "TC-011",
+        "TC-018"
+      ],
+      "target_file": "eShopModernized.Catalog.Tests/CatalogControllerTests.cs",
+      "layer": "test"
+    },
+    {
+      "id": "T-021",
+      "status": "completed",
+      "spec_refs": [
+        "TC-016"
+      ],
+      "target_file": "eShopModernized.Catalog.Tests/CatalogIdGeneratorTests.cs",
+      "layer": "test"
+    },
+    {
+      "id": "T-016",
+      "status": "completed",
+      "spec_refs": [
+        "FLOW-001"
+      ],
+      "target_file": "eShopModernized.Catalog/Program.cs",
+      "layer": "infrastructure"
+    }
+  ]
+}

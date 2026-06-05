@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Architecture Blueprint",
+  "description": "Machine-readable target architecture definition. Consumed by transform to generate code.",
+  "type": "object",
+  "required": ["feature", "services", "tech_stack", "data_strategy"],
+  "properties": {
+    "feature": {
+      "type": "string",
+      "description": "Feature name (matches decompose/assess feature name)"
+    },
+    "version": {
+      "type": "string"
+    },
+    "target_platform": {
+      "type": "string",
+      "description": "High-level target (e.g., 'cloud-native K8s', 'serverless AWS')"
+    },
+    "tech_stack": {
+      "type": "object",
+      "required": ["language", "framework", "database", "api_style"],
+      "properties": {
+        "language": { "type": "string" },
+        "framework": { "type": "string" },
+        "database": { "type": "string" },
+        "messaging": { "type": "string" },
+        "api_style": {
+          "type": "string",
+          "enum": ["REST", "gRPC", "GraphQL", "event-driven", "mixed"]
+        },
+        "deployment": { "type": "string" },
+        "testing": { "type": "string" },
+        "build_tool": { "type": "string" },
+        "observability": { "type": "string" }
+      }
+    },
+    "services": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "responsibility", "owns_data", "handles_flows"],
+        "properties": {
+          "name": { "type": "string" },
+          "responsibility": { "type": "string" },
+          "owns_data": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Data model structure names this service owns"
+          },
+          "handles_flows": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Flow IDs (FLOW-xxx) this service handles"
+          },
+          "implements_rules": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Business rule IDs (BR-xxx) this service implements"
+          },
+          "external_interfaces": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "External interface targets this service handles"
+          },
+          "apis": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "method": { "type": "string" },
+                "path": { "type": "string" },
+                "description": { "type": "string" },
+                "request_type": { "type": "string" },
+                "response_type": { "type": "string" }
+              }
+            }
+          },
+          "events_published": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "topic": { "type": "string" },
+                "schema": { "type": "string" }
+              }
+            }
+          },
+          "events_consumed": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "topic": { "type": "string" },
+                "handler": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "data_strategy": {
+      "type": "object",
+      "properties": {
+        "migration_approach": {
+          "type": "string",
+          "enum": ["CDC", "dual-write", "bulk-ETL", "event-sourcing", "mixed"]
+        },
+        "shared_data_pattern": {
+          "type": "string",
+          "enum": ["api-calls", "events", "shared-schema", "none"]
+        },
+        "schemas": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "owner_service": { "type": "string" },
+              "tables": { "type": "array", "items": { "type": "string" } },
+              "migration": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "communication": {
+      "type": "object",
+      "properties": {
+        "sync_protocol": { "type": "string" },
+        "async_protocol": { "type": "string" },
+        "transaction_pattern": {
+          "type": "string",
+          "enum": ["saga", "outbox", "2PC", "eventual", "none"]
+        },
+        "service_mesh": { "type": "boolean" }
+      }
+    },
+    "cross_cutting": {
+      "type": "object",
+      "properties": {
+        "auth": { "type": "string" },
+        "observability": { "type": "string" },
+        "error_handling": { "type": "string" },
+        "secrets": { "type": "string" }
+      }
+    }
+  }
+}

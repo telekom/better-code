@@ -1,0 +1,35 @@
+# GitLab Pages for the static presentation bundle.
+# The generated catalog build/test pipeline is preserved for the demo at:
+# demo/eShopModernizing/eShopLegacyMVCSolution/target/catalog-item-management/.gitlab-ci.yml
+
+stages:
+  - pages
+
+pages:
+  image: alpine:3.20
+  stage: pages
+  script:
+    # Decks are self-contained HTML; keep Pages free of Bun/Vite.
+    - mkdir -p public/presentations
+    - mkdir -p public/demo/eShopModernizing/eShopLegacyMVCSolution/.migration/discovery/graphify-out
+    - mkdir -p public/demo/eShopModernizing/eShopLegacyMVCSolution/.migration/assess
+    - mkdir -p public/demo/eShopModernizing/eShopLegacyMVCSolution/.migration/decompose/catalog-item-management
+    - mkdir -p public/demo/eShopModernizing/eShopLegacyMVCSolution/.migration/architect/catalog-item-management
+    - mkdir -p public/demo/eShopModernizing/eShopLegacyMVCSolution/.migration/validate/catalog-item-management
+    - mkdir -p public/demo/eShopModernizing/eShopLegacyMVCSolution/target/catalog-item-management
+    - touch public/.nojekyll
+    - cp index.html public/index.html
+    - cp .gitlab-ci.yml public/.gitlab-ci.yml
+    - cp presentations/*.html public/presentations/
+    - cp demo/eShopModernizing/eShopLegacyMVCSolution/.migration/discovery/graphify-out/GRAPH_REPORT.md public/demo/eShopModernizing/eShopLegacyMVCSolution/.migration/discovery/graphify-out/GRAPH_REPORT.md
+    - cp demo/eShopModernizing/eShopLegacyMVCSolution/.migration/assess/migration-sequence.md public/demo/eShopModernizing/eShopLegacyMVCSolution/.migration/assess/migration-sequence.md
+    - cp demo/eShopModernizing/eShopLegacyMVCSolution/.migration/decompose/catalog-item-management/summary.md public/demo/eShopModernizing/eShopLegacyMVCSolution/.migration/decompose/catalog-item-management/summary.md
+    - cp demo/eShopModernizing/eShopLegacyMVCSolution/.migration/architect/catalog-item-management/summary.md public/demo/eShopModernizing/eShopLegacyMVCSolution/.migration/architect/catalog-item-management/summary.md
+    - cp demo/eShopModernizing/eShopLegacyMVCSolution/.migration/validate/catalog-item-management/report.md public/demo/eShopModernizing/eShopLegacyMVCSolution/.migration/validate/catalog-item-management/report.md
+    - cp demo/eShopModernizing/eShopLegacyMVCSolution/target/catalog-item-management/.gitlab-ci.yml public/demo/eShopModernizing/eShopLegacyMVCSolution/target/catalog-item-management/.gitlab-ci.yml
+    - cp demo/eShopModernizing/eShopLegacyMVCSolution/target/catalog-item-management/README.md public/demo/eShopModernizing/eShopLegacyMVCSolution/target/catalog-item-management/README.md
+  artifacts:
+    paths:
+      - public
+  only:
+    - main

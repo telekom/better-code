@@ -1,0 +1,322 @@
+{
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Global.asax.cs": {
+    "mtime": 1780408921.0,
+    "hash": "80d6f40dcc9e9ba0a91a738f25188936"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Services/CatalogServiceMock.cs": {
+    "mtime": 1780408921.0,
+    "hash": "b639642be37e7a189da378744f960ad1"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Services/ICatalogService.cs": {
+    "mtime": 1780408921.0,
+    "hash": "f5a68706202bb82d288c6d8fbaf39fcb"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Services/CatalogService.cs": {
+    "mtime": 1780408921.0,
+    "hash": "9e031acbfc8ac5ebb50fc5ecb26a7dda"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Properties/AssemblyInfo.cs": {
+    "mtime": 1780408921.0,
+    "hash": "8f3453bb187b7483ae269acb268f5b72"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/ViewModel/PaginatedItemsViewModel.cs": {
+    "mtime": 1780408921.0,
+    "hash": "903eae8a37a43073dc1540990b0e9e3d"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/modernizr-2.8.3.js": {
+    "mtime": 1780408921.0,
+    "hash": "c1ff1650bba6e39089834e708129d723"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/respond.js": {
+    "mtime": 1780408921.0,
+    "hash": "9034d02a3ff78ccdd81f0790a83940dd"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/jquery.validate-vsdoc.js": {
+    "mtime": 1780408921.0,
+    "hash": "b201e36b64c2abc19134e7fb5846ec5f"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/respond.matchmedia.addListener.js": {
+    "mtime": 1780408921.0,
+    "hash": "1b38ad2fe8e7ad575b394ef9d1ab53d4"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/respond.matchmedia.addListener.min.js": {
+    "mtime": 1780408921.0,
+    "hash": "87c090d540db8c1fb2278ea3e4240d3c"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/jquery.validate.unobtrusive.min.js": {
+    "mtime": 1780408921.0,
+    "hash": "00dac33f17af85806e84ca5005ec10b1"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/popper-utils.js": {
+    "mtime": 1780408921.0,
+    "hash": "81e147e696555bff375b315913960c17"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/respond.min.js": {
+    "mtime": 1780408921.0,
+    "hash": "afc1984a3d17110449dc90cf22de0c27"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/bootstrap.js": {
+    "mtime": 1780408921.0,
+    "hash": "7f827fe484ec04346553202782b0664b"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/jquery-3.3.1.slim.min.js": {
+    "mtime": 1780408921.0,
+    "hash": "99b0a83cf1b0b1e2cb16041520e87641"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/jquery-1.10.2.intellisense.js": {
+    "mtime": 1780408921.0,
+    "hash": "53682ac3aa8319edcb74e06b274e5ef2"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/popper-utils.min.js": {
+    "mtime": 1780408921.0,
+    "hash": "5eef7e902ddcf535e2ce4f57d1216d33"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/popper.js": {
+    "mtime": 1780408921.0,
+    "hash": "942a92c8ec7206a02357d8315470de6c"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/popper.min.js": {
+    "mtime": 1780408921.0,
+    "hash": "8e27d62e3419791403a63cfe0fc32aae"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/bootstrap.bundle.js": {
+    "mtime": 1780408921.0,
+    "hash": "a9247b1fe21ee409d0b37e74100de687"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/jquery.validate.js": {
+    "mtime": 1780408921.0,
+    "hash": "ed399222edd6d6afc491bc82ac5e5051"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/bootstrap.min.js": {
+    "mtime": 1780408921.0,
+    "hash": "e1d98d47689e00f8ecbc5d9f61bdb42e"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/jquery.validate.unobtrusive.js": {
+    "mtime": 1780408921.0,
+    "hash": "b8ce1b651fecf18f796c94235fb1baf9"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/index.d.ts": {
+    "mtime": 1780408921.0,
+    "hash": "e5e4b20b01c71bf4f78f731fdb4525ac"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/jquery-3.3.1.slim.js": {
+    "mtime": 1780408921.0,
+    "hash": "450d478c0491cf0b2d365997faff70dd"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/jquery-3.3.1.intellisense.js": {
+    "mtime": 1780408921.0,
+    "hash": "9935ba32da54a921f49222239797084c"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/modernizr-2.6.2.js": {
+    "mtime": 1780408921.0,
+    "hash": "ec703d0a1d8b3582388a14fde0ca20db"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/jquery.validate.min.js": {
+    "mtime": 1780408921.0,
+    "hash": "93c1dd8416ac2af1850652d5b620a142"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/jquery-3.3.1.min.js": {
+    "mtime": 1780408921.0,
+    "hash": "a09e13ee94d51c524b7e2a728c7d4039"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/bootstrap.bundle.min.js": {
+    "mtime": 1780408921.0,
+    "hash": "a454220fc07088bf1fdd19313b6bfd50"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/jquery-3.3.1.js": {
+    "mtime": 1780408921.0,
+    "hash": "6a07da9fae934baf3f749e876bbfdd96"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/umd/popper-utils.js": {
+    "mtime": 1780408921.0,
+    "hash": "3a4086212629fc56c1710ff65ec89ff7"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/umd/popper-utils.min.js": {
+    "mtime": 1780408921.0,
+    "hash": "827b1c138ee471322b93192345bec2c0"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/umd/popper.js": {
+    "mtime": 1780408921.0,
+    "hash": "a8eb87a8850fb035ef22db5016e0b525"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/umd/popper.min.js": {
+    "mtime": 1780408921.0,
+    "hash": "83fb8c4d9199dce0224da0206423106f"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/esm/popper-utils.js": {
+    "mtime": 1780408921.0,
+    "hash": "ee2fb0126d56aabc2269e94defdb9cc4"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/esm/popper-utils.min.js": {
+    "mtime": 1780408921.0,
+    "hash": "97329ab52bd6a9fb48310e4a558dec0f"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/esm/popper.js": {
+    "mtime": 1780408921.0,
+    "hash": "e725641cfcd3b81b615d505fb561af8b"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/esm/popper.min.js": {
+    "mtime": 1780408921.0,
+    "hash": "f53557e40286ac732667fbe3947b64be"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Controllers/PicController.cs": {
+    "mtime": 1780408921.0,
+    "hash": "28d6837acba0ffb1e79ba043d0d12318"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Controllers/CatalogController.cs": {
+    "mtime": 1780408921.0,
+    "hash": "fe9ee2fec983e137cc67aaede28c7713"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Controllers/Api/CatalogController.cs": {
+    "mtime": 1780408921.0,
+    "hash": "4724f31259949b8b66a74581aae2aeb5"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Controllers/WebApi/FilesController.cs": {
+    "mtime": 1780408921.0,
+    "hash": "90bd9fc4226de8eef5d9ecab1e9a171f"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Controllers/WebApi/BrandsController.cs": {
+    "mtime": 1780408921.0,
+    "hash": "769699cc4d384a436f35fed85d650e37"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/App_Start/BundleConfig.cs": {
+    "mtime": 1780408921.0,
+    "hash": "d65c6e533cdb7c741af7bae6848ae9bd"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/App_Start/WebApiConfig.cs": {
+    "mtime": 1780408921.0,
+    "hash": "743b616c18958949563419b2acbea66f"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/App_Start/RouteConfig.cs": {
+    "mtime": 1780408921.0,
+    "hash": "9b8cedd898e87459a0b6c77c1309f12e"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/App_Start/FilterConfig.cs": {
+    "mtime": 1780408921.0,
+    "hash": "33453b108132446340bc31894bdce687"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Models/CatalogBrand.cs": {
+    "mtime": 1780408921.0,
+    "hash": "68c06ee6d9305f50661ac31baef08867"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Models/CatalogType.cs": {
+    "mtime": 1780408921.0,
+    "hash": "90450d254a0d37f091c104519fafadeb"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Models/CatalogItem.cs": {
+    "mtime": 1780408921.0,
+    "hash": "9accb56cb20ae63e83fb25cb2a62a453"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Models/CatalogDBContext.cs": {
+    "mtime": 1780408921.0,
+    "hash": "154dc37eb07d2f97c380da658ba9070a"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Models/CatalogItemHiLoGenerator.cs": {
+    "mtime": 1780408921.0,
+    "hash": "afa1cf9ad0c0aab1d5c348b1bdb65d92"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Models/Infrastructure/CatalogDBInitializer.cs": {
+    "mtime": 1780408921.0,
+    "hash": "5288f963848269eac52ca419b380dbc4"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Models/Infrastructure/dbo.catalog_brand_hilo.Sequence.sql": {
+    "mtime": 1780408921.0,
+    "hash": "45d2b8d48699bead0b0a656678d3efe8"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Models/Infrastructure/dbo.catalog_type_hilo.Sequence.sql": {
+    "mtime": 1780408921.0,
+    "hash": "0a54f551079e0a1a14ef315c0d766de1"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Models/Infrastructure/PreconfiguredData.cs": {
+    "mtime": 1780408921.0,
+    "hash": "54ddcb7980267e6a1da722ff5e703ef3"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Models/Infrastructure/dbo.catalog_hilo.Sequence.sql": {
+    "mtime": 1780408921.0,
+    "hash": "24e0c61ee91a3aac5c98b806fe08d8a2"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Modules/ApplicationModule.cs": {
+    "mtime": 1780408921.0,
+    "hash": "e348f1e24a43b7bdc52b31da0b4ea930"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Scripts/README.md": {
+    "mtime": 1780408921.0,
+    "hash": "31fd1d84a8438548fa9ec61e4b3b98c0"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Images/brand.png": {
+    "mtime": 1780408921.0,
+    "hash": "ed900beed1cb55a987b11617056d6474"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Images/brand_dark.png": {
+    "mtime": 1780408921.0,
+    "hash": "e03cdf3c5145d1d2ca83f9c9f2aa4510"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Images/main_banner.png": {
+    "mtime": 1780408921.0,
+    "hash": "004f4cc9b7ec1ac304eeff99647d789b"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Images/main_footer_text.png": {
+    "mtime": 1780408921.0,
+    "hash": "492a8bca9618b3b007061f611dfe5eef"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/fonts/Montserrat-Bold.svg": {
+    "mtime": 1780408921.0,
+    "hash": "c20dd39cba8ec82ff472a06a139af9ca"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/fonts/Montserrat-Regular.svg": {
+    "mtime": 1780408921.0,
+    "hash": "221f7e911ca70126a458cb455d2abf96"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Pics/2.png": {
+    "mtime": 1780408921.0,
+    "hash": "6888b0b8df21f3d223b7113360f61d30"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Pics/3.png": {
+    "mtime": 1780408921.0,
+    "hash": "a9eb7aedcd23ea45fa249c0c4a5d174e"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Pics/dummy.png": {
+    "mtime": 1780408921.0,
+    "hash": "ea0c2be9167920110504287fa92cd3df"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Pics/12.png": {
+    "mtime": 1780408921.0,
+    "hash": "a8e6a25a8e47a084290a9f806175cd5d"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Pics/7.png": {
+    "mtime": 1780408921.0,
+    "hash": "0159023f0d2c9cf0713eb84de87d9ec4"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Pics/5.png": {
+    "mtime": 1780408921.0,
+    "hash": "197057e3bb364da1494379b2d71cf8dc"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Pics/11.png": {
+    "mtime": 1780408921.0,
+    "hash": "3d71b13b65fbbec3597b9f21873bd338"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Pics/6.png": {
+    "mtime": 1780408921.0,
+    "hash": "911524806769b5bd5ed5ac63578e4d59"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Pics/1.png": {
+    "mtime": 1780408921.0,
+    "hash": "63e09edc567041fd0ca98847b00f6dc6"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Pics/10.png": {
+    "mtime": 1780408921.0,
+    "hash": "25858256d234cd7fccf5ab5e3632c417"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Pics/4.png": {
+    "mtime": 1780408921.0,
+    "hash": "2c903da112607bb470891f9241b7863d"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Pics/9.png": {
+    "mtime": 1780408921.0,
+    "hash": "17f1a1657c371f4dd797db34694f4577"
+  },
+  "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution/src/eShopLegacyMVC/Pics/8.png": {
+    "mtime": 1780408921.0,
+    "hash": "659bcb510b467345dcc3d6c903986d25"
+  }
+}

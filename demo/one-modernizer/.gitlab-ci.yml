@@ -1,0 +1,37 @@
+stages:
+  - lint
+  - test
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  PYTHON_VERSION: "3.11"
+
+default:
+  image: python:${PYTHON_VERSION}-slim
+  cache:
+    paths:
+      - .cache/pip
+
+lint:python:
+  stage: lint
+  before_script:
+    - pip install ruff bandit
+  script:
+    - ruff check .
+    - bandit -r hooks skills -ll
+
+lint:markdown:
+  stage: lint
+  image: node:20-slim
+  before_script:
+    - npm install -g markdownlint-cli
+  script:
+    - markdownlint '**/*.md' --ignore node_modules
+
+test:
+  stage: test
+  before_script:
+    - pip install pytest
+    - pip install graphifyy==0.7.10
+  script:
+    - pytest hooks/scripts/tests/ -v

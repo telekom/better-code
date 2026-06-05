@@ -1,0 +1,15 @@
+# Pipeline output produced during demo dry-runs
+# Committed intentionally: migration evidence/output is part of the conference demo.
+
+# Local environment files from sample app variants
+**/.env
+
+# Plugin venv / engine install state (created by /setup at runtime)
+**/venv/
+**/__pycache__/
+*.pyc
+
+# .NET build artifacts (if the app is built locally during the demo)
+**/bin/
+**/obj/
+**/packages/

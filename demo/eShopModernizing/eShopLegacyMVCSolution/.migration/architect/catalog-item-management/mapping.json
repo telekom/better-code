@@ -1,0 +1,67 @@
+{
+  "feature": "catalog-item-management",
+  "rules": [
+    {"spec_id": "BR-001", "target_service": "catalog-service", "target_class": "CatalogItemValidator", "target_method": "ValidateName", "layer": "validation"},
+    {"spec_id": "BR-002", "target_service": "catalog-service", "target_class": "CatalogItemValidator", "target_method": "ValidatePrice", "layer": "validation"},
+    {"spec_id": "BR-003", "target_service": "catalog-service", "target_class": "CatalogItemValidator", "target_method": "ValidateAvailableStock", "layer": "validation"},
+    {"spec_id": "BR-004", "target_service": "catalog-service", "target_class": "CatalogItemValidator", "target_method": "ValidateRestockThreshold", "layer": "validation"},
+    {"spec_id": "BR-005", "target_service": "catalog-service", "target_class": "CatalogItemValidator", "target_method": "ValidateMaxStockThreshold", "layer": "validation"},
+    {"spec_id": "BR-006", "target_service": "catalog-service", "target_class": "CatalogController", "target_method": "ValidateIdProvided", "layer": "controller"},
+    {"spec_id": "BR-007", "target_service": "catalog-service", "target_class": "CatalogController", "target_method": "EnsureFoundOrNotFound", "layer": "controller"},
+    {"spec_id": "BR-008", "target_service": "catalog-service", "target_class": "CatalogService", "target_method": "GetCatalogItemsPaginated", "layer": "service"},
+    {"spec_id": "BR-009", "target_service": "catalog-service", "target_class": "PaginatedItemsViewModel", "target_method": "ComputeTotalPages", "layer": "domain"},
+    {"spec_id": "BR-010", "target_service": "catalog-service", "target_class": "CatalogController", "target_method": "AddPictureUri", "layer": "controller"},
+    {"spec_id": "BR-011", "target_service": "catalog-service", "target_class": "CatalogService", "target_method": "CreateCatalogItem", "layer": "service"},
+    {"spec_id": "BR-012", "target_service": "catalog-service", "target_class": "CatalogController", "target_method": "BindAndValidateAntiForgery", "layer": "controller"},
+    {"spec_id": "BR-013", "target_service": "catalog-service", "target_class": "CatalogController", "target_method": "PersistIfValid", "layer": "controller"},
+    {"spec_id": "BR-014", "target_service": "catalog-service", "target_class": "CatalogItem", "target_method": "ctor", "layer": "domain"},
+    {"spec_id": "BR-015", "target_service": "catalog-service", "target_class": "CatalogService", "target_method": "UpdateCatalogItem", "layer": "service"},
+    {"spec_id": "BR-016", "target_service": "catalog-service", "target_class": "CatalogIdGenerator", "target_method": "GetNextId", "layer": "repository"},
+    {"spec_id": "BR-017", "target_service": "catalog-service", "target_class": "CatalogService", "target_method": "RemoveCatalogItem", "layer": "service"}
+  ],
+  "data_model": [
+    {"spec_name": "CatalogItem", "target_service": "catalog-service", "target_entity": "CatalogItem", "target_table": "Catalog", "migration": "bulk-ETL"},
+    {"spec_name": "CatalogBrand", "target_service": "catalog-service", "target_entity": "CatalogBrand", "target_table": "CatalogBrand", "migration": "bulk-ETL"},
+    {"spec_name": "CatalogType", "target_service": "catalog-service", "target_entity": "CatalogType", "target_table": "CatalogType", "migration": "bulk-ETL"},
+    {"spec_name": "PaginatedItemsViewModel", "target_service": "catalog-service", "target_entity": "PaginatedItemsViewModel<T>", "target_table": "n/a (view model)", "migration": "new"}
+  ],
+  "flows": [
+    {"spec_id": "FLOW-001", "target_service": "catalog-service", "target_endpoint": "GET /Catalog", "target_handler": "CatalogController.Index", "trigger_type": "http"},
+    {"spec_id": "FLOW-002", "target_service": "catalog-service", "target_endpoint": "GET /Catalog/Details/{id}", "target_handler": "CatalogController.Details", "trigger_type": "http"},
+    {"spec_id": "FLOW-003", "target_service": "catalog-service", "target_endpoint": "POST /Catalog/Create", "target_handler": "CatalogController.Create", "trigger_type": "http"},
+    {"spec_id": "FLOW-004", "target_service": "catalog-service", "target_endpoint": "POST /Catalog/Edit/{id}", "target_handler": "CatalogController.Edit", "trigger_type": "http"},
+    {"spec_id": "FLOW-005", "target_service": "catalog-service", "target_endpoint": "POST /Catalog/Delete/{id}", "target_handler": "CatalogController.DeleteConfirmed", "trigger_type": "http"}
+  ],
+  "errors": [
+    {"spec_id": "ERR-001", "target_exception": "BadRequestResult", "target_handler": "CatalogController", "http_status": 400, "retry_policy": "none"},
+    {"spec_id": "ERR-002", "target_exception": "NotFoundResult", "target_handler": "CatalogController", "http_status": 404, "retry_policy": "none"},
+    {"spec_id": "ERR-003", "target_exception": "ValidationException", "target_handler": "CatalogController (redisplay) / ValidationProblemDetails", "http_status": 400, "retry_policy": "none"},
+    {"spec_id": "ERR-004", "target_exception": "Exception", "target_handler": "GlobalExceptionHandlerMiddleware", "http_status": 500, "retry_policy": "none"}
+  ],
+  "interfaces": [
+    {"spec_type": "DB", "spec_target": "Catalog table (CatalogDBContext)", "target_component": "CatalogRepository (CatalogDbContext)", "target_table": "Catalog", "target_topic": "", "target_url": ""},
+    {"spec_type": "DB", "spec_target": "catalog_hilo sequence", "target_component": "CatalogIdGenerator", "target_table": "catalog_hilo", "target_topic": "", "target_url": ""},
+    {"spec_type": "Screen", "spec_target": "Catalog Razor views", "target_component": "CatalogController + Views/Catalog/*.cshtml", "target_table": "", "target_topic": "", "target_url": ""},
+    {"spec_type": "API", "spec_target": "PicController route GetPicRouteTemplate", "target_component": "LinkGenerator / IUrlHelper (PictureUri)", "target_table": "", "target_topic": "", "target_url": "items/{id}/pic"}
+  ],
+  "test_cases": [
+    {"spec_id": "TC-001", "target_test_class": "CatalogItemValidatorTests", "target_test_method": "Create_EmptyName_Rejected", "test_type": "unit"},
+    {"spec_id": "TC-002", "target_test_class": "CatalogServiceTests", "target_test_method": "Create_ValidItem_AssignsId", "test_type": "integration"},
+    {"spec_id": "TC-003", "target_test_class": "CatalogItemValidatorTests", "target_test_method": "Price_ThreeDecimals_Rejected", "test_type": "unit"},
+    {"spec_id": "TC-004", "target_test_class": "CatalogItemValidatorTests", "target_test_method": "Price_AboveMax_Rejected", "test_type": "unit"},
+    {"spec_id": "TC-005", "target_test_class": "CatalogItemValidatorTests", "target_test_method": "Price_AtMax_Accepted", "test_type": "unit"},
+    {"spec_id": "TC-006", "target_test_class": "CatalogItemValidatorTests", "target_test_method": "AvailableStock_AboveMax_Rejected", "test_type": "unit"},
+    {"spec_id": "TC-007", "target_test_class": "CatalogItemValidatorTests", "target_test_method": "RestockThreshold_Negative_Rejected", "test_type": "unit"},
+    {"spec_id": "TC-008", "target_test_class": "CatalogItemValidatorTests", "target_test_method": "MaxStockThreshold_AboveMax_Rejected", "test_type": "unit"},
+    {"spec_id": "TC-009", "target_test_class": "CatalogControllerTests", "target_test_method": "Details_NullId_Returns400", "test_type": "unit"},
+    {"spec_id": "TC-010", "target_test_class": "CatalogControllerTests", "target_test_method": "Details_MissingItem_Returns404", "test_type": "integration"},
+    {"spec_id": "TC-011", "target_test_class": "CatalogControllerTests", "target_test_method": "Details_ValidId_ReturnsItemWithPictureUri", "test_type": "integration"},
+    {"spec_id": "TC-012", "target_test_class": "CatalogServiceTests", "target_test_method": "Index_ReturnsPageOrderedById", "test_type": "integration"},
+    {"spec_id": "TC-013", "target_test_class": "PaginatedItemsViewModelTests", "target_test_method": "TotalPages_IsCeiling", "test_type": "unit"},
+    {"spec_id": "TC-014", "target_test_class": "CatalogItemTests", "target_test_method": "New_DefaultsPictureFileName", "test_type": "unit"},
+    {"spec_id": "TC-015", "target_test_class": "CatalogServiceTests", "target_test_method": "Edit_ValidModel_Persists", "test_type": "integration"},
+    {"spec_id": "TC-016", "target_test_class": "CatalogIdGeneratorTests", "target_test_method": "HiLo_TenIdsPerFetch", "test_type": "unit"},
+    {"spec_id": "TC-017", "target_test_class": "CatalogServiceTests", "target_test_method": "Delete_RemovesItem", "test_type": "integration"},
+    {"spec_id": "TC-018", "target_test_class": "CatalogControllerTests", "target_test_method": "Create_MissingAntiForgery_Rejected", "test_type": "integration"}
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "autoCompactWindow": 900000,
+  "enabledPlugins": {
+    "one-modernizer@bettercode-local": true
+  }
+}

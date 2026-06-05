@@ -1,0 +1,131 @@
+{
+  "version": "1.0",
+  "project_root": "/home/lars/Developer/bettercode/demo/eShopModernizing/eShopLegacyMVCSolution",
+  "created_at": "2026-06-03T06:36:06.972151Z",
+  "updated_at": "2026-06-03T07:51:32.503431Z",
+  "pipeline": {
+    "discover": {
+      "status": "completed",
+      "outputs": {
+        "discovery_dir": ".migration/discovery/",
+        "graph": ".migration/discovery/graphify-out/graph.json",
+        "index": ".migration/discovery/index.json"
+      },
+      "completed_at": "2026-06-03T06:36:06.972246Z"
+    },
+    "assess": {
+      "status": "completed",
+      "outputs": {
+        "assess_dir": ".migration/assess/",
+        "feature_map": ".migration/assess/feature-map.json",
+        "sequence": ".migration/assess/migration-sequence.md"
+      },
+      "completed_at": "2026-06-03T06:36:06.972250Z"
+    },
+    "decompose": {
+      "status": "in_progress",
+      "outputs": {
+        "catalog-item-management": ".migration/decompose/catalog-item-management/"
+      },
+      "completed_at": "2026-06-03T06:57:51.591537Z"
+    },
+    "architect": {
+      "status": "in_progress",
+      "outputs": {
+        "catalog-item-management": ".migration/architect/catalog-item-management/"
+      },
+      "completed_at": "2026-06-03T06:57:51.591618Z"
+    },
+    "implement": {
+      "status": "in_progress",
+      "outputs": {
+        "catalog-item-management": ".migration/implement/catalog-item-management/",
+        "target_dir": "target/catalog-item-management/"
+      },
+      "completed_at": "2026-06-03T06:57:51.591621Z"
+    },
+    "validate": {
+      "status": "completed",
+      "outputs": {
+        "catalog-item-management": ".migration/validate/catalog-item-management/",
+        "report": ".migration/validate/catalog-item-management/report.md"
+      },
+      "completed_at": "2026-06-03T07:51:32.503372Z"
+    }
+  },
+  "features": {
+    "catalog-item-management": {
+      "registered_at": "2026-06-03T06:36:06.972256Z",
+      "modules": [
+        "web-controllers",
+        "catalog-services",
+        "domain-model",
+        "views-and-static"
+      ],
+      "strategy": "Refactor",
+      "stage": "validated-demo-complete",
+      "artifacts": {
+        "assessment": ".migration/assess/features/catalog-item-management.md",
+        "spec_json": ".migration/decompose/catalog-item-management/spec.json",
+        "blueprint_json": ".migration/architect/catalog-item-management/blueprint.json",
+        "mapping_json": ".migration/architect/catalog-item-management/mapping.json",
+        "scaffold_json": ".migration/architect/catalog-item-management/scaffold.json",
+        "target_dir": "target/catalog-item-management/",
+        "constitution": ".migration/implement/catalog-item-management/constitution.md",
+        "coverage_report": ".migration/implement/catalog-item-management/coverage-report.json",
+        "validation_report": ".migration/validate/catalog-item-management/report.md"
+      }
+    },
+    "reference-data-brands-types": {
+      "registered_at": "2026-06-03T06:36:06.972293Z",
+      "modules": [
+        "web-controllers",
+        "catalog-services",
+        "domain-model",
+        "shared-utilities"
+      ],
+      "strategy": "Refactor",
+      "stage": "assessed",
+      "artifacts": {
+        "assessment": ".migration/assess/features/reference-data-brands-types.md"
+      }
+    },
+    "product-imagery": {
+      "registered_at": "2026-06-03T06:36:06.972299Z",
+      "modules": [
+        "web-controllers",
+        "data-persistence-seeding"
+      ],
+      "strategy": "Refactor",
+      "stage": "assessed",
+      "artifacts": {
+        "assessment": ".migration/assess/features/product-imagery.md"
+      }
+    },
+    "data-seeding-init": {
+      "registered_at": "2026-06-03T06:36:06.972301Z",
+      "modules": [
+        "data-persistence-seeding",
+        "domain-model"
+      ],
+      "strategy": "Rewrite",
+      "stage": "assessed",
+      "artifacts": {
+        "assessment": ".migration/assess/features/data-seeding-init.md"
+      }
+    },
+    "application-platform": {
+      "registered_at": "2026-06-03T06:36:06.972304Z",
+      "modules": [
+        "app-bootstrap-config",
+        "shared-utilities"
+      ],
+      "strategy": "Rewrite",
+      "stage": "assessed",
+      "artifacts": {
+        "assessment": ".migration/assess/features/application-platform.md"
+      }
+    }
+  },
+  "active_feature": "catalog-item-management"
+}

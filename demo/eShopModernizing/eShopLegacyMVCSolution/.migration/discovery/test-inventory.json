@@ -1,0 +1,29 @@
+{
+  "summary": {
+    "total_source_files": 119,
+    "test_files": 0,
+    "production_files": 119,
+    "prod_files_with_tests": 0,
+    "estimated_coverage_pct": 0.0
+  },
+  "frameworks": {},
+  "fixtures": [],
+  "coverage_by_directory": {
+    "eShopLegacy.Utilities": {
+      "total": 2,
+      "tested": 0
+    },
+    "eShopPorted": {
+      "total": 56,
+      "tested": 0
+    },
+    "src": {
+      "total": 61,
+      "tested": 0
+    }
+  },
+  "untested_directories": [
+    "eShopPorted",
+    "src"
+  ]
+}

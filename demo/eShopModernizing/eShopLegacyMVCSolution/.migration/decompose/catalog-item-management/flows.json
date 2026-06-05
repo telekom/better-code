@@ -1,0 +1,308 @@
+[
+  {
+    "id": "FLOW-001",
+    "name": "Browse catalog (paginated listing)",
+    "trigger": "HTTP GET /Catalog/Index?pageSize&pageIndex (default pageSize=10, pageIndex=0)",
+    "steps": [
+      {
+        "seq": 1,
+        "action": "Controller receives pageSize/pageIndex (defaults 10/0)",
+        "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:22-24",
+        "calls": [],
+        "reads": [],
+        "writes": [],
+        "rules": []
+      },
+      {
+        "seq": 2,
+        "action": "Service queries total count and a page of items ordered by Id, eager-loading brand and type",
+        "source": "src/eShopLegacyMVC/Services/CatalogService.cs:21-35",
+        "calls": [
+          "CatalogDBContext"
+        ],
+        "reads": [
+          "CatalogItem",
+          "CatalogBrand",
+          "CatalogType"
+        ],
+        "writes": [],
+        "rules": [
+          "BR-008",
+          "BR-009"
+        ]
+      },
+      {
+        "seq": 3,
+        "action": "Controller computes PictureUri for each item",
+        "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:152-158",
+        "calls": [],
+        "reads": [
+          "CatalogItem"
+        ],
+        "writes": [
+          "CatalogItem.PictureUri"
+        ],
+        "rules": [
+          "BR-010"
+        ]
+      },
+      {
+        "seq": 4,
+        "action": "Return Index view with PaginatedItemsViewModel",
+        "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:27",
+        "calls": [],
+        "reads": [],
+        "writes": [],
+        "rules": []
+      }
+    ],
+    "error_paths": []
+  },
+  {
+    "id": "FLOW-002",
+    "name": "View item details",
+    "trigger": "HTTP GET /Catalog/Details/{id}",
+    "steps": [
+      {
+        "seq": 1,
+        "action": "Validate id is not null",
+        "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:34-37",
+        "calls": [],
+        "reads": [],
+        "writes": [],
+        "rules": [
+          "BR-006"
+        ]
+      },
+      {
+        "seq": 2,
+        "action": "Find catalog item by id (eager-load brand/type)",
+        "source": "src/eShopLegacyMVC/Services/CatalogService.cs:37-40",
+        "calls": [
+          "CatalogDBContext"
+        ],
+        "reads": [
+          "CatalogItem"
+        ],
+        "writes": [],
+        "rules": [
+          "BR-007"
+        ]
+      },
+      {
+        "seq": 3,
+        "action": "Compute PictureUri and return Details view",
+        "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:43-45",
+        "calls": [],
+        "reads": [
+          "CatalogItem"
+        ],
+        "writes": [
+          "CatalogItem.PictureUri"
+        ],
+        "rules": [
+          "BR-010"
+        ]
+      }
+    ],
+    "error_paths": [
+      {
+        "at_step": 1,
+        "condition": "id == null",
+        "action": "Return HTTP 400 BadRequest",
+        "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:34-37"
+      },
+      {
+        "at_step": 2,
+        "condition": "item not found",
+        "action": "Return HTTP 404",
+        "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:39-42"
+      }
+    ]
+  },
+  {
+    "id": "FLOW-003",
+    "name": "Create catalog item",
+    "trigger": "HTTP POST /Catalog/Create (anti-forgery, bound allow-list)",
+    "steps": [
+      {
+        "seq": 1,
+        "action": "Validate anti-forgery token and bind allow-listed fields",
+        "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:60-62",
+        "calls": [],
+        "reads": [],
+        "writes": [],
+        "rules": [
+          "BR-012"
+        ]
+      },
+      {
+        "seq": 2,
+        "action": "Validate model (name, price, stock ranges)",
+        "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:65",
+        "calls": [],
+        "reads": [
+          "CatalogItem"
+        ],
+        "writes": [],
+        "rules": [
+          "BR-001",
+          "BR-002",
+          "BR-003",
+          "BR-004",
+          "BR-005",
+          "BR-013"
+        ]
+      },
+      {
+        "seq": 3,
+        "action": "Assign Id from HiLo and persist new item",
+        "source": "src/eShopLegacyMVC/Services/CatalogService.cs:51-56",
+        "calls": [
+          "CatalogItemHiLoGenerator",
+          "CatalogDBContext"
+        ],
+        "reads": [
+          "catalog_hilo sequence"
+        ],
+        "writes": [
+          "CatalogItem"
+        ],
+        "rules": [
+          "BR-011",
+          "BR-016"
+        ]
+      },
+      {
+        "seq": 4,
+        "action": "Redirect to Index",
+        "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:68",
+        "calls": [],
+        "reads": [],
+        "writes": [],
+        "rules": []
+      }
+    ],
+    "error_paths": [
+      {
+        "at_step": 2,
+        "condition": "ModelState invalid",
+        "action": "Repopulate brand/type SelectLists and redisplay Create view with submitted values",
+        "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:71-73"
+      }
+    ]
+  },
+  {
+    "id": "FLOW-004",
+    "name": "Edit catalog item",
+    "trigger": "HTTP POST /Catalog/Edit (anti-forgery, bound allow-list)",
+    "steps": [
+      {
+        "seq": 1,
+        "action": "Validate anti-forgery token and bind allow-listed fields",
+        "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:98-100",
+        "calls": [],
+        "reads": [],
+        "writes": [],
+        "rules": [
+          "BR-012"
+        ]
+      },
+      {
+        "seq": 2,
+        "action": "Validate model",
+        "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:103",
+        "calls": [],
+        "reads": [
+          "CatalogItem"
+        ],
+        "writes": [],
+        "rules": [
+          "BR-001",
+          "BR-002",
+          "BR-003",
+          "BR-004",
+          "BR-005",
+          "BR-013"
+        ]
+      },
+      {
+        "seq": 3,
+        "action": "Mark entity Modified and save",
+        "source": "src/eShopLegacyMVC/Services/CatalogService.cs:58-62",
+        "calls": [
+          "CatalogDBContext"
+        ],
+        "reads": [],
+        "writes": [
+          "CatalogItem"
+        ],
+        "rules": [
+          "BR-015"
+        ]
+      },
+      {
+        "seq": 4,
+        "action": "Redirect to Index",
+        "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:106",
+        "calls": [],
+        "reads": [],
+        "writes": [],
+        "rules": []
+      }
+    ],
+    "error_paths": [
+      {
+        "at_step": 2,
+        "condition": "ModelState invalid",
+        "action": "Repopulate SelectLists and redisplay Edit view",
+        "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:108-110"
+      }
+    ]
+  },
+  {
+    "id": "FLOW-005",
+    "name": "Delete catalog item",
+    "trigger": "HTTP POST /Catalog/Delete/{id} (anti-forgery)",
+    "steps": [
+      {
+        "seq": 1,
+        "action": "Validate anti-forgery token",
+        "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:132-133",
+        "calls": [],
+        "reads": [],
+        "writes": [],
+        "rules": [
+          "BR-012"
+        ]
+      },
+      {
+        "seq": 2,
+        "action": "Find item by id and remove it",
+        "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:134-138",
+        "calls": [
+          "CatalogDBContext"
+        ],
+        "reads": [
+          "CatalogItem"
+        ],
+        "writes": [
+          "CatalogItem"
+        ],
+        "rules": [
+          "BR-017"
+        ]
+      },
+      {
+        "seq": 3,
+        "action": "Redirect to Index",
+        "source": "src/eShopLegacyMVC/Controllers/CatalogController.cs:139",
+        "calls": [],
+        "reads": [],
+        "writes": [],
+        "rules": []
+      }
+    ],
+    "error_paths": []
+  }
+]

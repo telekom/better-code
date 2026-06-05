@@ -1,0 +1,245 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Feature Decomposition Specification",
+  "description": "Complete behavioral specification for a feature being migrated. Consumed by the transform step to generate equivalent code in the target platform.",
+  "type": "object",
+  "required": [
+    "feature",
+    "version",
+    "modules",
+    "migration_strategy",
+    "business_rules",
+    "data_model",
+    "flows"
+  ],
+  "properties": {
+    "feature": {
+      "type": "string",
+      "description": "Feature name (matches the assess feature name)"
+    },
+    "version": {
+      "type": "string",
+      "description": "Spec version (semver)"
+    },
+    "extracted_from": {
+      "type": "string",
+      "description": "Path to the assess feature file this was derived from"
+    },
+    "modules": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of module/program names that implement this feature"
+    },
+    "migration_strategy": {
+      "type": "string",
+      "enum": [
+        "Rewrite",
+        "Refactor",
+        "Replace",
+        "Replatform",
+        "Retain",
+        "Retire"
+      ]
+    },
+    "target_platform": {
+      "type": "string",
+      "description": "Target technology (e.g., 'Java/Spring Boot', 'Go', '.NET')"
+    },
+    "business_rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "description", "type", "source", "confidence"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^BR-\\d{3}$" },
+          "description": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": [
+              "validation",
+              "calculation",
+              "state-transition",
+              "routing",
+              "transformation",
+              "authorization"
+            ]
+          },
+          "condition": { "type": "string" },
+          "action": { "type": "string" },
+          "source": { "type": "string", "description": "file:line-range" },
+          "confidence": {
+            "type": "string",
+            "enum": ["clear", "inferred", "ambiguous"]
+          },
+          "dependencies": { "type": "array", "items": { "type": "string" } },
+          "data_fields": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "data_model": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "source", "fields"],
+        "properties": {
+          "name": { "type": "string" },
+          "source": { "type": "string" },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "type"],
+              "properties": {
+                "name": { "type": "string" },
+                "type": { "type": "string" },
+                "target_type": { "type": "string" },
+                "nullable": { "type": "boolean" },
+                "constraints": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "used_by_rules": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "description": { "type": "string" }
+              }
+            }
+          },
+          "relationships": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "to": { "type": "string" },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "one-to-many",
+                    "many-to-one",
+                    "one-to-one",
+                    "many-to-many"
+                  ]
+                },
+                "foreign_key": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "flows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "trigger", "steps"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^FLOW-\\d{3}$" },
+          "name": { "type": "string" },
+          "trigger": { "type": "string" },
+          "steps": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["seq", "action", "source"],
+              "properties": {
+                "seq": { "type": "integer" },
+                "action": { "type": "string" },
+                "source": { "type": "string" },
+                "calls": { "type": "array", "items": { "type": "string" } },
+                "reads": { "type": "array", "items": { "type": "string" } },
+                "writes": { "type": "array", "items": { "type": "string" } },
+                "rules": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          },
+          "error_paths": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["at_step", "condition", "action", "source"],
+              "properties": {
+                "at_step": { "type": "integer" },
+                "condition": { "type": "string" },
+                "action": { "type": "string" },
+                "source": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "trigger", "handling", "source", "severity"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^ERR-\\d{3}$" },
+          "trigger": { "type": "string" },
+          "handling": { "type": "string" },
+          "source": { "type": "string" },
+          "severity": {
+            "type": "string",
+            "enum": ["critical", "warning", "info"]
+          },
+          "recovery": { "type": "string" },
+          "user_impact": { "type": "string" }
+        }
+      }
+    },
+    "test_cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "description", "type", "input", "expected_output"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^TC-\\d{3}$" },
+          "description": { "type": "string" },
+          "covers_rules": { "type": "array", "items": { "type": "string" } },
+          "covers_flow": { "type": "string" },
+          "input": { "type": "object" },
+          "expected_output": { "type": "object" },
+          "type": {
+            "type": "string",
+            "enum": ["unit", "integration", "boundary", "negative"]
+          },
+          "preconditions": { "type": "string" }
+        }
+      }
+    },
+    "external_interfaces": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "target", "direction", "source"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["DB", "API", "MQ", "File", "Screen", "Email", "FTP"]
+          },
+          "target": { "type": "string" },
+          "protocol": { "type": "string" },
+          "direction": {
+            "type": "string",
+            "enum": ["inbound", "outbound", "bidirectional"]
+          },
+          "source": { "type": "string" },
+          "data_format": { "type": "string" }
+        }
+      }
+    },
+    "unknowns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["description", "source", "impact"],
+        "properties": {
+          "description": { "type": "string" },
+          "source": { "type": "string" },
+          "impact": { "type": "string" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "feature": "catalog-item-management",
+  "solution": "eShopModernized.Catalog",
+  "services": [
+    {
+      "name": "catalog-service",
+      "project": "eShopModernized.Catalog",
+      "sdk": "Microsoft.NET.Sdk.Web",
+      "target_framework": "net8.0",
+      "structure": [
+        {
+          "folder": "Controllers",
+          "files": [
+            {"file": "CatalogController.cs", "class": "CatalogController", "methods": ["Index", "Details", "Create", "Edit", "DeleteConfirmed", "AddPictureUri", "ValidateIdProvided", "EnsureFoundOrNotFound", "BindAndValidateAntiForgery", "PersistIfValid"], "role": "MVC controller for catalog CRUD"}
+          ]
+        },
+        {
+          "folder": "Application",
+          "files": [
+            {"file": "ICatalogService.cs", "class": "ICatalogService", "role": "service contract"},
+            {"file": "CatalogService.cs", "class": "CatalogService", "methods": ["GetCatalogItemsPaginated", "FindCatalogItem", "GetCatalogBrands", "GetCatalogTypes", "CreateCatalogItem", "UpdateCatalogItem", "RemoveCatalogItem"], "role": "application/business logic (EF Core backed)"},
+            {"file": "CatalogServiceMock.cs", "class": "CatalogServiceMock", "role": "in-memory test double (no shared mutable static state)"}
+          ]
+        },
+        {
+          "folder": "Validation",
+          "files": [
+            {"file": "CatalogItemValidator.cs", "class": "CatalogItemValidator", "methods": ["ValidateName", "ValidatePrice", "ValidateAvailableStock", "ValidateRestockThreshold", "ValidateMaxStockThreshold"], "role": "FluentValidation rules for CatalogItem"}
+          ]
+        },
+        {
+          "folder": "Domain",
+          "files": [
+            {"file": "CatalogItem.cs", "class": "CatalogItem", "methods": ["ctor"], "role": "product entity (default PictureFileName)"},
+            {"file": "CatalogBrand.cs", "class": "CatalogBrand", "role": "brand entity"},
+            {"file": "CatalogType.cs", "class": "CatalogType", "role": "type entity"}
+          ]
+        },
+        {
+          "folder": "ViewModels",
+          "files": [
+            {"file": "PaginatedItemsViewModel.cs", "class": "PaginatedItemsViewModel<T>", "methods": ["ComputeTotalPages"], "role": "paging envelope"},
+            {"file": "CatalogItemEditRequest.cs", "class": "CatalogItemEditRequest", "role": "bound request DTO (replaces [Bind] allow-list, anti-overposting)"}
+          ]
+        },
+        {
+          "folder": "Infrastructure",
+          "files": [
+            {"file": "CatalogDbContext.cs", "class": "CatalogDbContext", "role": "EF Core DbContext (DbContextOptions injected)"},
+            {"file": "Config/CatalogItemConfig.cs", "class": "CatalogItemConfig", "role": "IEntityTypeConfiguration<CatalogItem> (table Catalog, FK, lengths, Id DatabaseGenerated.None)"},
+            {"file": "Config/CatalogBrandConfig.cs", "class": "CatalogBrandConfig", "role": "IEntityTypeConfiguration<CatalogBrand>"},
+            {"file": "Config/CatalogTypeConfig.cs", "class": "CatalogTypeConfig", "role": "IEntityTypeConfiguration<CatalogType>"},
+            {"file": "CatalogRepository.cs", "class": "CatalogRepository", "role": "data access over CatalogDbContext"},
+            {"file": "CatalogIdGenerator.cs", "class": "CatalogIdGenerator", "methods": ["GetNextId"], "role": "HiLo id allocation (EF Core sequence catalog_hilo, 10/batch)"}
+          ]
+        },
+        {
+          "folder": "Middleware",
+          "files": [
+            {"file": "GlobalExceptionHandlerMiddleware.cs", "class": "GlobalExceptionHandlerMiddleware", "role": "maps unhandled exceptions to ProblemDetails / error page (ERR-004)"}
+          ]
+        },
+        {
+          "folder": "Views/Catalog",
+          "files": [
+            {"file": "Index.cshtml", "role": "listing"},
+            {"file": "Details.cshtml", "role": "details"},
+            {"file": "Create.cshtml", "role": "create form"},
+            {"file": "Edit.cshtml", "role": "edit form"},
+            {"file": "Delete.cshtml", "role": "delete confirm"}
+          ]
+        },
+        {
+          "folder": "(root)",
+          "files": [
+            {"file": "Program.cs", "class": "Program", "role": "host bootstrap: DI, EF Core, FluentValidation, OpenTelemetry, routing, exception middleware"},
+            {"file": "appsettings.json", "role": "config: ConnectionStrings:CatalogDb, UseMockData, UseCustomizationData, AppInsights"}
+          ]
+        }
+      ],
+      "dependencies": [
+        "Microsoft.EntityFrameworkCore.SqlServer (8.x)",
+        "Microsoft.EntityFrameworkCore.Design (8.x)",
+        "FluentValidation.AspNetCore (11.x)",
+        "Microsoft.ApplicationInsights.AspNetCore",
+        "OpenTelemetry.Extensions.Hosting",
+        "OpenTelemetry.Instrumentation.AspNetCore",
+        "Autofac.Extensions.DependencyInjection (optional, parity with eShopPorted)"
+      ],
+      "apis": [
+        {"method": "GET", "path": "/Catalog", "request_type": "pageSize:int=10, pageIndex:int=0", "response_type": "HTML (PaginatedItemsViewModel<CatalogItem>)"},
+        {"method": "GET", "path": "/Catalog/Details/{id}", "request_type": "id:int", "response_type": "HTML (CatalogItem)"},
+        {"method": "GET", "path": "/Catalog/Create", "request_type": "none", "response_type": "HTML"},
+        {"method": "POST", "path": "/Catalog/Create", "request_type": "CatalogItemEditRequest", "response_type": "302 -> /Catalog"},
+        {"method": "GET", "path": "/Catalog/Edit/{id}", "request_type": "id:int", "response_type": "HTML"},
+        {"method": "POST", "path": "/Catalog/Edit/{id}", "request_type": "CatalogItemEditRequest", "response_type": "302 -> /Catalog"},
+        {"method": "GET", "path": "/Catalog/Delete/{id}", "request_type": "id:int", "response_type": "HTML"},
+        {"method": "POST", "path": "/Catalog/Delete/{id}", "request_type": "id:int", "response_type": "302 -> /Catalog"}
+      ],
+      "config_files": ["appsettings.json", "appsettings.Development.json"],
+      "test_project": {
+        "name": "eShopModernized.Catalog.Tests",
+        "target_framework": "net8.0",
+        "dependencies": ["xunit", "FluentAssertions", "Microsoft.EntityFrameworkCore.InMemory", "Microsoft.AspNetCore.Mvc.Testing", "Moq"],
+        "files": [
+          {"file": "CatalogItemValidatorTests.cs", "class": "CatalogItemValidatorTests"},
+          {"file": "CatalogServiceTests.cs", "class": "CatalogServiceTests"},
+          {"file": "CatalogControllerTests.cs", "class": "CatalogControllerTests"},
+          {"file": "PaginatedItemsViewModelTests.cs", "class": "PaginatedItemsViewModelTests"},
+          {"file": "CatalogItemTests.cs", "class": "CatalogItemTests"},
+          {"file": "CatalogIdGeneratorTests.cs", "class": "CatalogIdGeneratorTests"}
+        ]
+      }
+    }
+  ],
+  "infrastructure": {
+    "containerization": "Dockerfile (mcr.microsoft.com/dotnet/aspnet:8.0 runtime, sdk:8.0 build)",
+    "compose": "docker-compose.yml (catalog-service + mssql)",
+    "orchestration": "Helm chart / Azure App Service (optional)",
+    "ci_cd": "dotnet restore/build/test + docker build/push pipeline",
+    "database": {"engine": "SQL Server / Azure SQL", "schema_migrations": "EF Core Migrations", "sequences": ["catalog_hilo", "catalog_brand_hilo", "catalog_type_hilo"]}
+  },
+  "shared_contracts": {
+    "openapi": "not required for this server-rendered MVC feature (no public JSON API in scope)",
+    "event_schemas": [],
+    "proto": []
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "feature": "catalog-item-management",
+  "resolved": [
+    {
+      "ambiguity": "Price regex ^\\d+(\\.\\d{0,2})*$ allows repeated decimal groups (spec unknown #1).",
+      "resolution": "Preserve the exact regex from legacy/eShopPorted for behavioral parity. Do not tighten in this pass.",
+      "basis": "Parity-first constitution; src/eShopLegacyMVC/Models/CatalogItem.cs:22 and eShopPorted/Models/CatalogItem.cs:22 are identical.",
+      "spec_refs": ["BR-002"]
+    },
+    {
+      "ambiguity": "No optimistic concurrency / SaveChanges error handling (spec unknown #2).",
+      "resolution": "Keep legacy last-write-wins behavior; no rowversion this pass. Logged as a follow-up enhancement (ADR-005).",
+      "basis": "Parity-first; matches eShopPorted CatalogService.UpdateCatalogItem.",
+      "spec_refs": ["BR-015"]
+    },
+    {
+      "ambiguity": "CatalogServiceMock mutates shared static PreconfiguredData lists (spec unknown #3).",
+      "resolution": "Fix in the mock: seed from a fresh copy of PreconfiguredData per instance and avoid mutating the static source. Behavior-preserving bug fix.",
+      "basis": "Discovery flagged cross-request state bleed; safe to correct without changing observable CRUD behavior.",
+      "spec_refs": ["BR-008"]
+    },
+    {
+      "ambiguity": "HiLo id state cached in a process singleton (spec unknown #4); eShopPorted dropped the HiLo generator.",
+      "resolution": "Re-implement HiLo as CatalogIdGenerator backed by an EF Core sequence (catalog_hilo, INCREMENT 10), registered as a singleton, to honor BR-011/BR-016. Documented as not scale-out-safe without a distributed sequence.",
+      "basis": "spec.json is the behavioral source of truth (BR-016); legacy src/eShopLegacyMVC/Models/CatalogItemHiLoGenerator.cs.",
+      "spec_refs": ["BR-011", "BR-016"]
+    },
+    {
+      "ambiguity": "PictureUri generation depends on the Product Imagery feature's pic route, which is not in this feature's scope.",
+      "resolution": "Compute a placeholder URL '/Pics/{id}.png' (matching eShopPorted) until the imagery feature provides the canonical route.",
+      "basis": "eShopPorted/Controllers/CatalogController.cs:163 uses the same placeholder.",
+      "spec_refs": ["BR-010"]
+    }
+  ],
+  "open": []
+}

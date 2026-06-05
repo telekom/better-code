@@ -1,0 +1,46 @@
+@model PaginatedItemsViewModel<CatalogItem>
+@{
+    ViewData["Title"] = "Catalog";
+}
+
+<h1>Catalog</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Picture</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Type</th>
+            <th>Brand</th>
+            <th>Stock</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.Data)
+    {
+        <tr>
+            <td><img src="@item.PictureUri" alt="@item.Name" width="50" /></td>
+            <td>@item.Name</td>
+            <td>@item.Description</td>
+            <td>@item.Price.ToString("C")</td>
+            <td>@item.CatalogType?.Type</td>
+            <td>@item.CatalogBrand?.Brand</td>
+            <td>@item.AvailableStock</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<p>Page @(Model.ActualPage + 1) of @Model.TotalPages (@Model.TotalItems items)</p>

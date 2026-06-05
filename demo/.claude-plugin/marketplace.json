@@ -1,0 +1,13 @@
+{
+  "name": "bettercode-local",
+  "owner": {
+    "name": "Demo-bettercode"
+  },
+  "plugins": [
+    {
+      "name": "one-modernizer",
+      "source": "./one-modernizer",
+      "description": "Legacy code modernization pipeline: discover → assess → decompose → architect → implement → validate."
+    }
+  ]
+}

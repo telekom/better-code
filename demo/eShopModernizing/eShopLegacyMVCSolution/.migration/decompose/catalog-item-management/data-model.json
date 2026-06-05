@@ -1,0 +1,343 @@
+[
+  {
+    "name": "CatalogItem",
+    "source": "src/eShopLegacyMVC/Models/CatalogItem.cs:6-63",
+    "fields": [
+      {
+        "name": "Id",
+        "type": "int",
+        "target_type": "int",
+        "nullable": false,
+        "constraints": [
+          "PRIMARY KEY",
+          "DatabaseGenerated(None)"
+        ],
+        "used_by_rules": [
+          "BR-006",
+          "BR-007",
+          "BR-008",
+          "BR-011",
+          "BR-015",
+          "BR-016",
+          "BR-017"
+        ],
+        "description": "Application-assigned identifier (HiLo). Mapped to Catalog table.Id"
+      },
+      {
+        "name": "Name",
+        "type": "string",
+        "target_type": "string",
+        "nullable": false,
+        "constraints": [
+          "NOT NULL",
+          "MaxLength(50)"
+        ],
+        "used_by_rules": [
+          "BR-001"
+        ],
+        "description": "Product name"
+      },
+      {
+        "name": "Description",
+        "type": "string",
+        "target_type": "string",
+        "nullable": true,
+        "constraints": [],
+        "used_by_rules": [],
+        "description": "Product description"
+      },
+      {
+        "name": "Price",
+        "type": "decimal",
+        "target_type": "decimal(18,2)",
+        "nullable": false,
+        "constraints": [
+          "NOT NULL",
+          "Range(0,1000000)",
+          "<=2 decimals"
+        ],
+        "used_by_rules": [
+          "BR-002"
+        ],
+        "description": "Unit price, currency"
+      },
+      {
+        "name": "PictureFileName",
+        "type": "string",
+        "target_type": "string",
+        "nullable": false,
+        "constraints": [
+          "NOT NULL",
+          "default 'dummy.png'"
+        ],
+        "used_by_rules": [
+          "BR-014"
+        ],
+        "description": "Picture file name (default dummy.png)"
+      },
+      {
+        "name": "PictureUri",
+        "type": "string",
+        "target_type": "string",
+        "nullable": true,
+        "constraints": [
+          "NotMapped (Ignore)"
+        ],
+        "used_by_rules": [
+          "BR-010"
+        ],
+        "description": "Computed image URL; not persisted"
+      },
+      {
+        "name": "CatalogTypeId",
+        "type": "int",
+        "target_type": "int",
+        "nullable": false,
+        "constraints": [
+          "FOREIGN KEY -> CatalogType.Id",
+          "NOT NULL"
+        ],
+        "used_by_rules": [
+          "BR-013"
+        ],
+        "description": "FK to catalog type"
+      },
+      {
+        "name": "CatalogType",
+        "type": "CatalogType",
+        "target_type": "CatalogType",
+        "nullable": false,
+        "constraints": [
+          "Required navigation"
+        ],
+        "used_by_rules": [
+          "BR-008"
+        ],
+        "description": "Navigation to type"
+      },
+      {
+        "name": "CatalogBrandId",
+        "type": "int",
+        "target_type": "int",
+        "nullable": false,
+        "constraints": [
+          "FOREIGN KEY -> CatalogBrand.Id",
+          "NOT NULL"
+        ],
+        "used_by_rules": [
+          "BR-013"
+        ],
+        "description": "FK to catalog brand"
+      },
+      {
+        "name": "CatalogBrand",
+        "type": "CatalogBrand",
+        "target_type": "CatalogBrand",
+        "nullable": false,
+        "constraints": [
+          "Required navigation"
+        ],
+        "used_by_rules": [
+          "BR-008"
+        ],
+        "description": "Navigation to brand"
+      },
+      {
+        "name": "AvailableStock",
+        "type": "int",
+        "target_type": "int",
+        "nullable": false,
+        "constraints": [
+          "Range(0,10000000)"
+        ],
+        "used_by_rules": [
+          "BR-003"
+        ],
+        "description": "Quantity in stock"
+      },
+      {
+        "name": "RestockThreshold",
+        "type": "int",
+        "target_type": "int",
+        "nullable": false,
+        "constraints": [
+          "Range(0,10000000)"
+        ],
+        "used_by_rules": [
+          "BR-004"
+        ],
+        "description": "Stock level at which to reorder"
+      },
+      {
+        "name": "MaxStockThreshold",
+        "type": "int",
+        "target_type": "int",
+        "nullable": false,
+        "constraints": [
+          "Range(0,10000000)"
+        ],
+        "used_by_rules": [
+          "BR-005"
+        ],
+        "description": "Maximum stock capacity"
+      },
+      {
+        "name": "OnReorder",
+        "type": "bool",
+        "target_type": "bool",
+        "nullable": false,
+        "constraints": [],
+        "used_by_rules": [],
+        "description": "True if item is on reorder"
+      }
+    ],
+    "relationships": [
+      {
+        "to": "CatalogBrand",
+        "type": "many-to-one",
+        "foreign_key": "CatalogBrandId"
+      },
+      {
+        "to": "CatalogType",
+        "type": "many-to-one",
+        "foreign_key": "CatalogTypeId"
+      }
+    ]
+  },
+  {
+    "name": "CatalogBrand",
+    "source": "src/eShopLegacyMVC/Models/CatalogBrand.cs:8-12",
+    "fields": [
+      {
+        "name": "Id",
+        "type": "int",
+        "target_type": "int",
+        "nullable": false,
+        "constraints": [
+          "PRIMARY KEY"
+        ],
+        "used_by_rules": [
+          "BR-008"
+        ],
+        "description": "Brand identifier"
+      },
+      {
+        "name": "Brand",
+        "type": "string",
+        "target_type": "string",
+        "nullable": false,
+        "constraints": [
+          "NOT NULL",
+          "MaxLength(100)"
+        ],
+        "used_by_rules": [],
+        "description": "Brand name"
+      }
+    ],
+    "relationships": [
+      {
+        "to": "CatalogItem",
+        "type": "one-to-many",
+        "foreign_key": "CatalogBrandId"
+      }
+    ]
+  },
+  {
+    "name": "CatalogType",
+    "source": "src/eShopLegacyMVC/Models/CatalogType.cs:8-12",
+    "fields": [
+      {
+        "name": "Id",
+        "type": "int",
+        "target_type": "int",
+        "nullable": false,
+        "constraints": [
+          "PRIMARY KEY"
+        ],
+        "used_by_rules": [
+          "BR-008"
+        ],
+        "description": "Type identifier"
+      },
+      {
+        "name": "Type",
+        "type": "string",
+        "target_type": "string",
+        "nullable": false,
+        "constraints": [
+          "NOT NULL",
+          "MaxLength(100)"
+        ],
+        "used_by_rules": [],
+        "description": "Type name"
+      }
+    ],
+    "relationships": [
+      {
+        "to": "CatalogItem",
+        "type": "one-to-many",
+        "foreign_key": "CatalogTypeId"
+      }
+    ]
+  },
+  {
+    "name": "PaginatedItemsViewModel",
+    "source": "src/eShopLegacyMVC/ViewModel/PaginatedItemsViewModel.cs:6-26",
+    "fields": [
+      {
+        "name": "ActualPage",
+        "type": "int",
+        "target_type": "int",
+        "nullable": false,
+        "constraints": [],
+        "used_by_rules": [],
+        "description": "Current page index"
+      },
+      {
+        "name": "ItemsPerPage",
+        "type": "int",
+        "target_type": "int",
+        "nullable": false,
+        "constraints": [],
+        "used_by_rules": [
+          "BR-009"
+        ],
+        "description": "Page size"
+      },
+      {
+        "name": "TotalItems",
+        "type": "long",
+        "target_type": "long",
+        "nullable": false,
+        "constraints": [],
+        "used_by_rules": [
+          "BR-009"
+        ],
+        "description": "Total item count"
+      },
+      {
+        "name": "TotalPages",
+        "type": "int",
+        "target_type": "int",
+        "nullable": false,
+        "constraints": [],
+        "used_by_rules": [
+          "BR-009"
+        ],
+        "description": "Computed total pages"
+      },
+      {
+        "name": "Data",
+        "type": "IEnumerable<CatalogItem>",
+        "target_type": "IEnumerable<CatalogItem>",
+        "nullable": false,
+        "constraints": [],
+        "used_by_rules": [
+          "BR-008"
+        ],
+        "description": "Items on the current page"
+      }
+    ],
+    "relationships": []
+  }
+]

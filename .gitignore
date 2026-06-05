@@ -1,0 +1,26 @@
+tmp/
+
+# Local runtimes and editor state
+.venv/
+venv/
+env/
+.vs/
+.vscode/
+.idea/
+
+# Python caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node/build outputs
+node_modules/
+dist/
+build/
+coverage/
+
+# .NET build outputs
+bin/
+obj/

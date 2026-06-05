@@ -1,0 +1,58 @@
+@model CatalogItem
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+        <label asp-for="Name"></label>
+        <input asp-for="Name" />
+        <span asp-validation-for="Name"></span>
+    </div>
+    <div>
+        <label asp-for="Description"></label>
+        <input asp-for="Description" />
+    </div>
+    <div>
+        <label asp-for="Price"></label>
+        <input asp-for="Price" />
+        <span asp-validation-for="Price"></span>
+    </div>
+    <div>
+        <label asp-for="PictureFileName"></label>
+        <input asp-for="PictureFileName" />
+    </div>
+    <div>
+        <label asp-for="CatalogBrandId"></label>
+        <select asp-for="CatalogBrandId" asp-items="ViewBag.CatalogBrandId"></select>
+    </div>
+    <div>
+        <label asp-for="CatalogTypeId"></label>
+        <select asp-for="CatalogTypeId" asp-items="ViewBag.CatalogTypeId"></select>
+    </div>
+    <div>
+        <label asp-for="AvailableStock"></label>
+        <input asp-for="AvailableStock" />
+        <span asp-validation-for="AvailableStock"></span>
+    </div>
+    <div>
+        <label asp-for="RestockThreshold"></label>
+        <input asp-for="RestockThreshold" />
+        <span asp-validation-for="RestockThreshold"></span>
+    </div>
+    <div>
+        <label asp-for="MaxStockThreshold"></label>
+        <input asp-for="MaxStockThreshold" />
+        <span asp-validation-for="MaxStockThreshold"></span>
+    </div>
+    <div>
+        <label asp-for="OnReorder"></label>
+        <input asp-for="OnReorder" />
+    </div>
+    <button type="submit">Create</button>
+</form>
+
+<a asp-action="Index">Back to List</a>

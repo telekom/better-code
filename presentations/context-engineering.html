@@ -1,0 +1,3018 @@
+﻿<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="AI agents for legacy analysis: Backup slides."
+    />
+    <title>AI Agents for Legacy Analysis - Backup</title>
+    <style>
+      @font-face {
+        font-family: "TeleNeo";
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+        src: url("https://www.telekom.de/resources/sites/phoenix/style/font/teleneo-regular.woff2")
+          format("woff2");
+      }
+      @font-face {
+        font-family: "TeleNeo";
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+        src: url("https://www.telekom.de/resources/sites/phoenix/style/font/teleneo-bold.woff2")
+          format("woff2");
+      }
+      @font-face {
+        font-family: "TeleNeo";
+        font-weight: 900;
+        font-style: normal;
+        font-display: swap;
+        src: url("https://www.telekom.de/resources/sites/phoenix/style/font/teleneo-ultra.woff2")
+          format("woff2");
+      }
+
+      :root {
+        --magenta: #e20074;
+        --magenta-deep: #b9005f;
+        --magenta-soft: #fcedf5;
+        --ink: #18181c;
+        --muted: #666674;
+        --faint: #a6a0aa;
+        --line: rgba(24, 24, 28, 0.15);
+        --line-strong: rgba(24, 24, 28, 0.78);
+        --paper: #f8f8f8;
+        --paper-grid: rgba(24, 24, 28, 0.07);
+        --surface: #ffffff;
+        --surface-2: #eeeeef;
+        --inverse: #0b0b0f;
+        --inverse-2: #181820;
+        --inverse-fg: #f7f7f8;
+        --mono: "SFMono-Regular", "JetBrains Mono", "Roboto Mono", Consolas,
+          ui-monospace, monospace;
+        --sans: "TeleNeo", "Helvetica Neue", Arial, sans-serif;
+        --serif: Georgia, "Times New Roman", serif;
+      }
+
+      [data-theme="dark"] {
+        --ink: #f3f3f5;
+        --muted: #b8b8c2;
+        --faint: #777784;
+        --line: rgba(255, 255, 255, 0.14);
+        --line-strong: rgba(255, 255, 255, 0.78);
+        --paper: #0f0f14;
+        --paper-grid: rgba(255, 255, 255, 0.05);
+        --surface: #191921;
+        --surface-2: #24242d;
+        --magenta-soft: rgba(226, 0, 116, 0.14);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: var(--sans);
+      }
+
+      body {
+        background-image: radial-gradient(
+          circle at 1px 1px,
+          var(--paper-grid) 1px,
+          transparent 0
+        );
+        background-size: 22px 22px;
+      }
+
+      button {
+        font: inherit;
+      }
+
+      em {
+        color: var(--magenta);
+        font-style: normal;
+      }
+
+      .deck {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+
+      .toolbar {
+        position: fixed;
+        z-index: 40;
+        top: 20px;
+        right: 24px;
+        display: flex;
+        gap: 8px;
+      }
+
+      .toggle-group {
+        display: inline-flex;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--surface) 88%, transparent);
+        backdrop-filter: blur(16px);
+      }
+
+      .toggle-opt {
+        min-width: 42px;
+        height: 30px;
+        padding: 0 12px;
+        border: 0;
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 0.08em;
+      }
+
+      .toggle-opt.active {
+        background: var(--magenta);
+        color: #fff;
+      }
+
+      .progress {
+        position: fixed;
+        z-index: 30;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 3px;
+        background: var(--magenta);
+        transition: width 0.32s ease;
+      }
+
+      .slide-counter {
+        position: fixed;
+        z-index: 30;
+        left: 40px;
+        bottom: 30px;
+        color: var(--muted);
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      .slide {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 70px 96px 76px;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(26px);
+        transition:
+          opacity 0.55s cubic-bezier(0.2, 0.7, 0.2, 1),
+          transform 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
+        overflow: hidden;
+      }
+
+      .slide.active {
+        opacity: 1;
+        pointer-events: auto;
+        transform: none;
+      }
+
+      .slide.exit {
+        opacity: 0;
+        transform: translateY(-26px);
+      }
+
+      .slide.inverse {
+        background: var(--paper);
+        color: var(--ink);
+      }
+
+      .slide.inverse::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background-image: radial-gradient(
+          circle at 1px 1px,
+          var(--paper-grid) 1px,
+          transparent 0
+        );
+        background-size: 22px 22px;
+      }
+
+      .slide > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      h1,
+      h2,
+      h3,
+      p,
+      pre {
+        margin: 0;
+      }
+
+      h1 {
+        max-width: 1120px;
+        font-size: clamp(58px, 7.8vw, 112px);
+        font-weight: 900;
+        line-height: 0.96;
+        letter-spacing: 0;
+      }
+
+      h2 {
+        max-width: 1120px;
+        font-size: clamp(44px, 5.1vw, 74px);
+        font-weight: 900;
+        line-height: 1.04;
+        letter-spacing: 0;
+      }
+
+      h3 {
+        font-size: 24px;
+        line-height: 1.12;
+      }
+
+      .display {
+        font-family: var(--serif);
+        font-weight: 400;
+        letter-spacing: 0;
+      }
+
+      .display-xl {
+        max-width: 1260px;
+        font-size: clamp(70px, 9vw, 132px);
+        line-height: 0.98;
+      }
+
+      .lead {
+        max-width: 820px;
+        margin-top: 22px;
+        color: var(--muted);
+        font-size: 22px;
+        line-height: 1.42;
+      }
+
+      .inverse .lead {
+        color: var(--muted);
+      }
+
+      .kicker,
+      .label {
+        margin: 0 0 20px;
+        color: var(--magenta);
+        font-family: var(--mono);
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .big-t {
+        position: absolute;
+        right: -80px;
+        bottom: -95px;
+        z-index: 0;
+        color: rgba(226, 0, 116, 0.055);
+        font-size: 620px;
+        font-weight: 900;
+        line-height: 0.75;
+        pointer-events: none;
+      }
+
+      .ambient {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      .ambient .ring {
+        position: absolute;
+        width: var(--s);
+        height: var(--s);
+        left: var(--x);
+        top: var(--y);
+        border: 1px solid rgba(226, 0, 116, 0.22);
+        transform: translate(-50%, -50%) rotate(12deg);
+      }
+
+      .ambient .dot {
+        position: absolute;
+        width: var(--s);
+        height: var(--s);
+        left: var(--x);
+        top: var(--y);
+        border-radius: 50%;
+        background: var(--magenta);
+        opacity: var(--o, 0.15);
+        animation: drift 9s ease-in-out infinite alternate;
+      }
+
+      @keyframes drift {
+        to {
+          transform: translate(var(--dx, 20px), var(--dy, -20px));
+        }
+      }
+
+      .act {
+        align-items: center;
+        text-align: center;
+      }
+
+      .act h2 {
+        max-width: 980px;
+        font-family: var(--serif);
+        font-size: clamp(58px, 7vw, 96px);
+        font-weight: 400;
+      }
+
+      .act .act-label {
+        margin-bottom: 34px;
+        color: var(--muted);
+        font-family: var(--mono);
+        font-size: 14px;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+      }
+
+      .grid-2,
+      .grid-3,
+      .grid-4 {
+        display: grid;
+        gap: 24px;
+        width: 100%;
+        margin-top: 40px;
+      }
+
+      .grid-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .grid-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .grid-4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .card {
+        min-height: 160px;
+        padding: 26px;
+        border: 1px solid var(--line-strong);
+        background: var(--surface);
+      }
+
+      .inverse .card {
+        border-color: var(--line-strong);
+        background: var(--surface);
+      }
+
+      .card p,
+      .lane p,
+      .phase p,
+      .concept-row p,
+      .window-frame p,
+      .scoreboard .note,
+      .learning p,
+      .hygiene-node p {
+        margin-top: 11px;
+        color: var(--muted);
+        font-size: 17px;
+        line-height: 1.42;
+      }
+
+      .thesis-statement {
+        max-width: 1080px;
+        margin-top: 46px;
+        padding: 18px 0 20px 42px;
+        border-left: 8px solid var(--magenta);
+      }
+
+      .thesis-statement strong {
+        display: block;
+        max-width: 980px;
+        color: var(--ink);
+        font-family: var(--serif);
+        font-size: clamp(42px, 5.8vw, 78px);
+        font-weight: 900;
+        letter-spacing: 0;
+        line-height: 0.98;
+      }
+
+      .thesis-statement p {
+        max-width: 760px;
+        margin-top: 28px;
+        color: var(--muted);
+        font-size: clamp(22px, 2.2vw, 30px);
+        line-height: 1.28;
+      }
+
+      .hygiene-system {
+        position: relative;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 24px;
+        width: min(1120px, 100%);
+        margin-top: 44px;
+      }
+
+      .hygiene-core {
+        grid-column: 1 / -1;
+        display: grid;
+        place-items: center;
+        min-height: 118px;
+        border: 1px solid var(--magenta);
+        background:
+          linear-gradient(90deg, var(--magenta-soft), transparent 68%),
+          var(--surface);
+        text-align: center;
+      }
+
+      .hygiene-core strong {
+        color: var(--magenta);
+        font-size: clamp(34px, 4vw, 54px);
+        font-weight: 900;
+        line-height: 1;
+      }
+
+      .hygiene-node {
+        min-height: 190px;
+        padding: 24px;
+        border-top: 4px solid var(--magenta);
+        background: var(--surface);
+      }
+
+      .hygiene-node span {
+        color: var(--magenta);
+        font-family: var(--mono);
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .hygiene-node h3 {
+        margin-top: 18px;
+        font-size: clamp(26px, 2.4vw, 34px);
+        line-height: 1.05;
+      }
+
+      .bottom-note {
+        width: min(1120px, 100%);
+        margin-top: 44px;
+        padding: 20px 26px;
+        border-left: 5px solid var(--magenta);
+        background: var(--surface);
+        color: var(--magenta);
+        font-size: 20px;
+        font-style: italic;
+        font-weight: 700;
+        line-height: 1.38;
+      }
+
+      .inverse .card p,
+      .inverse .phase p,
+      .inverse .window-frame p {
+        color: var(--muted);
+      }
+
+      .num,
+      .tag,
+      .node-kicker {
+        display: block;
+        margin-bottom: 14px;
+        color: var(--magenta);
+        font-family: var(--mono);
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .stat-strip {
+        display: grid;
+        grid-template-columns: 1.15fr 0.9fr 0.95fr;
+        width: min(1040px, 100%);
+        margin-top: 44px;
+        border-top: 3px solid var(--magenta);
+        border-bottom: 1px solid var(--line-strong);
+      }
+
+      .stat-cell {
+        min-height: 174px;
+        padding: 26px 28px;
+        border-right: 1px solid var(--line);
+        background: linear-gradient(180deg, var(--surface), transparent 118%);
+      }
+
+      .stat-cell:last-child {
+        border-right: 0;
+      }
+
+      .stat-cell strong,
+      .metric-big strong {
+        display: block;
+        margin: 8px 0 10px;
+        color: var(--magenta);
+        font-size: clamp(52px, 7vw, 84px);
+        font-weight: 900;
+        line-height: 0.9;
+      }
+
+      .stat-cell p,
+      .metric-big span {
+        color: var(--muted);
+        font-size: 17px;
+        line-height: 1.42;
+      }
+
+      .domain-tangle {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+        width: min(1120px, 100%);
+        margin-top: 42px;
+      }
+
+      .tangle-node {
+        min-height: 142px;
+        padding: 22px;
+        border: 1px solid var(--line-strong);
+        border-left: 5px solid var(--magenta);
+        background: var(--surface);
+        box-shadow: 0 14px 34px rgba(24, 24, 28, 0.07);
+      }
+
+      .tangle-node.core {
+        grid-column: span 2;
+        background:
+          linear-gradient(90deg, var(--magenta-soft), transparent 70%),
+          var(--surface);
+      }
+
+      .tangle-node h3 {
+        font-size: clamp(24px, 2.4vw, 34px);
+      }
+
+      .tangle-node p {
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 17px;
+        line-height: 1.36;
+      }
+
+      .selection-matrix,
+      .risk-evidence-table {
+        display: grid;
+        width: min(1120px, 100%);
+        margin-top: 36px;
+        border: 1px solid var(--line-strong);
+        background: var(--surface);
+      }
+
+      .selection-matrix {
+        grid-template-columns: 1.1fr 0.95fr 1.05fr;
+      }
+
+      .risk-evidence-table {
+        grid-template-columns: 1fr 0.72fr 1.18fr;
+      }
+
+      .matrix-cell {
+        min-height: 78px;
+        padding: 18px 20px;
+        border-right: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+        font-size: 18px;
+        line-height: 1.35;
+      }
+
+      .matrix-cell:nth-child(3n) {
+        border-right: 0;
+      }
+
+      .matrix-cell.head {
+        color: var(--magenta);
+        font-family: var(--mono);
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .matrix-cell strong {
+        color: var(--magenta);
+      }
+
+      .matrix-cell .dim {
+        color: var(--muted);
+      }
+
+      .feature-list {
+        display: grid;
+        gap: 15px;
+        max-width: 930px;
+        margin: 36px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .feature-list li {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        padding: 14px 18px;
+        border-left: 3px solid var(--magenta);
+        background: linear-gradient(90deg, var(--magenta-soft), transparent 70%);
+        color: var(--ink);
+        font-size: 19px;
+        line-height: 1.38;
+      }
+
+      .inverse .feature-list li {
+        color: var(--ink);
+        background: linear-gradient(90deg, var(--magenta-soft), transparent 70%);
+      }
+
+      .feature-list li::before {
+        content: "";
+        flex: 0 0 auto;
+        width: 8px;
+        height: 8px;
+        margin-top: 9px;
+        border-radius: 50%;
+        background: var(--magenta);
+      }
+
+      .code {
+        max-width: 920px;
+        margin-top: 30px;
+        padding: 24px 28px;
+        background: var(--inverse);
+        color: var(--inverse-fg);
+        font-family: var(--mono);
+        font-size: 15px;
+        line-height: 1.55;
+        white-space: pre-wrap;
+      }
+
+      .inverse .code {
+        background: #1e1e28;
+      }
+
+      .keyword {
+        color: var(--magenta);
+      }
+
+      .ok {
+        color: var(--magenta);
+      }
+
+      .bad {
+        color: var(--ink);
+      }
+
+      .lanes {
+        display: grid;
+        gap: 14px;
+        width: min(1120px, 100%);
+        margin-top: 42px;
+      }
+
+      .lane {
+        display: grid;
+        grid-template-columns: 92px minmax(210px, 0.72fr) 1fr;
+        align-items: center;
+        min-height: 102px;
+        border-top: 1px solid var(--line-strong);
+        background: linear-gradient(90deg, var(--magenta-soft), transparent 74%);
+      }
+
+      .lane span {
+        display: grid;
+        place-items: center;
+        align-self: stretch;
+        background: var(--magenta);
+        color: #fff;
+        font-family: var(--mono);
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .lane h3 {
+        padding: 0 26px;
+      }
+
+      .lane p {
+        padding-right: 28px;
+      }
+
+      .context-stack {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+        gap: 18px;
+        align-items: stretch;
+        width: min(1180px, 100%);
+        margin-top: 34px;
+      }
+
+      .context-stack.two {
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        width: min(920px, 100%);
+      }
+
+      .context-plus {
+        display: grid;
+        place-items: center;
+        color: var(--magenta);
+        font-family: var(--serif);
+        font-size: clamp(34px, 4vw, 54px);
+        line-height: 1;
+      }
+
+      .turn-card {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        min-height: 326px;
+        padding: 24px;
+        border: 1px solid var(--line);
+        border-left: 4px solid var(--magenta);
+        border-radius: 8px;
+        background: var(--surface);
+        box-shadow: 0 14px 34px rgba(24, 24, 28, 0.08);
+      }
+
+      .turn-title {
+        margin-bottom: 2px;
+        font-family: var(--serif);
+        font-size: clamp(26px, 2.6vw, 36px);
+        font-weight: 400;
+        line-height: 1.08;
+      }
+
+      .turn-rows {
+        display: grid;
+        gap: 8px;
+        margin-top: 6px;
+      }
+
+      .row {
+        display: grid;
+        grid-template-columns: 86px 1fr;
+        gap: 12px;
+        align-items: center;
+        min-height: 42px;
+        padding: 10px 12px;
+        border-radius: 6px;
+        font-family: var(--mono);
+        font-size: 14px;
+        line-height: 1.35;
+      }
+
+      .row b {
+        color: var(--muted);
+        font-size: 14px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .r-system {
+        background: color-mix(in srgb, var(--ink) 8%, transparent);
+      }
+
+      .r-user {
+        background: color-mix(in srgb, var(--magenta) 11%, transparent);
+      }
+
+      .r-agent {
+        background: color-mix(in srgb, var(--magenta) 18%, transparent);
+      }
+
+      .r-tool {
+        background: color-mix(in srgb, var(--ink) 12%, transparent);
+      }
+
+      .r-empty {
+        border: 1px dashed var(--line);
+        background: transparent;
+      }
+
+      .r-empty span::before {
+        content: "-";
+        color: var(--faint);
+      }
+
+      .context-sources {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px 28px;
+        width: min(1040px, 100%);
+        margin-top: 38px;
+      }
+
+      .source-item {
+        display: grid;
+        grid-template-columns: 38px 1fr;
+        gap: 12px;
+        align-items: start;
+        padding: 15px 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .source-item span {
+        display: grid;
+        place-items: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: var(--magenta);
+        color: #fff;
+        font-family: var(--mono);
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .source-item h3 {
+        font-size: 22px;
+      }
+
+      .source-item p {
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.36;
+      }
+
+      .terminal {
+        width: min(930px, 100%);
+        margin-top: 36px;
+        font-family: var(--mono);
+        font-size: 18px;
+        line-height: 1.65;
+      }
+
+      .terminal span {
+        display: block;
+      }
+
+      .terminal .dim {
+        color: var(--muted);
+      }
+
+      .bar-chart {
+        display: grid;
+        gap: 16px;
+        width: min(1040px, 100%);
+        margin-top: 40px;
+      }
+
+      .bar-row {
+        display: grid;
+        grid-template-columns: 180px 1fr 110px;
+        gap: 18px;
+        align-items: center;
+        font-family: var(--mono);
+      }
+
+      .bar-track {
+        height: 16px;
+        background: var(--surface-2);
+      }
+
+      .bar-fill {
+        width: var(--w);
+        height: 100%;
+        background: var(--magenta);
+      }
+
+      .bar-value {
+        color: var(--magenta);
+        font-weight: 700;
+      }
+
+      .chart {
+        width: min(980px, 100%);
+        margin-top: 34px;
+      }
+
+      .chart svg {
+        width: 100%;
+        height: auto;
+      }
+
+      .rot-viz {
+        width: min(980px, 100%);
+        margin-top: 42px;
+      }
+
+      .rot-meter {
+        display: grid;
+        grid-template-columns: 1fr 120px;
+        gap: 18px;
+        align-items: center;
+        font-family: var(--mono);
+      }
+
+      .rot-track {
+        height: 14px;
+        background: var(--surface-2);
+        overflow: hidden;
+      }
+
+      .rot-fill {
+        width: 36%;
+        height: 100%;
+        background: var(--magenta);
+      }
+
+      .token-field {
+        display: grid;
+        grid-template-columns: repeat(24, 1fr);
+        gap: 6px;
+        margin-top: 22px;
+      }
+
+      .tok {
+        height: 9px;
+        background: var(--line-strong);
+        opacity: 0.2;
+      }
+
+      .tok.hot {
+        background: var(--magenta);
+        opacity: 0.95;
+      }
+
+      .context-budget-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+        gap: 34px;
+        align-items: stretch;
+        width: min(1120px, 100%);
+        margin-top: 36px;
+      }
+
+      .budget-panel,
+      .context-window-panel,
+      .collab-pane,
+      .scale-card {
+        border: 1px solid var(--line-strong);
+        background: var(--surface);
+        box-shadow: 0 14px 34px rgba(24, 24, 28, 0.08);
+      }
+
+      .budget-panel {
+        padding: 26px;
+      }
+
+      .context-dots {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .context-dot {
+        aspect-ratio: 1;
+        border: 1px solid var(--line);
+        background: color-mix(in srgb, var(--surface-2) 84%, transparent);
+      }
+
+      .context-dot.used {
+        background: var(--magenta);
+        border-color: var(--magenta);
+      }
+
+      .context-dot.tool {
+        background: color-mix(in srgb, var(--magenta) 58%, var(--ink));
+      }
+
+      .context-dot.buffer {
+        background: repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 4px,
+          var(--line) 4px,
+          var(--line) 6px
+        );
+      }
+
+      .budget-list {
+        display: grid;
+        gap: 12px;
+        margin-top: 26px;
+        font-family: var(--mono);
+        font-size: 14px;
+      }
+
+      .budget-line {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 20px;
+        align-items: center;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .budget-line strong {
+        color: var(--magenta);
+      }
+
+      .context-callout {
+        display: grid;
+        align-content: center;
+        gap: 18px;
+        padding: 32px;
+        border-left: 5px solid var(--magenta);
+        background: linear-gradient(90deg, var(--magenta-soft), transparent 82%);
+      }
+
+      .context-callout strong {
+        font-family: var(--serif);
+        font-size: clamp(34px, 3.4vw, 52px);
+        font-weight: 400;
+        line-height: 1.02;
+      }
+
+      .context-equation {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+        width: min(1060px, 100%);
+        margin-top: 36px;
+      }
+
+      .context-term {
+        min-height: 164px;
+        padding: 22px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+      }
+
+      .context-term span,
+      .scale-step span {
+        color: var(--magenta);
+        font-family: var(--mono);
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .context-term h3 {
+        margin-top: 18px;
+        font-size: clamp(22px, 2vw, 30px);
+      }
+
+      .context-term p {
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.38;
+      }
+
+      .context-rot-chart {
+        display: grid;
+        grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.65fr);
+        gap: 34px;
+        align-items: stretch;
+        width: min(1120px, 100%);
+        margin-top: 34px;
+      }
+
+      .rot-chart-card {
+        position: relative;
+        min-height: 360px;
+        padding: 26px;
+        border: 1px solid var(--line-strong);
+        background: var(--surface);
+      }
+
+      .rot-chart-card svg {
+        width: 100%;
+        height: 100%;
+        min-height: 290px;
+      }
+
+      .rot-axis,
+      .rot-grid {
+        stroke: var(--line);
+        stroke-width: 1;
+      }
+
+      .rot-line-main {
+        fill: none;
+        stroke: var(--magenta);
+        stroke-width: 5;
+      }
+
+      .rot-line-ghost {
+        fill: none;
+        stroke: var(--line-strong);
+        stroke-width: 3;
+        stroke-dasharray: 8 8;
+        opacity: 0.45;
+      }
+
+      .rot-point {
+        fill: var(--paper);
+        stroke: var(--magenta);
+        stroke-width: 4;
+      }
+
+      .rot-label {
+        fill: var(--muted);
+        font-family: var(--mono);
+        font-size: 14px;
+      }
+
+      .rot-insight {
+        display: grid;
+        align-content: center;
+        gap: 18px;
+        padding: 28px;
+        border-left: 5px solid var(--magenta);
+        background: var(--surface);
+      }
+
+      .rot-insight strong {
+        color: var(--magenta);
+        font-size: clamp(44px, 5vw, 74px);
+        line-height: 0.9;
+      }
+
+      .rot-insight p {
+        color: var(--muted);
+        font-size: 18px;
+        line-height: 1.38;
+      }
+
+      .context-window-compare {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 80px minmax(0, 1fr);
+        gap: 20px;
+        align-items: stretch;
+        width: min(1160px, 100%);
+        margin-top: 34px;
+      }
+
+      .context-window-panel {
+        position: relative;
+        min-height: 420px;
+        padding: 22px;
+      }
+
+      .context-window-focus {
+        display: grid;
+        grid-template-columns: minmax(0, 0.95fr) minmax(320px, 0.8fr);
+        gap: 34px;
+        align-items: stretch;
+        width: min(1120px, 100%);
+        margin-top: 34px;
+      }
+
+      .context-window-panel.focus {
+        min-height: 500px;
+        padding: 30px;
+      }
+
+      .context-window-panel.compact {
+        min-height: 360px;
+        padding: 28px;
+      }
+
+      .context-risk-list {
+        display: grid;
+        gap: 16px;
+        align-content: center;
+      }
+
+      .context-risk {
+        padding: 22px 24px;
+        border-left: 5px solid var(--magenta);
+        background: var(--surface);
+        box-shadow: 0 14px 34px rgba(24, 24, 28, 0.07);
+      }
+
+      .context-risk h3 {
+        font-size: clamp(24px, 2.3vw, 34px);
+      }
+
+      .context-risk p {
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 18px;
+        line-height: 1.36;
+      }
+
+      .context-window-panel::before {
+        content: "200K tokens";
+        position: absolute;
+        left: -8px;
+        top: 50%;
+        color: var(--muted);
+        font-family: var(--mono);
+        font-size: 14px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        transform: translate(-100%, -50%) rotate(-90deg);
+        transform-origin: center;
+      }
+
+      .window-title {
+        margin-bottom: 16px;
+        text-align: center;
+        font-family: var(--mono);
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .context-slab {
+        margin-bottom: 10px;
+        padding: 14px 16px;
+        border-left: 4px solid var(--magenta);
+        background: color-mix(in srgb, var(--magenta) 12%, transparent);
+        font-family: var(--mono);
+        font-size: 14px;
+        line-height: 1.35;
+      }
+
+      .context-slab.dimmed {
+        border-left-color: var(--line-strong);
+        background: color-mix(in srgb, var(--ink) 8%, transparent);
+      }
+
+      .context-slab.danger {
+        background: var(--magenta);
+        color: #fff;
+      }
+
+      .context-slab strong {
+        display: block;
+        margin-bottom: 4px;
+        font-family: var(--sans);
+        font-size: 17px;
+      }
+
+      .context-ellipsis {
+        margin: 16px 0;
+        color: var(--magenta);
+        text-align: center;
+        font-family: var(--mono);
+        font-size: 30px;
+        line-height: 0.8;
+      }
+
+      .context-arrow {
+        display: grid;
+        place-items: center;
+        color: var(--magenta);
+        font-family: var(--mono);
+        font-size: 44px;
+        font-weight: 900;
+      }
+
+      .context-window-notes {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        width: min(980px, 100%);
+        margin-top: 22px;
+      }
+
+      .note-box {
+        padding: 18px 20px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+      }
+
+      .note-box h3 {
+        color: var(--magenta);
+        font-family: var(--mono);
+        font-size: 14px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .note-box p {
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.36;
+      }
+
+      .subagent-context-flow {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 90px minmax(0, 1fr);
+        gap: 22px;
+        align-items: stretch;
+        width: min(1120px, 100%);
+        margin-top: 34px;
+      }
+
+      .evidence-contract-board {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 22px;
+        width: min(1060px, 100%);
+        margin-top: 34px;
+      }
+
+      .evidence-contract-board article {
+        min-height: 170px;
+        padding: 26px;
+        border: 1px solid var(--line-strong);
+        background: var(--surface);
+        box-shadow: 0 14px 34px rgba(24, 24, 28, 0.07);
+      }
+
+      .evidence-contract-board span {
+        color: var(--magenta);
+        font-family: var(--mono);
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .evidence-contract-board h3 {
+        margin-top: 18px;
+        font-size: clamp(26px, 2.5vw, 38px);
+      }
+
+      .evidence-contract-board p {
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 18px;
+        line-height: 1.34;
+      }
+
+      .collab-map {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 34px;
+        width: min(1120px, 100%);
+        margin-top: 36px;
+      }
+
+      .collab-pane {
+        min-height: 360px;
+        padding: 26px;
+      }
+
+      .collab-pane h3 {
+        color: var(--magenta);
+        font-size: clamp(26px, 2.4vw, 36px);
+      }
+
+      .collab-diagram {
+        display: grid;
+        grid-template-columns: 72px 1fr 72px;
+        gap: 20px;
+        align-items: center;
+        margin: 34px 0 24px;
+      }
+
+      .head-icon,
+      .artifact-icon {
+        display: grid;
+        place-items: center;
+        aspect-ratio: 1;
+        border: 2px solid var(--magenta);
+        border-radius: 50%;
+        color: var(--magenta);
+        font-family: var(--serif);
+        font-size: 38px;
+      }
+
+      .artifact-icon {
+        border-radius: 8px;
+        color: var(--ink);
+      }
+
+      .decision-paths {
+        display: grid;
+        gap: 12px;
+      }
+
+      .decision-paths div {
+        height: 3px;
+        background: var(--magenta);
+      }
+
+      .decision-paths .muted {
+        background: var(--line-strong);
+        opacity: 0.45;
+      }
+
+      .collab-pane ul {
+        margin: 0;
+        color: var(--muted);
+        font-size: 17px;
+        line-height: 1.55;
+      }
+
+      .scale-beyond-context-flow {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 90px minmax(0, 1fr);
+        gap: 22px;
+        align-items: stretch;
+        width: min(1060px, 100%);
+        margin-top: 34px;
+      }
+
+      .scale-card {
+        display: grid;
+        align-content: center;
+        min-height: 330px;
+        padding: 28px;
+        text-align: center;
+      }
+
+      .scale-card h3 {
+        margin-top: 12px;
+        font-size: clamp(21px, 2vw, 28px);
+      }
+
+      .doc-pile {
+        position: relative;
+        width: 160px;
+        height: 180px;
+        margin: 0 auto 18px;
+      }
+
+      .doc-sheet {
+        position: absolute;
+        width: 58px;
+        height: 74px;
+        border: 2px solid var(--ink);
+        background: var(--surface);
+        transform: translate(var(--x), var(--y)) rotate(var(--r));
+      }
+
+      .doc-sheet::before,
+      .evidence-doc::before {
+        content: "";
+        position: absolute;
+        left: 10px;
+        right: 10px;
+        top: 18px;
+        height: 2px;
+        background: var(--magenta);
+        box-shadow: 0 10px 0 var(--line-strong), 0 20px 0 var(--line-strong);
+      }
+
+      .agent-stack {
+        display: grid;
+        gap: 10px;
+        margin: 0 auto 18px;
+        width: 130px;
+      }
+
+      .agent-pill {
+        padding: 10px;
+        border: 1px solid var(--magenta);
+        background: color-mix(in srgb, var(--magenta) 10%, transparent);
+        font-family: var(--mono);
+        font-size: 14px;
+      }
+
+      .routing-list {
+        display: grid;
+        gap: 14px;
+        margin-top: 24px;
+      }
+
+      .routing-list div {
+        padding: 14px 16px;
+        border-left: 4px solid var(--magenta);
+        background: color-mix(in srgb, var(--magenta) 10%, transparent);
+        text-align: left;
+        font-size: 18px;
+        line-height: 1.28;
+      }
+
+      .aggregation-board {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 90px minmax(0, 1fr);
+        gap: 22px;
+        align-items: stretch;
+        width: min(1060px, 100%);
+        margin-top: 34px;
+      }
+
+      .evidence-doc {
+        position: relative;
+        width: 86px;
+        height: 112px;
+        margin: 0 auto 18px;
+        border: 2px solid var(--magenta);
+        background: var(--surface);
+      }
+
+      .scale-arrow {
+        display: grid;
+        place-items: center;
+        color: var(--magenta);
+        font-family: var(--mono);
+        font-size: 34px;
+        font-weight: 900;
+      }
+
+      .split {
+        display: grid;
+        grid-template-columns: 1fr 1px 1fr;
+        gap: 36px;
+        width: min(1060px, 100%);
+        margin-top: 42px;
+      }
+
+      .divider {
+        background: var(--line-strong);
+      }
+
+      .phase-band {
+        display: grid;
+        grid-template-columns: 1fr 1.08fr 1.42fr 1fr;
+        width: min(1140px, 100%);
+        min-height: 246px;
+        margin-top: 42px;
+        overflow: hidden;
+        border: 1px solid var(--line-strong);
+      }
+
+      .phase {
+        padding: 24px;
+        border-right: 1px solid var(--line);
+        background: var(--surface);
+      }
+
+      .phase:last-child {
+        border-right: 0;
+      }
+
+      .phase.accent {
+        background: var(--magenta);
+        color: #fff;
+      }
+
+      .phase.output {
+        background: var(--inverse);
+        color: var(--inverse-fg);
+      }
+
+      .phase.accent .tag,
+      .phase.accent p,
+      .phase.output .tag,
+      .phase.output p {
+        color: rgba(255, 255, 255, 0.78);
+      }
+
+      .phase h3 {
+        margin-bottom: 14px;
+        font-size: clamp(24px, 2.3vw, 32px);
+      }
+
+      .chips {
+        display: grid;
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .chip {
+        padding: 10px 12px;
+        border-left: 3px solid var(--magenta);
+        background: color-mix(in srgb, var(--surface-2) 76%, transparent);
+        font-size: 14px;
+        line-height: 1.28;
+      }
+
+      .concept-list {
+        width: min(1080px, 100%);
+        margin-top: 38px;
+        border-top: 1px solid var(--line-strong);
+      }
+
+      .concept-row {
+        display: grid;
+        grid-template-columns: 160px 230px 1fr;
+        gap: 24px;
+        align-items: baseline;
+        padding: 17px 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .concept-row h3 {
+        font-size: 27px;
+      }
+
+      .pyramid {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        margin-top: 40px;
+      }
+
+      .tier {
+        width: var(--w);
+        padding: 20px 28px;
+        border: 1.5px solid var(--magenta);
+        background: var(--surface);
+        text-align: center;
+      }
+
+      .tier h3 {
+        margin: 4px 0;
+      }
+
+      .window-map {
+        display: grid;
+        grid-template-columns: 1fr 70px 1.28fr 0.9fr;
+        gap: 18px;
+        align-items: stretch;
+        width: min(1120px, 100%);
+        margin-top: 42px;
+      }
+
+      .window-frame {
+        min-height: 250px;
+        padding: 24px;
+        border: 1px solid var(--line-strong);
+        background: var(--surface);
+      }
+
+      .window-frame.main {
+        box-shadow: inset 0 0 0 3px var(--magenta);
+      }
+
+      .mini-agent {
+        margin-top: 10px;
+        padding: 12px 14px;
+        border-left: 4px solid var(--magenta);
+        background: var(--surface);
+        font-family: var(--mono);
+        font-size: 14px;
+        line-height: 1.35;
+      }
+
+      .map-arrow {
+        display: grid;
+        place-items: center;
+        color: var(--magenta);
+        font-family: var(--mono);
+        font-size: 36px;
+        font-weight: 700;
+      }
+
+      .scoreboard {
+        display: grid;
+        grid-template-columns: 1.1fr 0.8fr 0.8fr 1fr;
+        width: min(1100px, 100%);
+        margin-top: 40px;
+        border: 1px solid var(--line-strong);
+      }
+
+      .scoreboard > div {
+        min-height: 70px;
+        padding: 18px;
+        border-right: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        align-items: center;
+        font-size: 18px;
+      }
+
+      .scoreboard > div:nth-child(4n) {
+        border-right: 0;
+      }
+
+      .scoreboard .head {
+        color: var(--magenta);
+        font-family: var(--mono);
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .scoreboard .pos {
+        color: var(--magenta);
+        font-weight: 900;
+        justify-content: center;
+      }
+
+      .scoreboard .neg {
+        color: var(--ink);
+        font-weight: 900;
+        justify-content: center;
+      }
+
+      .scoreboard .note {
+        margin: 0;
+        font-size: 16px;
+      }
+
+      .assessment-layout {
+        display: grid;
+        grid-template-columns: 280px minmax(0, 1fr);
+        gap: 38px;
+        align-items: stretch;
+        width: min(980px, 100%);
+        margin-top: 36px;
+      }
+
+      .assessment-layout .code {
+        margin-top: 0;
+      }
+
+      .compare {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+        margin-top: 34px;
+        border: 1px solid var(--line-strong);
+      }
+
+      .compare .pane {
+        padding: 30px;
+      }
+
+      .compare .pane + .pane {
+        border-left: 1px solid var(--line-strong);
+      }
+
+      .compare h3 {
+        margin-bottom: 16px;
+        color: var(--magenta);
+        font-family: var(--mono);
+        font-size: 14px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .compare pre {
+        font-family: var(--mono);
+        font-size: 14px;
+        line-height: 1.55;
+        white-space: pre-wrap;
+      }
+
+      .timeline {
+        display: grid;
+        gap: 24px;
+        max-width: 840px;
+        margin-top: 44px;
+        padding-left: 32px;
+        border-left: 3px solid var(--magenta);
+      }
+
+      .timeline h3 {
+        color: var(--magenta);
+        font-family: var(--mono);
+        font-size: 14px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .timeline p {
+        margin-top: 7px;
+        color: var(--muted);
+        font-size: 18px;
+        line-height: 1.36;
+      }
+
+      .learning-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px 34px;
+        width: min(1100px, 100%);
+        margin-top: 38px;
+      }
+
+      .learning-grid.focus {
+        grid-template-columns: 1fr;
+        width: min(880px, 100%);
+      }
+
+      .learning {
+        display: grid;
+        grid-template-columns: 60px 1fr;
+        gap: 18px;
+        align-items: start;
+        padding-bottom: 18px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .learning span {
+        display: grid;
+        place-items: center;
+        width: 48px;
+        height: 48px;
+        background: var(--magenta);
+        color: #fff;
+        font-family: var(--mono);
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .learning h3 {
+        font-size: clamp(24px, 2.3vw, 34px);
+      }
+
+      .learning p {
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 18px;
+        line-height: 1.34;
+      }
+
+      .demo-flow {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        width: 100%;
+        margin-top: 42px;
+        border: 1px solid var(--line-strong);
+      }
+
+      .demo-flow div {
+        min-height: 102px;
+        padding: 20px 18px;
+        border-right: 1px solid var(--line);
+        color: var(--ink);
+        font-family: var(--mono);
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        line-height: 1.35;
+        text-transform: uppercase;
+      }
+
+      .demo-flow div:last-child {
+        border-right: 0;
+      }
+
+      .demo-flow span {
+        display: grid;
+        place-items: center;
+        width: 28px;
+        height: 28px;
+        margin-bottom: 13px;
+        border-radius: 50%;
+        background: var(--magenta);
+        color: #fff;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        width: fit-content;
+        margin-top: 28px;
+        padding: 10px 18px;
+        border-radius: 999px;
+        background: var(--magenta);
+        color: #fff;
+        font-family: var(--mono);
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .fragment {
+        opacity: 0;
+        transform: translateY(18px);
+        transition:
+          opacity 0.38s ease,
+          transform 0.38s ease;
+      }
+
+      .fragment.visible {
+        opacity: 1;
+        transform: none;
+      }
+
+      .notes {
+        display: none;
+      }
+
+      .stagger {
+        animation: rise 0.72s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+      }
+
+      .d2 {
+        animation-delay: 0.08s;
+      }
+
+      .d3 {
+        animation-delay: 0.16s;
+      }
+
+      .d4 {
+        animation-delay: 0.24s;
+      }
+
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(18px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      @media (max-width: 900px) {
+        .slide {
+          padding: 48px 32px 58px;
+        }
+        h1 {
+          font-size: clamp(44px, 13vw, 68px);
+        }
+        h2 {
+          font-size: clamp(34px, 10vw, 54px);
+        }
+        .grid-2,
+        .grid-3,
+        .grid-4,
+        .stat-strip,
+        .domain-tangle,
+        .lane,
+        .context-stack,
+        .context-sources,
+        .split,
+        .phase-band,
+        .concept-row,
+        .window-map,
+        .scoreboard,
+        .assessment-layout,
+        .compare,
+        .selection-matrix,
+        .risk-evidence-table,
+        .learning-grid,
+        .hygiene-system,
+        .context-budget-grid,
+        .context-equation,
+        .context-rot-chart,
+        .context-window-compare,
+        .context-window-focus,
+        .context-window-notes,
+        .subagent-context-flow,
+        .evidence-contract-board,
+        .collab-map,
+        .scale-beyond-context-flow,
+        .aggregation-board,
+        .demo-flow {
+          grid-template-columns: 1fr;
+        }
+        .divider {
+          height: 1px;
+        }
+        .stat-cell,
+        .phase,
+        .demo-flow div {
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+        }
+        .lane span {
+          min-height: 46px;
+        }
+        .lane h3,
+        .lane p {
+          padding: 16px 20px;
+        }
+        .tier {
+          width: 100% !important;
+        }
+        .scoreboard > div {
+          border-right: 0;
+        }
+        .thesis-statement {
+          padding-left: 24px;
+        }
+        .toolbar {
+          top: 12px;
+          right: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="toolbar" id="toolbar">
+      <div class="toggle-group" id="langToggle" aria-label="Language">
+        <button class="toggle-opt active" data-lang="en">EN</button>
+        <button class="toggle-opt" data-lang="de">DE</button>
+      </div>
+      <div class="toggle-group" id="themeToggle" aria-label="Theme">
+        <button class="toggle-opt active" data-theme-value="light">White</button>
+        <button class="toggle-opt" data-theme-value="dark">Black</button>
+      </div>
+    </div>
+
+    <div class="progress" id="progress"></div>
+    <div class="slide-counter" id="counter">01 / 43</div>
+
+    <main class="deck" id="deck">
+      <section class="slide act inverse active" data-slide="0">
+        <div class="ambient" aria-hidden="true">
+          <div class="ring" style="--x: 50%; --y: 50%; --s: 740px"></div>
+          <div class="ring" style="--x: 50%; --y: 50%; --s: 520px"></div>
+        </div>
+        <div class="act-label">Akt I</div>
+        <h2 data-i18n="s04.h2">Context is an<br /><em>architecture decision</em></h2>
+      </section>
+
+<section class="slide" data-slide="1">
+        <p class="kicker" data-i18n="s07c.kicker">After a few turns</p>
+        <h2 data-i18n="s07c.h2">The real question arrives<br /><em>inside old noise</em></h2>
+        <div class="context-window-focus">
+          <article class="turn-card fragment">
+            <span class="node-kicker">Turn 15</span>
+            <div class="turn-title" data-i18n="s07.t15">The stack is heavy</div>
+            <div class="turn-rows">
+              <div class="row r-system"><b>system</b><span>CLAUDE.md + MCP schemas</span></div>
+              <div class="row r-user"><b>user</b><span data-i18n="s07.user">analyze CatalogService</span></div>
+              <div class="row r-tool"><b>tool</b><span>read, grep, test x12</span></div>
+              <div class="row r-tool"><b>tool</b><span>CI build/test output</span></div>
+              <div class="row r-user"><b>user</b><span data-i18n="s07.deploy">can we migrate this?</span></div>
+            </div>
+          </article>
+          <div class="context-risk-list">
+            <article class="context-risk fragment"><h3 data-i18n="s07c.r1.h">Question got harder</h3><p data-i18n="s07c.r1.p">Migration judgment now depends on what the context kept, lost and overemphasized.</p></article>
+            <article class="context-risk fragment"><h3 data-i18n="s07c.r2.h">Next move: measure</h3><p data-i18n="s07c.r2.p">Before more analysis, ask what is already occupying the window.</p></article>
+          </div>
+        </div>
+        <aside class="notes">
+          This is the bridge into the /context moment: the same main context has
+          to carry stable instructions, tool schemas, user turns, file reads,
+          tool results, and summaries.
+        </aside>
+      </section>
+
+<section class="slide" data-slide="2">
+        <p class="kicker" data-i18n="s07b.kicker">/context moment</p>
+        <h2 data-i18n="s07b.h2">The budget is<br /><em>already spent</em></h2>
+        <div class="context-budget-grid">
+          <article class="budget-panel fragment">
+            <span class="node-kicker">/context</span>
+            <div class="context-dots" aria-hidden="true">
+              <span class="context-dot used"></span><span class="context-dot used"></span><span class="context-dot used"></span><span class="context-dot tool"></span><span class="context-dot tool"></span><span class="context-dot tool"></span><span class="context-dot tool"></span><span class="context-dot tool"></span><span class="context-dot"></span><span class="context-dot"></span><span class="context-dot"></span><span class="context-dot buffer"></span>
+              <span class="context-dot used"></span><span class="context-dot used"></span><span class="context-dot tool"></span><span class="context-dot tool"></span><span class="context-dot tool"></span><span class="context-dot tool"></span><span class="context-dot"></span><span class="context-dot"></span><span class="context-dot"></span><span class="context-dot buffer"></span><span class="context-dot buffer"></span><span class="context-dot buffer"></span>
+              <span class="context-dot used"></span><span class="context-dot tool"></span><span class="context-dot tool"></span><span class="context-dot tool"></span><span class="context-dot"></span><span class="context-dot"></span><span class="context-dot"></span><span class="context-dot"></span><span class="context-dot buffer"></span><span class="context-dot buffer"></span><span class="context-dot buffer"></span><span class="context-dot buffer"></span>
+            </div>
+            <div class="budget-list">
+              <div class="budget-line"><span data-i18n="s07b.b1">System prompt</span><strong>3.3K</strong></div>
+              <div class="budget-line"><span data-i18n="s07b.b2">System tools</span><strong>16.9K</strong></div>
+              <div class="budget-line"><span data-i18n="s07b.b3">MCP tools</span><strong>49.1K</strong></div>
+              <div class="budget-line"><span data-i18n="s07b.b4">Skills</span><strong>305</strong></div>
+              <div class="budget-line"><span data-i18n="s07b.b5">Messages</span><strong>8</strong></div>
+              <div class="budget-line"><span data-i18n="s07b.b6">Free space</span><strong>40.9%</strong></div>
+            </div>
+          </article>
+          <article class="context-callout fragment">
+            <strong data-i18n="s07b.callout">Tool definitions can be the biggest file in the room</strong>
+            <p data-i18n="s07b.note">Before the agent reads CatalogService, it may already carry thousands of tokens of unused capability.</p>
+          </article>
+        </div>
+        <aside class="notes">
+          Inspired by the M3 /context screenshot, but redrawn in our style. The
+          number is a teaching example: tool contracts are not free, and MCP
+          sprawl can dominate the budget before code analysis starts.
+        </aside>
+      </section>
+
+<section class="slide" data-slide="3">
+        <p class="kicker" data-i18n="s08.kicker">Context sources</p>
+        <h2 data-i18n="s08.h2">The prompt is only<br />the <em>visible layer</em></h2>
+        <div class="context-sources">
+          <article class="source-item fragment"><span>S</span><div><h3 data-i18n="s08.i1.h">System prompt</h3><p data-i18n="s08.i1.p">Role, permissions, policies, injected product behavior.</p></div></article>
+          <article class="source-item fragment"><span>T</span><div><h3 data-i18n="s08.i2.h">MCP tool contracts</h3><p data-i18n="s08.i2.p">Schemas and descriptions loaded before a tool is ever called.</p></div></article>
+          <article class="source-item fragment"><span>F</span><div><h3 data-i18n="s08.i3.h">Files and artifacts</h3><p data-i18n="s08.i3.p">Code, docs, tests, configs, generated reports, and diagrams.</p></div></article>
+          <article class="source-item fragment"><span>R</span><div><h3 data-i18n="s08.i4.h">Tool results</h3><p data-i18n="s08.i4.p">Search output, logs, compiler failures, and static-analysis findings.</p></div></article>
+          <article class="source-item fragment"><span>M</span><div><h3 data-i18n="s08.i5.h">Memory</h3><p data-i18n="s08.i5.p">Project facts, preferences, summaries, previous decisions.</p></div></article>
+          <article class="source-item fragment"><span>A</span><div><h3 data-i18n="s08.i6.h">Agent messages</h3><p data-i18n="s08.i6.p">Plans, assumptions, mistakes, corrections, and user feedback.</p></div></article>
+        </div>
+      </section>
+
+<section class="slide" data-slide="4">
+        <p class="kicker" data-i18n="s09.kicker">Tooling trap</p>
+        <h2 data-i18n="s09.h2"><em>MCP</em> sprawl<br />becomes context debt</h2>
+        <div class="terminal">
+          <span><span class="dim">$</span> claude mcp list</span>
+          <span>  |-- repo-search          <span class="dim">source access</span></span>
+          <span>  |-- architecture-maps    <span class="dim">diagram generation</span></span>
+          <span>  |-- jira                 <span class="dim">ownership and scope</span></span>
+          <span>  |-- observability        <span class="dim">runtime evidence</span></span>
+          <span>  |-- dependency-scanner   <span class="dim">risk signals</span></span>
+          <span>  |-- test-runner          <span class="dim">verification</span></span>
+          <span>  `-- <span class="dim">+ many more...</span></span>
+        </div>
+        <p class="lead fragment" data-i18n="s09.sub">
+          Unused tool contracts spend attention before the first dependency is
+          inspected.
+        </p>
+      </section>
+
+<section class="slide" data-slide="5">
+        <p class="kicker" data-i18n="s10.kicker">Token budget</p>
+        <h2 data-i18n="s10.h2">Tool contracts have<br />a <em>context price</em></h2>
+        <div class="bar-chart">
+          <div class="bar-row fragment"><span>System prompt</span><div class="bar-track"><div class="bar-fill" style="--w: 42%"></div></div><span class="bar-value">~4K</span></div>
+          <div class="bar-row fragment"><span>MCP tool defs</span><div class="bar-track"><div class="bar-fill" style="--w: 100%"></div></div><span class="bar-value">~10K</span></div>
+          <div class="bar-row fragment"><span>CatalogService</span><div class="bar-track"><div class="bar-fill" style="--w: 84%"></div></div><span class="bar-value">~15K</span></div>
+          <div class="bar-row fragment"><span>Test output</span><div class="bar-track"><div class="bar-fill" style="--w: 28%"></div></div><span class="bar-value">~3K</span></div>
+          <div class="bar-row fragment"><span>Skill metadata</span><div class="bar-track"><div class="bar-fill" style="--w: 2%"></div></div><span class="bar-value">~50</span></div>
+        </div>
+        <p class="lead fragment" data-i18n="s10.sub">Budget context like architecture.</p>
+      </section>
+
+<section class="slide" data-slide="6">
+        <p class="kicker" data-i18n="s11.kicker">Context Rot</p>
+        <h2 data-i18n="s11.h2">Context Rot hurts<br /><em>migration judgment</em></h2>
+        <div class="context-rot-chart">
+          <article class="rot-chart-card fragment">
+            <svg viewBox="0 0 760 360" role="img" aria-label="Accuracy drops as irrelevant context grows">
+              <line class="rot-axis" x1="70" y1="300" x2="710" y2="300"></line>
+              <line class="rot-axis" x1="70" y1="42" x2="70" y2="300"></line>
+              <line class="rot-grid" x1="70" y1="116" x2="710" y2="116"></line>
+              <line class="rot-grid" x1="70" y1="208" x2="710" y2="208"></line>
+              <polyline class="rot-line-ghost" points="85,78 190,82 310,86 430,108 560,202 690,248"></polyline>
+              <polyline class="rot-line-main" points="85,64 190,70 310,116 430,182 560,238 690,252"></polyline>
+              <circle class="rot-point" cx="85" cy="64" r="7"></circle>
+              <circle class="rot-point" cx="310" cy="116" r="7"></circle>
+              <circle class="rot-point" cx="560" cy="238" r="7"></circle>
+              <text class="rot-label" x="64" y="30">accuracy</text>
+              <text class="rot-label" x="592" y="334">irrelevant context</text>
+              <text class="rot-label" x="90" y="54">clean</text>
+              <text class="rot-label" x="520" y="228">crowded</text>
+            </svg>
+          </article>
+          <article class="rot-insight fragment">
+            <strong>89 → 38</strong>
+            <p data-i18n="s11.sub">
+              Noise competes with dependencies, invariants, and test signals.
+            </p>
+            <p class="node-kicker" data-i18n="s11.source">Inspired by Chroma Context Rot research</p>
+          </article>
+        </div>
+        <aside class="notes">
+          The important point is not the exact benchmark task. It is the shape:
+          more irrelevant context makes the model worse at the actual question.
+          For migration, that means worse risk judgment.
+        </aside>
+      </section>
+
+<section class="slide" data-slide="7">
+        <p class="kicker" data-i18n="s11b.kicker">Auto-compact trigger</p>
+        <h2 data-i18n="s11b.h2">The main context<br /><em>fills up</em></h2>
+        <div class="context-window-focus">
+          <article class="context-window-panel focus fragment">
+            <div class="window-title" data-i18n="s11b.left">Main Context before compact</div>
+            <div class="context-slab"><strong>System Prompt</strong>Claude Code + MCP schemas</div>
+            <div class="context-slab"><strong>User Goal</strong>analyze CatalogService</div>
+            <div class="context-slab"><strong>Skill</strong>risk assessment workflow</div>
+            <div class="context-slab"><strong>Tool Result</strong>read CatalogService.cs</div>
+            <div class="context-slab"><strong>Tool Result</strong>grep SaveChanges HiLo</div>
+            <div class="context-ellipsis">...</div>
+            <div class="context-slab danger" data-i18n="s11b.full">Context almost full</div>
+          </article>
+          <div class="context-risk-list">
+            <article class="context-risk fragment"><h3 data-i18n="s11b.r1.h">Attention gets crowded</h3><p data-i18n="s11b.r1.p">Useful evidence sits next to old plans, logs and unused tool schemas.</p></article>
+            <article class="context-risk fragment"><h3 data-i18n="s11b.r2.h">The model still answers</h3><p data-i18n="s11b.r2.p">The risk is not silence. The risk is confident synthesis from blurred evidence.</p></article>
+          </div>
+        </div>
+        <aside class="notes">
+          Make the audience feel the full context window before we show the
+          reset. Auto-compact is useful, but it is not a free lunch.
+        </aside>
+      </section>
+
+<section class="slide" data-slide="8">
+        <p class="kicker" data-i18n="s11d.kicker">Auto-compact trade-off</p>
+        <h2 data-i18n="s11d.h2">A summary is<br /><em>not the evidence</em></h2>
+        <div class="context-window-focus">
+          <article class="context-window-panel compact fragment">
+            <div class="window-title" data-i18n="s11d.right">After compact</div>
+            <div class="context-slab"><strong>System Prompt</strong>Claude Code + MCP schemas</div>
+            <div class="context-slab dimmed"><strong data-i18n="s11d.summary.h">Compact Summary</strong><span data-i18n="s11d.summary.p">Architecture, risk and tests in compressed form</span></div>
+            <div class="context-ellipsis">...</div>
+            <div class="context-slab"><strong>Tool Result</strong>write risk-table.md</div>
+            <div class="context-slab dimmed" data-i18n="s11d.output">New evidence has room again</div>
+          </article>
+          <div class="context-risk-list">
+            <article class="context-risk fragment"><h3 data-i18n="s11d.good.h">What improves</h3><p data-i18n="s11d.good.p">The session gets space for fresh code, tests and owner input.</p></article>
+            <article class="context-risk fragment"><h3 data-i18n="s11d.bad.h">What can vanish</h3><p data-i18n="s11d.bad.p">Uncertainty, minority findings and exact references may be compressed away.</p></article>
+          </div>
+        </div>
+        <aside class="notes">
+          This is the M3 auto-compact visual rebuilt for our story. Summary loss
+          is not just a subagent issue; compaction has the same trade-off.
+        </aside>
+      </section>
+
+<section class="slide" data-slide="9">
+        <p class="kicker" data-i18n="s11c.kicker">Fresh windows</p>
+        <h2 data-i18n="s11c.h2">Give noisy work<br /><em>a fresh window</em></h2>
+        <div class="subagent-context-flow">
+          <article class="context-window-panel compact fragment">
+            <div class="window-title" data-i18n="s11c.main">Main Context</div>
+            <div class="context-slab"><strong>Plan</strong>Architecture, risk, tests</div>
+            <div class="context-slab"><strong>Task</strong>architecture.extract()</div>
+            <div class="context-slab dimmed" data-i18n="s11c.wait">Wait for evidence contract</div>
+          </article>
+          <div class="context-arrow fragment">-&gt;</div>
+          <article class="context-window-panel compact fragment">
+            <div class="window-title" data-i18n="s11c.sub">Subagent Context</div>
+            <div class="context-slab"><strong>Task</strong>extract boundaries</div>
+            <div class="context-slab"><strong>Tool Result</strong>read 18 files</div>
+            <div class="context-slab"><strong>Tool Result</strong>dependency graph</div>
+            <div class="context-ellipsis">...</div>
+            <div class="context-slab"><strong>Artifact</strong>architecture-map.md</div>
+          </article>
+        </div>
+        <aside class="notes">
+          This is why subagents matter for legacy analysis. The main context
+          does not need every grep result.
+        </aside>
+      </section>
+
+<section class="slide" data-slide="10">
+        <p class="kicker" data-i18n="s11e.kicker">Return contract</p>
+        <h2 data-i18n="s11e.h2">Back comes an<br /><em>Evidence Contract</em></h2>
+        <div class="evidence-contract-board">
+          <article class="fragment"><span>01</span><h3 data-i18n="s11e.c1.h">Finding</h3><p data-i18n="s11e.c1.p">Boundaries, risks and test gaps in one short claim.</p></article>
+          <article class="fragment"><span>02</span><h3 data-i18n="s11e.c2.h">References</h3><p data-i18n="s11e.c2.p">Files, commands and snippets that support the claim.</p></article>
+          <article class="fragment"><span>03</span><h3 data-i18n="s11e.c3.h">Confidence</h3><p data-i18n="s11e.c3.p">How strong the evidence is, and what is missing.</p></article>
+          <article class="fragment"><span>04</span><h3 data-i18n="s11e.c4.h">Artifact</h3><p data-i18n="s11e.c4.p">Architecture Map, Risk Table or Test-Gap Report.</p></article>
+        </div>
+        <p class="bottom-note" data-i18n="s11e.note">Raw noise stays out. Reviewable evidence comes back.</p>
+      </section>
+
+<section class="slide" data-slide="11">
+        <p class="kicker" data-i18n="s12q.kicker">Bridge</p>
+        <h2 data-i18n="s12q.h2">Before orchestration<br /><em>evidence hygiene</em></h2>
+        <div class="thesis-statement fragment">
+          <strong data-i18n="s12q.thesis">Clean context is better architecture.</strong>
+          <p data-i18n="s12q.sub">
+            Right evidence. Right time. Reviewable output.
+          </p>
+        </div>
+      </section>
+
+<section class="slide" data-slide="12">
+        <p class="kicker" data-i18n="s12h.kicker">Context hygiene</p>
+        <h2 data-i18n="s12h.h2">Clean context<br /><em>improves decisions</em></h2>
+        <div class="hygiene-system">
+          <div class="hygiene-core fragment">
+            <strong data-i18n="s12h.core">Clean evidence flow</strong>
+          </div>
+          <article class="hygiene-node fragment">
+            <span data-i18n="s12h.r1.m">less duplication</span>
+            <h3 data-i18n="s12h.r1.h">Deduplicate evidence</h3>
+            <p data-i18n="s12h.r1.p">One fact, one source.</p>
+          </article>
+          <article class="hygiene-node fragment">
+            <span data-i18n="s12h.r2.m">less noise</span>
+            <h3 data-i18n="s12h.r2.h">Compact outputs</h3>
+            <p data-i18n="s12h.r2.p">Findings, severity, references.</p>
+          </article>
+          <article class="hygiene-node fragment">
+            <span data-i18n="s12h.r3.m">more review</span>
+            <h3 data-i18n="s12h.r3.h">Return typed artifacts</h3>
+            <p data-i18n="s12h.r3.p">Architecture Map, Risk Table, Test-Gap Report.</p>
+          </article>
+        </div>
+      </section>
+
+<section class="slide" data-slide="13">
+        <p class="kicker" data-i18n="s12b.kicker">Operating loop</p>
+        <h2 data-i18n="s12b.h2">Context control<br /><em>is a workflow</em></h2>
+        <div class="lanes">
+          <article class="lane fragment"><span>01</span><h3 data-i18n="s12b.l1.h">Measure</h3><p data-i18n="s12b.l1.p">Check budget before long analysis.</p></article>
+          <article class="lane fragment"><span>02</span><h3 data-i18n="s12b.l2.h">Route</h3><p data-i18n="s12b.l2.p">Load tools, files and skills only when needed.</p></article>
+          <article class="lane fragment"><span>03</span><h3 data-i18n="s12b.l3.h">Compress</h3><p data-i18n="s12b.l3.p">Return artifacts, references and open questions.</p></article>
+        </div>
+        <p class="bottom-note" data-i18n="s12b.note">The harness exists to make this loop repeatable.</p>
+        <aside class="notes">
+          This closes the context chapter before we enter the harness. It turns
+          the visuals into a practice: measure, route, compress, and then decide.
+        </aside>
+      </section>
+
+<section class="slide act inverse" data-slide="14">
+        <div class="act-label">Akt II</div>
+        <h2 data-i18n="s13.h2">From prompt<br />to <em>agent harness</em></h2>
+      </section>
+
+<section class="slide" data-slide="15">
+        <p class="kicker" data-i18n="s15.kicker">Pattern map</p>
+        <h2 data-i18n="s15.h2">Analysis harness<br /><em>components</em></h2>
+        <div class="concept-list">
+          <article class="concept-row fragment"><span>Runtime</span><h3>Agent</h3><p data-i18n="s15.agent">Executes the inspect, reason, act, verify loop.</p></article>
+          <article class="concept-row fragment"><span>Control</span><h3>Harness</h3><p data-i18n="s15.harness">Defines permissions, context policy, logging, memory, and review gates.</p></article>
+          <article class="concept-row fragment"><span>Tools</span><h3>MCP Gateway</h3><p data-i18n="s15.mcp">Catalog, isolation and policy for tools; context efficiency depends on how the harness loads them.</p></article>
+          <article class="concept-row fragment"><span>Knowledge</span><h3>Skills</h3><p data-i18n="s15.skills">Package reusable procedures for risk assessment, extraction, and verification.</p></article>
+          <article class="concept-row fragment"><span>Delegation</span><h3>Subagents</h3><p data-i18n="s15.subagents">Run bounded tasks in fresh context windows.</p></article>
+          <article class="concept-row fragment"><span>Gates</span><h3>Hooks</h3><p data-i18n="s15.hooks">Trigger tests, scans, and owner-review checks around risky actions.</p></article>
+        </div>
+      </section>
+
+<section class="slide" data-slide="16">
+        <p class="kicker" data-i18n="s16.kicker">Orchestrator</p>
+        <h2 data-i18n="s16.h2">Orchestrator protects<br />the <em>main context</em></h2>
+        <div class="lanes">
+          <article class="lane fragment"><span>Plan</span><h3 data-i18n="s16.l1.h">Decompose</h3><p data-i18n="s16.l1.p">Architecture, risk, tests, migration path.</p></article>
+          <article class="lane fragment"><span>Route</span><h3 data-i18n="s16.l2.h">Choose context</h3><p data-i18n="s16.l2.p">Select tools, skills, files, and subagents.</p></article>
+          <article class="lane fragment"><span>Synth</span><h3 data-i18n="s16.l3.h">Merge artifacts</h3><p data-i18n="s16.l3.p">One recommendation with confidence and gaps.</p></article>
+        </div>
+      </section>
+
+<section class="slide" data-slide="17">
+        <p class="kicker" data-i18n="s19.kicker">Skill example</p>
+        <h2 data-i18n="s19.h2">A Skill is<br /><em>a migration checklist</em></h2>
+        <pre class="code"><span class="keyword">name</span>: legacy-risk-assessment
+<span class="keyword">when</span>: analyzing migration candidates
+<span class="keyword">steps</span>:
+  1. map dependencies
+  2. identify business invariants
+  3. score risk and confidence
+  4. produce review gates
+<span class="keyword">outputs</span>: architecture-map.md, risk-table.md, test-gaps.md</pre>
+        <p class="lead" data-i18n="s19.sub">The skill carries steps and expected outputs.</p>
+      </section>
+
+<section class="slide" data-slide="18">
+        <p class="kicker" data-i18n="s21b.kicker">Subagent design</p>
+        <h2 data-i18n="s21b.h2">Collaboration beats<br /><em>blind delegation</em></h2>
+        <div class="collab-map">
+          <article class="collab-pane fragment">
+            <h3 data-i18n="s21b.left.h">Delegation</h3>
+            <div class="collab-diagram">
+              <div class="head-icon">A</div>
+              <div class="decision-paths"><div></div><div class="muted"></div><div></div></div>
+              <div class="artifact-icon">?</div>
+            </div>
+            <ul>
+              <li data-i18n="s21b.left.1">Good for independent scans</li>
+              <li data-i18n="s21b.left.2">Risky for planning decisions</li>
+              <li data-i18n="s21b.left.3">Can guess without user input</li>
+            </ul>
+          </article>
+          <article class="collab-pane fragment">
+            <h3 data-i18n="s21b.right.h">Collaboration</h3>
+            <div class="collab-diagram">
+              <div class="head-icon">U</div>
+              <div class="decision-paths"><div></div><div></div><div class="muted"></div></div>
+              <div class="artifact-icon">✓</div>
+            </div>
+            <ul>
+              <li data-i18n="s21b.right.1">Human-in-the-loop for key calls</li>
+              <li data-i18n="s21b.right.2">Validated architecture choices</li>
+              <li data-i18n="s21b.right.3">Main context keeps the decision story</li>
+            </ul>
+          </article>
+        </div>
+        <aside class="notes">
+          This is the Bild (2) idea translated into our talk: subagents are not
+          a replacement for collaboration. Use them for isolated evidence work,
+          not for decisions that need a human and shared context.
+        </aside>
+      </section>
+
+<section class="slide" data-slide="19">
+        <p class="kicker" data-i18n="s21c.kicker">Scaling pattern</p>
+        <h2 data-i18n="s21c.h2">Do not load it all<br /><em>route the work</em></h2>
+        <div class="scale-beyond-context-flow">
+          <article class="scale-card fragment">
+            <span>01</span>
+            <div class="doc-pile" aria-hidden="true">
+              <i class="doc-sheet" style="--x: 8px; --y: 6px; --r: -8deg"></i>
+              <i class="doc-sheet" style="--x: 46px; --y: 20px; --r: 4deg"></i>
+              <i class="doc-sheet" style="--x: 24px; --y: 84px; --r: -2deg"></i>
+              <i class="doc-sheet" style="--x: 82px; --y: 68px; --r: 9deg"></i>
+            </div>
+            <h3 data-i18n="s21c.s1">Legacy codebase</h3>
+          </article>
+          <div class="scale-arrow fragment">-&gt;</div>
+          <article class="scale-card fragment">
+            <span>02</span>
+            <h3 data-i18n="s21c.s2">Chunk by decision</h3>
+            <div class="routing-list">
+              <div data-i18n="s21c.r1">Architecture boundaries</div>
+              <div data-i18n="s21c.r2">Runtime risk</div>
+              <div data-i18n="s21c.r3">Missing tests</div>
+            </div>
+          </article>
+        </div>
+        <p class="bottom-note" data-i18n="s21c.note">No full-codebase dump into the main Context Window.</p>
+        <aside class="notes">
+          This is the first half of the Bild (3) idea: route the codebase by
+          decision need instead of treating the whole repo as one prompt.
+        </aside>
+      </section>
+
+<section class="slide" data-slide="20">
+        <p class="kicker" data-i18n="s21d.kicker">Aggregation pattern</p>
+        <h2 data-i18n="s21d.h2">Parallel agents<br /><em>keep main context clean</em></h2>
+        <div class="aggregation-board">
+          <article class="scale-card fragment">
+            <span>03</span>
+            <div class="agent-stack">
+              <div class="agent-pill">architecture</div>
+              <div class="agent-pill">dependencies</div>
+              <div class="agent-pill">test gaps</div>
+              <div class="agent-pill">risk</div>
+            </div>
+            <h3 data-i18n="s21d.s1">Specialists read deeply</h3>
+          </article>
+          <div class="scale-arrow fragment">-&gt;</div>
+          <article class="scale-card fragment">
+            <span>04</span>
+            <div class="evidence-doc" aria-hidden="true"></div>
+            <h3 data-i18n="s21d.s2">Evidence comes back</h3>
+            <p data-i18n="s21d.s2p">Relevant snippets, citations and open questions.</p>
+          </article>
+        </div>
+        <p class="bottom-note" data-i18n="s21d.note">The main context keeps the decision story, not every raw tool result.</p>
+      </section>
+
+<section class="slide act inverse" data-slide="21">
+        <div class="act-label">Akt III</div>
+        <h2 data-i18n="s24.h2">CatalogService as<br /><em>agent workflow</em></h2>
+      </section>
+
+<section class="slide" data-slide="22">
+        <p class="kicker" data-i18n="s26.kicker">A/B result</p>
+        <h2 data-i18n="s26.h2">Reading code<br /><em>is not enough</em></h2>
+        <div class="scoreboard">
+          <div class="head"></div><div class="head">No harness</div><div class="head">Harness</div><div class="head"></div>
+          <div data-i18n="s26.r1">Syntax and local control flow</div><div class="pos">OK</div><div class="pos">OK</div><div class="note" data-i18n="s26.n1">The model can parse code.</div>
+          <div data-i18n="s26.r2">Architecture boundaries</div><div class="neg">weak</div><div class="pos">strong</div><div class="note" data-i18n="s26.n2">Needs dependency evidence.</div>
+          <div data-i18n="s26.r3">Runtime and ownership risk</div><div class="neg">missed</div><div class="pos">captured</div><div class="note" data-i18n="s26.n3">Needs runtime and owner signals.</div>
+          <div data-i18n="s26.r4">Migration decision package</div><div class="neg">no</div><div class="pos">yes</div><div class="note" data-i18n="s26.n4">Needs gates and review.</div>
+        </div>
+      </section>
+
+<section class="slide" data-slide="23">
+        <p class="kicker" data-i18n="s33a.kicker">Anti-patterns</p>
+        <h2 data-i18n="s33a.h2">Stop making<br /><em>the prompt bigger</em></h2>
+        <div class="learning-grid focus">
+          <article class="learning fragment"><span>01</span><div><h3 data-i18n="s33a.l1.h">Everything up front</h3><p data-i18n="s33a.l1.p">Repo dumps, tool dumps and “just in case” docs crowd the decision.</p></div></article>
+          <article class="learning fragment"><span>02</span><div><h3 data-i18n="s33a.l2.h">Instructions as controls</h3><p data-i18n="s33a.l2.p">“Be careful” is weaker than tests, scans and owner review.</p></div></article>
+          <article class="learning fragment"><span>03</span><div><h3 data-i18n="s33a.l3.h">Summaries without sources</h3><p data-i18n="s33a.l3.p">A clean paragraph is not evidence unless it points back to code.</p></div></article>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const translations = {
+        de: {
+          "s01.kicker": "betterCode() GenAI Summit",
+          "s01.h1": "Legacy-Analyse ist<br><em>kein Prompt</em>",
+          "s01.sub": "Claude Code, MCP Gateway, Skills, Subagents, dynamischer Kontext und Gates.",
+          "s02.kicker": "Anschluss an Laura & Sigrid",
+          "s02.h2": "Vom Modernisierungsrahmen<br>zum <em>Analyse-Harness</em>",
+          "s02.sub": "Laura und Sigrid setzen den Modernisierungsrahmen. Wir gehen eine Ebene tiefer: der Agenten-Workflow.",
+          "s02.c1.h": "Reverse Engineering",
+          "s02.c1.p": "Architektur, Verhalten, Risiken und Owner rekonstruieren.",
+          "s02.c2.h": "Forward Engineering",
+          "s02.c2.p": "Zielbild, Tests und Migrationsschnitt ableiten.",
+          "s02.c3.h": "Unser Deep Dive",
+          "s02.c3.p": "Claude Code + MCP + Skills + Subagents.",
+          "s03.kicker": "Unser Fokus",
+          "s03.h2": "Keine Rewrite-Magie<br><em>Evidenz-Pipeline</em>",
+          "s03.sub": "Das Modell denkt. Der Harness kontrolliert Context, Tools, Artefakte und Gates.",
+          "s03.left.tag": "Was wir vermeiden",
+          "s03.left.1": "Repo Dump, Tool Dump, vages Ziel.",
+          "s03.left.2": "Rewrite-Vorschlag ohne Entscheidungsartefakte.",
+          "s03.left.3": "Confidence ohne ausgeführte Checks.",
+          "s03.right.tag": "Was wir bauen",
+          "s03.right.1": "Context am Entscheidungspunkt laden.",
+          "s03.right.2": "Subagents liefern referenzierte Evidenz.",
+          "s03.right.3": "Tests, Security Checks, Owner Review.",
+          "s04.h2": "Context ist eine<br><em>Architekturentscheidung</em>",
+          "s05.kicker": "Echtes Legacy-System vor Code",
+          "s05.h2": "CatalogService:<br>Legacy-<em>Data-Access-Core</em>",
+          "s05.sub": "Katalog-Verwaltung an einer Stelle: EF6-Queries, Paging, HiLo-Keys, Bild-Blobs, ein Mock/SQL-Swap und .NET-Framework-Kopplung.",
+          "s05.core.p": "Ein Service kapselt jeden Katalog-Read und -Write samt Persistenzdetails.",
+          "s05.n1.tag": "Persistenz",
+          "s05.n1.p": "Eager .Include()-Loads, SaveChanges, Lazy-Loading-Fallen.",
+          "s05.n2.tag": "Keys",
+          "s05.n2.p": "App-seitige Primärschlüssel über eigene SQL-Sequenzen.",
+          "s05.n3.tag": "Verdrahtung",
+          "s05.n3.p": "Service-Implementierung per Config und DI-Modul gewählt.",
+          "s05.n4.tag": "Framework",
+          "s05.n4.p": "web.config, Global.asax, Bundling, IIS-Kopplung.",
+          "s06.kicker": "Was der Agent verstehen muss",
+          "s06.h2": "Ein Catalog-Service braucht<br><em>viele Evidenzschichten</em>",
+          "s06.i1.h": "Source Code",
+          "s06.i1.p": "Control Flow, Datenstrukturen, Exception-Pfade, Dead Code.",
+          "s06.i2.h": "Tests",
+          "s06.i2.p": "Bestehendes Verhalten, Lücken, brüchige Fixtures, fehlende Edge Cases.",
+          "s06.i3.h": "Architektur",
+          "s06.i3.p": "Grenzen, Kopplung, Ownership, Deployment-Topologie.",
+          "s06.i4.h": "Runtime",
+          "s06.i4.p": "Logs, Incidents, Feature Flags, Batch Windows, Downstream Contracts.",
+          "s06.i5.h": "Domänen-Regeln",
+          "s06.i5.p": "Validierungen, Pflichtfelder, Bild-/SKU-Constraints, Katalog-Invarianten.",
+          "s06.i6.h": "People Context",
+          "s06.i6.p": "Wer freigibt, was nicht brechen darf, wo Wissen liegt.",
+          "s07a.kicker": "Reality Check fürs Publikum",
+          "s07a.h2": "Warum Sessions<br><em>schlechter werden</em>",
+          "s07a.sub": "Der Agent vergisst nicht. Er behält zu viel.",
+          "s07a.t1.h": "Instruktionen",
+          "s07a.t1.p": "System Prompt, Projektregeln, Safety Policy.",
+          "s07a.t2.h": "Tool Contracts",
+          "s07a.t2.p": "Schemas, bevor Evidenz existiert.",
+          "s07a.t3.h": "Exploration",
+          "s07a.t3.p": "Files, Grep Results, Logs, fehlende Tests.",
+          "s07a.t4.h": "Conversation",
+          "s07a.t4.p": "Pläne, Korrekturen, Umwege, Annahmen.",
+          "s07a.t5.h": "Summaries",
+          "s07a.t5.p": "Komprimierte Erinnerung mit Verlusten.",
+          "s07.kicker": "Context-Mechanik",
+          "s07.h2": "Das <em>Context Window</em><br>wächst immer weiter",
+          "s07.sub": "History, Schemas, File Reads, Tests und Summaries teilen sich ein Attention Budget.",
+          "s07.t1": "Am Anfang",
+          "s07.user": "analysiere CatalogService",
+          "s07.t5": "Nach Exploration",
+          "s07.agent": "1.330 Knoten, 66 Communities gemappt",
+          "s07.tests": "jetzt Teststrategie",
+          "s07.t15": "Der Stack ist schwer",
+          "s07.deploy": "können wir migrieren?",
+          "s07c.kicker": "Nach ein paar Turns",
+          "s07c.h2": "Die echte Frage kommt<br><em>in altem Rauschen an</em>",
+          "s07c.r1.h": "Die Frage ist schwerer",
+          "s07c.r1.p": "Das Migrationsurteil hängt jetzt daran, was der Context behalten, verloren und überbetont hat.",
+          "s07c.r2.h": "Nächster Schritt: messen",
+          "s07c.r2.p": "Vor noch mehr Analyse erst prüfen, was das Window bereits belegt.",
+          "s07b.kicker": "/context Moment",
+          "s07b.h2": "Das Budget ist<br><em>schon verbraucht</em>",
+          "s07b.b1": "System Prompt",
+          "s07b.b2": "System Tools",
+          "s07b.b3": "MCP Tools",
+          "s07b.b4": "Skills",
+          "s07b.b5": "Messages",
+          "s07b.b6": "Freier Platz",
+          "s07b.callout": "Tool-Definitionen können die größte Datei im Raum sein",
+          "s07b.note": "Bevor der Agent CatalogService liest, trägt er tausende Tokens ungenutzte Capability.",
+          "s08.kicker": "Context Sources",
+          "s08.h2": "Der Prompt ist nur<br>die <em>sichtbare Schicht</em>",
+          "s08.i1.h": "System Prompt",
+          "s08.i1.p": "Rolle, Rechte, Policies, injiziertes Produktverhalten.",
+          "s08.i2.h": "MCP Tool Contracts",
+          "s08.i2.p": "Schemas und Beschreibungen, bevor ein Tool je aufgerufen wird.",
+          "s08.i3.h": "Dateien und Artefakte",
+          "s08.i3.p": "Code, Docs, Tests, Configs, erzeugte Reports und Diagramme.",
+          "s08.i4.h": "Tool Results",
+          "s08.i4.p": "Search Output, Logs, Compilerfehler und Static-Analysis Findings.",
+          "s08.i5.h": "Memory",
+          "s08.i5.p": "Projektfakten, Präferenzen, Summaries, frühere Entscheidungen.",
+          "s08.i6.h": "Agent Messages",
+          "s08.i6.p": "Pläne, Annahmen, Fehler, Korrekturen und User Feedback.",
+          "s09.kicker": "Tooling-Falle",
+          "s09.h2": "<em>MCP</em> Sprawl<br>wird Context Debt",
+          "s09.sub": "Ungenutzte Tool Contracts verbrauchen Aufmerksamkeit vor der ersten Dependency.",
+          "s10.kicker": "Token Budget",
+          "s10.h2": "Tool Contracts haben<br>einen <em>Context-Preis</em>",
+          "s10.sub": "Budgetiere Context wie Architektur.",
+          "s11.kicker": "Context Rot",
+          "s11.h2": "Context Rot macht<br><em>Risiko-Urteile schlechter</em>",
+          "s11.sub": "Rauschen konkurriert mit Dependencies, Invarianten und Testsignalen.",
+          "s11.source": "Inspiriert von Chroma Context-Rot-Research",
+          "s11b.kicker": "Auto-Compact Trigger",
+          "s11b.h2": "Der Main Context<br><em>läuft voll</em>",
+          "s11b.left": "Main Context vor Compact",
+          "s11b.full": "Context fast voll",
+          "s11b.r1.h": "Attention wird eng",
+          "s11b.r1.p": "Nützliche Evidenz liegt neben alten Plänen, Logs und ungenutzten Tool Schemas.",
+          "s11b.r2.h": "Das Modell antwortet trotzdem",
+          "s11b.r2.p": "Das Risiko ist nicht Schweigen. Das Risiko ist sichere Synthese aus unscharfer Evidenz.",
+          "s11d.kicker": "Auto-Compact Trade-off",
+          "s11d.h2": "Eine Summary ist<br><em>nicht die Evidenz</em>",
+          "s11d.right": "Nach Compact",
+          "s11d.summary.h": "Compact Summary",
+          "s11d.summary.p": "Architektur, Risiko und Tests in komprimierter Form",
+          "s11d.output": "Neue Evidenz hat wieder Platz",
+          "s11d.good.h": "Was besser wird",
+          "s11d.good.p": "Die Session bekommt Raum für frischen Code, Tests und Owner Input.",
+          "s11d.bad.h": "Was verschwinden kann",
+          "s11d.bad.p": "Unsicherheit, Minderheitsbefunde und genaue Referenzen können verschwinden.",
+          "s11c.kicker": "Frische Fenster",
+          "s11c.h2": "Laute Tool-Outputs<br><em>raus aus dem Main Context</em>",
+          "s11c.main": "Main Context",
+          "s11c.wait": "Wartet auf Evidence Contract",
+          "s11c.sub": "Subagent Context",
+          "s11e.kicker": "Return Contract",
+          "s11e.h2": "Zurück kommt ein<br><em>Evidence Contract</em>",
+          "s11e.c1.h": "Finding",
+          "s11e.c1.p": "Grenzen, Risiken und Test-Gaps als kurze Aussage.",
+          "s11e.c2.h": "Referenzen",
+          "s11e.c2.p": "Files, Commands und Snippets, die die Aussage tragen.",
+          "s11e.c3.h": "Confidence",
+          "s11e.c3.p": "Wie stark die Evidenz ist und was noch fehlt.",
+          "s11e.c4.h": "Artefakt",
+          "s11e.c4.p": "Architecture Map, Risk Table oder Test-Gap Report.",
+          "s11e.note": "Raw Noise bleibt draußen. Prüfbare Evidenz kommt zurück.",
+          "s12q.kicker": "Brücke",
+          "s12q.h2": "Vor Orchestrierung<br><em>Context Hygiene</em>",
+          "s12q.thesis": "Sauberer Context ist bessere Architektur.",
+          "s12q.sub": "Richtige Evidenz. Richtige Zeit. Prüfbarer Output.",
+          "s12h.kicker": "Context Hygiene",
+          "s12h.h2": "Sauberer Context<br><em>verbessert Entscheidungen</em>",
+          "s12h.core": "Sauberer Evidenzfluss",
+          "s12h.r1.h": "Evidenz deduplizieren",
+          "s12h.r1.m": "weniger Duplikate",
+          "s12h.r1.p": "Eine Tatsache, eine Quelle.",
+          "s12h.r2.h": "Outputs komprimieren",
+          "s12h.r2.m": "weniger Rauschen",
+          "s12h.r2.p": "Findings, Severity, Referenzen.",
+          "s12h.r3.h": "Typisierte Artefakte zurückgeben",
+          "s12h.r3.m": "mehr Review",
+          "s12h.r3.p": "Architecture Map, Risk Table, Test-Gap Report.",
+          "s12.kicker": "Kern-Trade-off",
+          "s12.h2": "Alles laden?<br><em>Oder gezielt routen?</em>",
+          "s12.left.tag": "Statisch",
+          "s12.left.1": "Repo, Docs, Schemas, Summaries vorab.",
+          "s12.left.2": "Einfacher Flow, teure Attention.",
+          "s12.left.3": "Rauschen verdrängt Migrationssignale.",
+          "s12.right.tag": "Dynamisch",
+          "s12.right.1": "Dateien, Tools, Skills und Docs am Entscheidungspunkt entdecken.",
+          "s12.right.2": "Braucht Orchestrierung, Output Contracts und Merge-Logik.",
+          "s12.right.3": "Hält den Main Context fokussiert auf Evidenz und Entscheidungen.",
+          "s12b.kicker": "Operating Loop",
+          "s12b.h2": "Context Control<br><em>ist ein Workflow</em>",
+          "s12b.l1.h": "Messen",
+          "s12b.l1.p": "Budget vor langer Analyse prüfen.",
+          "s12b.l2.h": "Routen",
+          "s12b.l2.p": "Tools, Files und Skills erst bei Bedarf laden.",
+          "s12b.l3.h": "Komprimieren",
+          "s12b.l3.p": "Artefakte, Referenzen und offene Fragen zurückgeben.",
+          "s12b.note": "Der Harness macht diese Schleife wiederholbar.",
+          "s13.h2": "Vom Prompt<br>zum <em>Agent Harness</em>",
+          "s14.kicker": "Zielarchitektur",
+          "s14.h2": "Legacy Code in<br><em>Entscheidungsartefakten</em>",
+          "s14.p1": "CatalogService, Tests, Logs, Dependency-Metadaten.",
+          "s14.p2": "Plant den Workflow, routet Evidenz-Requests und schützt den Main Context.",
+          "s14.c1": "MCP-discovered Tool Contracts",
+          "s14.c2": "Wiederverwendbare Skill-Prozeduren",
+          "s14.c3": "Frische Context Windows für Spezialisten",
+          "s14.out.h": "Entscheidungsartefakte",
+          "s14.out.p": "Architecture Map, Risk Table, Test-Gap Report, Migration Decision, Review Gates.",
+          "s15.kicker": "Pattern Map",
+          "s15.h2": "Analyse-Harness<br><em>Komponenten</em>",
+          "s15.agent": "Führt die Schleife aus: inspizieren, reasoning, handeln, verifizieren.",
+          "s15.harness": "Definiert Rechte, Context Policy, Logging, Memory und Review Gates.",
+          "s15.mcp": "Katalog, Isolation und Policy für Tools; Context-Effizienz hängt davon ab, wie der Harness lädt.",
+          "s15.skills": "Kapseln wiederverwendbare Prozeduren für Risk Assessment, Extraction und Verification.",
+          "s15.subagents": "Führen begrenzte Tasks in frischen Context Windows aus.",
+          "s15.hooks": "Triggern Tests, Scans und Owner-Review-Checks rund um riskante Aktionen.",
+          "s15b.kicker": "Pattern Selection",
+          "s15b.h2": "Welches Pattern<br><em>für welchen Job?</em>",
+          "s15b.h.need": "Wenn du brauchst",
+          "s15b.h.use": "Nimm",
+          "s15b.h.return": "Gib zurück",
+          "s15b.r1.need": "Deterministische Capability",
+          "s15b.r1.return": "Kompaktes Tool Result",
+          "s15b.r2.need": "Wiederverwendbare Analyse-Methode",
+          "s15b.r2.return": "Checkliste + Output Contract",
+          "s15b.r3.need": "Laute Repo-Exploration",
+          "s15b.r3.return": "Evidence Contract",
+          "s15b.r4.need": "Riskante Aktion",
+          "s15b.r4.return": "Pass/fail + Owner Review",
+          "s15b.r5.need": "Finale Synthese",
+          "s15b.r5.return": "Migrationsentscheidung",
+          "s16.kicker": "Orchestrator",
+          "s16.h2": "Orchestrator schützt<br>den <em>Main Context</em>",
+          "s16.l1.h": "Zerlegen",
+          "s16.l1.p": "Architektur, Risiko, Tests, Migrationspfad.",
+          "s16.l2.h": "Context wählen",
+          "s16.l2.p": "Tools, Skills, Dateien, Subagents auswählen.",
+          "s16.l3.h": "Artefakte mergen",
+          "s16.l3.p": "Eine Empfehlung mit Confidence und Lücken.",
+          "s17.kicker": "MCP Gateway",
+          "s17.h2": "Gateway ist Governance<br><em>nicht Context-Magie</em>",
+          "s17.before": "Schlechter Einsatz",
+          "s17.after": "Guter Einsatz",
+          "s17.note": "Moderne Harnesses laden Tools bereits dynamisch. Gateway lohnt sich, wenn Kontrolle, Isolation und Governance wichtig sind.",
+          "s18.kicker": "Skills",
+          "s18.h2": "Skills laden Wissen<br><em>just in time</em>",
+          "s18.sub": "Methodenwissen erst laden, wenn die Aufgabe passt.",
+          "s18.l1": "Level 1 - immer geladen",
+          "s18.l1p": "Agent weiß, was existiert.",
+          "s18.l2": "Level 2 - bei Relevanz",
+          "s18.l2p": "Agent versteht die Methode.",
+          "s18.l3": "Level 3 - bei Bedarf",
+          "s18.files": "Verlinkte Dateien & Referenzen",
+          "s18.l3p": "Agent hat das exakte Material, das er braucht.",
+          "s18.note": "Capability bleibt verfügbar; Instruktionen bleiben aus dem Main Window.",
+          "s19.kicker": "Skill-Beispiel",
+          "s19.h2": "Ein Skill ist<br><em>ein Migrations-Checkplan</em>",
+          "s19.sub": "Der Skill bringt Ablauf, Entscheidungskriterien und erwartete Outputs mit.",
+          "s20.kicker": "Subagents",
+          "s20.h2": "Subagents schaffen<br>frische <em>Context Windows</em>",
+          "s20.main.h": "Orchestrator",
+          "s20.main.p": "Hält Interaktion, Task Graph und Synthese zusammen.",
+          "s20.spec.h": "Frische Fenster",
+          "s20.return.h": "Evidenz-Contract",
+          "s20.return.p": "Findings, Referenzen, Confidence, Artefakte.",
+          "s21.kicker": "Subagent Trade-offs",
+          "s21.h2": "Delegation kauft Fokus<br>mit Risiko <em>Summary Loss</em>",
+          "s21.left.tag": "Vorteile",
+          "s21.left.1": "Frischer Context pro Spezialist.",
+          "s21.left.2": "Parallel: Architektur, Risiko, Test-Gaps.",
+          "s21.left.3": "Main Thread bleibt entscheidungsfokussiert.",
+          "s21.right.tag": "Nachteile",
+          "s21.right.1": "Evidenz kann in Summaries verschwinden.",
+          "s21.right.2": "Spezialisten können nicht klären.",
+          "s21.right.3": "Braucht strikte Output Contracts.",
+          "s21b.kicker": "Subagent Design",
+          "s21b.h2": "Collaboration schlägt<br><em>blinde Delegation</em>",
+          "s21b.left.h": "Delegation",
+          "s21b.left.1": "Gut für unabhängige Scans",
+          "s21b.left.2": "Riskant für Planungsentscheidungen",
+          "s21b.left.3": "Kann ohne Rückfrage raten",
+          "s21b.right.h": "Collaboration",
+          "s21b.right.1": "Human-in-the-loop für Schlüsselentscheidungen",
+          "s21b.right.2": "Validierte Architekturentscheidungen",
+          "s21b.right.3": "Main Context hält die Entscheidungsstory",
+          "s21c.kicker": "Scaling Pattern",
+          "s21c.h2": "Nicht alles laden<br><em>Arbeit routen</em>",
+          "s21c.s1": "Legacy-Codebase",
+          "s21c.s2": "Nach Entscheidungsbedarf chunking",
+          "s21c.r1": "Architekturgrenzen",
+          "s21c.r2": "Runtime-Risiko",
+          "s21c.r3": "Fehlende Tests",
+          "s21c.note": "Kein Full-Codebase-Dump in den Main Context.",
+          "s21d.kicker": "Aggregation Pattern",
+          "s21d.h2": "Parallele Agents<br><em>halten den Main Context sauber</em>",
+          "s21d.s1": "Spezialisten lesen tief",
+          "s21d.s2": "Evidenz kommt zurück",
+          "s21d.s2p": "Relevante Snippets, Zitate und offene Fragen.",
+          "s21d.note": "Der Main Context hält die Entscheidungsstory, nicht jedes rohe Tool Result.",
+          "s22.kicker": "Artifact-first Subagents",
+          "s22.h2": "Typisierte Artefakte<br>schlagen Optimismus",
+          "s22.c1.h": "Architecture Map",
+          "s22.c1.p": "Grenzen, Dependencies, Transaktionskanten.",
+          "s22.c2.h": "Findings Log",
+          "s22.c2.p": "Evidenz, Quelle, Annahme, Confidence.",
+          "s22.c3.h": "Risk Table",
+          "s22.c3.p": "Severity, Impact, Mitigation, Owner.",
+          "s22.c4.h": "Test-Gap Report",
+          "s22.c4.p": "Fehlende Verhaltenschecks vor der Extraction.",
+          "s23.kicker": "Hooks & Gates",
+          "s23.h2": "Riskante Aktionen brauchen<br><em>Review Gates</em>",
+          "s23.l1.h": "Vor Edits",
+          "s23.l1.p": "Baseline Tests, Dependency Scan, Rollback-Pfad.",
+          "s23.l2.h": "Nach Generierung",
+          "s23.l2.p": "Deterministische Checks plus Behavior Diff.",
+          "s23.l3.h": "Vor Entscheidung",
+          "s23.l3.p": "Artefakte, Test-Evidenz, Security Review, Owner Approval.",
+          "s23.note": "Instruktionen sind keine Kontrolle. Checks sind Kontrolle.",
+          "s24.h2": "CatalogService als<br><em>Agent Workflow</em>",
+          "s25.kicker": "Demo Setup",
+          "s25.h2": "Gleicher Code<br><em>andere Evidenz</em>",
+          "s26.kicker": "A/B Ergebnis",
+          "s26.h2": "Code lesen<br><em>reicht nicht</em>",
+          "s26.r1": "Syntax und lokaler Control Flow",
+          "s26.n1": "Das Modell kann Code parsen.",
+          "s26.r2": "Architekturgrenzen",
+          "s26.n2": "Braucht Dependency-Evidenz.",
+          "s26.r3": "Runtime- und Ownership-Risiko",
+          "s26.n3": "Braucht Runtime- und Owner-Signale.",
+          "s26.r4": "Migrationsentscheidungs-Paket",
+          "s26.n4": "Braucht Gates und Review.",
+          "s27.kicker": "Artefakt 1",
+          "s27.h2": "Architecture Map<br><em>aus Evidenz</em>",
+          "s27.p1": "Controller, Services, EF-Modell, DI-Verdrahtung.",
+          "s27.p2": "Findet Schicht-Grenzen aus Evidenz.",
+          "s27.p3h": "Schichten & Nähte",
+          "s27.p3": "Web/MVC, Catalog-Service, Domänenmodell, EF-Datenzugriff, Composition Root.",
+          "s27.p4h": "Owner-Fragen",
+          "s27.p4": "Welches Team kann es betreiben, deployen und zurückrollen?",
+          "s28.kicker": "Artefakt 2",
+          "s28.h2": "Risk Table<br>vor der Migration",
+          "s28.h.signal": "Signal",
+          "s28.h.level": "Level",
+          "s28.h.evidence": "Evidenz",
+          "s28.r1.signal": "Kopplung",
+          "s28.r1.evidence": "Katalog-Writes berühren EF6, HiLo-Sequenzen, Bild-Storage und DI-Wiring.",
+          "s28.r2.signal": "Coverage",
+          "s28.r2.evidence": "Keine lokalen Characterization Tests decken CatalogService, Paging oder Persistenzverhalten ab.",
+          "s28.r3.signal": "Runtime-Kritikalität",
+          "s28.r3.evidence": "Fehler brechen Katalog-Reads, Writes und die Produktpflege im Admin.",
+          "s28.r4.signal": "Owner-Klarheit",
+          "s28.r4.evidence": "Catalog- und Plattform-Team teilen die DI/Config-Verdrahtung.",
+          "s29.kicker": "Artefakt 3",
+          "s29.h2": "Test-Gap Report<br>vor Extraction",
+          "s29.l1.h": "Migrationslücken",
+          "s29.l1.p": "Mock/SQL-Divergenz, HiLo-Race, fehlende Pagination-Grenzen.",
+          "s29.l2.h": "Katalog-Invarianten",
+          "s29.l2.p": "Pflichtfeld-Validierung, Brand/Type-Integrität, Bildgrößen-Limits.",
+          "s29.l3.h": "Vor Extraction",
+          "s29.l3.p": "Characterization Tests für jede Invariante ergänzen.",
+          "s30.kicker": "Migrationsentscheidung",
+          "s30.h2": "Der Migrationspfad folgt<br><em>Risiko-Evidenz</em>",
+          "s30.sub": "Vergleiche Kopplung, Coverage, Runtime-Risiko, Ownership und Rollback.",
+          "s30.l1.p": "Slices routen, wenn Contracts und Rollback klar sind.",
+          "s30.l2.h": "Gezielter Rewrite",
+          "s30.l2.p": "Rewrite erst mit expliziten Invarianten und Lücken.",
+          "s30.l3.h": "Automatisiertes Refactoring",
+          "s30.l3.p": "Nutzen, wo Static Analysis und Tests Verhalten prüfen.",
+          "s31.kicker": "Verifikation",
+          "s31.h2": "Vertrauen entsteht durch<br><em>Verification Layers</em>",
+          "s31.l1.h": "Deterministische Checks",
+          "s31.l1.p": "Unit-, Integrations- und Characterization-Tests.",
+          "s31.l2.h": "LLM Review",
+          "s31.l2.p": "Markiert semantische Deltas; ersetzt nie Tests.",
+          "s31.l3.h": "Owner-Entscheidung",
+          "s31.l3.p": "Menschen akzeptieren Risiko und geben Rollout frei.",
+          "s32.kicker": "Grenzen und Fallstricke",
+          "s32.h2": "Wo der Harness<br><em>trotzdem lügt</em>",
+          "s32.r1.h": "Sauberes Artefakt",
+          "s32.r1.p": "Schwache Evidenz kann hinter einer polierten Tabelle verschwinden.",
+          "s32.r2.h": "Sichere Summary",
+          "s32.r2.p": "Minderheitsbefunde verschwinden, wenn der Return Contract vage ist.",
+          "s32.r3.h": "Syntax grün",
+          "s32.r3.p": "Business-Invarianten können trotzdem gebrochen sein.",
+          "s32.note": "Die Lösung ist nicht mehr Confidence. Die Lösung ist stärkere Evidenz und explizites Review.",
+          "s33a.kicker": "Anti-Patterns",
+          "s33a.h2": "Hört auf<br><em>den Prompt aufzublähen</em>",
+          "s33a.l1.h": "Alles vorab laden",
+          "s33a.l1.p": "Repo Dumps, Tool Dumps und Docs auf Vorrat überfüllen den Context.",
+          "s33a.l2.h": "Instruktionen als Kontrolle",
+          "s33a.l2.p": "„Sei vorsichtig“ ist schwächer als Tests, Scans und Owner Review.",
+          "s33a.l3.h": "Summaries ohne Quellen",
+          "s33a.l3.p": "Ein sauberer Absatz ist keine Evidenz, wenn er nicht auf Code zeigt.",
+          "s33.kicker": "Design-Prinzipien & Learnings",
+          "s33.h2": "Baut den<br><em>Analyse-Harness</em>",
+          "s33.l1.h": "Context ist ein Interface",
+          "s33.l1.p": "Zweck, Kosten, Owner, Ablaufdatum.",
+          "s33.l2.h": "Tool Contracts sind Budget",
+          "s33.l2.p": "Schemas verbrauchen Aufmerksamkeit.",
+          "s33.l3.h": "Artefakte brauchen Contracts",
+          "s33.l3.p": "Evidenz, Confidence, Annahmen.",
+          "s33.l4.h": "Gates sind Kontrolle",
+          "s33.l4.p": "Tests, Security, Owner Review.",
+          "s33.l5.h": "Menschen besitzen Risiko",
+          "s33.l5.p": "Teams genehmigen und betreiben.",
+          "s33.note": "Investiert in Harness Patterns, nicht in größere Prompts.",
+          "s34.kicker": "Live Demo",
+          "s34.h1": "<em>Demo</em><br>eShop Catalog",
+          "s34.sub": "Ein Catalog-Service. Fünf Artefakte. Ein Review Gate.",
+          "s34.s1": "Assessment",
+          "s34.s2": "Architecture Map",
+          "s34.s3": "Risk Table",
+          "s34.s4": "Test-Gap Report",
+          "s34.s5": "Review Gate",
+          "s34.badge": "Live Agent Workflow"
+        }
+      };
+
+      const slides = Array.from(document.querySelectorAll(".slide"));
+      const counter = document.getElementById("counter");
+      const progress = document.getElementById("progress");
+      const fragmentState = new Array(slides.length).fill(0);
+      const defaultContent = {};
+      document.querySelectorAll("[data-i18n]").forEach((node) => {
+        defaultContent[node.dataset.i18n] = node.innerHTML;
+      });
+      let current = 0;
+      let lang = "en";
+
+      function fragmentsFor(slide) {
+        return Array.from(slide.querySelectorAll(".fragment"));
+      }
+
+      function syncFragments(slideIndex) {
+        const fragments = fragmentsFor(slides[slideIndex]);
+        fragments.forEach((fragment, index) => {
+          fragment.classList.toggle("visible", index < fragmentState[slideIndex]);
+        });
+      }
+
+      function showSlide(next) {
+        if (next < 0 || next >= slides.length || next === current) return;
+        slides[current].classList.remove("active");
+        slides[current].classList.add("exit");
+        current = next;
+        slides[current].classList.remove("exit");
+        slides[current].classList.add("active");
+        syncFragments(current);
+        updateChrome();
+      }
+
+      function updateChrome() {
+        const total = slides.length;
+        counter.textContent = `${String(current + 1).padStart(2, "0")} / ${total}`;
+        progress.style.width = `${((current + 1) / total) * 100}%`;
+      }
+
+      function nextFragment() {
+        const fragments = fragmentsFor(slides[current]);
+        if (fragmentState[current] >= fragments.length) return false;
+        fragments[fragmentState[current]].classList.add("visible");
+        fragmentState[current] += 1;
+        return true;
+      }
+
+      function previousFragment() {
+        if (fragmentState[current] <= 0) return false;
+        fragmentState[current] -= 1;
+        fragmentsFor(slides[current])[fragmentState[current]].classList.remove("visible");
+        return true;
+      }
+
+      function next() {
+        if (!nextFragment()) showSlide(current + 1);
+      }
+
+      function previous() {
+        if (!previousFragment()) showSlide(current - 1);
+      }
+
+      function setLang(nextLang) {
+        lang = nextLang;
+        document.documentElement.lang = lang;
+        document.querySelectorAll("[data-i18n]").forEach((node) => {
+          const key = node.dataset.i18n;
+          const value = translations[lang]?.[key] ?? defaultContent[key];
+          if (value) node.innerHTML = value;
+        });
+        document.querySelectorAll("[data-lang]").forEach((button) => {
+          button.classList.toggle("active", button.dataset.lang === lang);
+        });
+      }
+
+      document.addEventListener("keydown", (event) => {
+        if (["ArrowRight", "PageDown", " "].includes(event.key)) {
+          event.preventDefault();
+          next();
+        }
+        if (["ArrowLeft", "PageUp", "Backspace"].includes(event.key)) {
+          event.preventDefault();
+          previous();
+        }
+        if (event.key === "Home") showSlide(0);
+        if (event.key === "End") showSlide(slides.length - 1);
+      });
+
+      document.getElementById("deck").addEventListener("click", (event) => {
+        if (event.target.closest("button")) return;
+        if (event.shiftKey) previous();
+        else next();
+      });
+
+      let touchStartX = 0;
+      document.addEventListener("touchstart", (event) => {
+        touchStartX = event.changedTouches[0].clientX;
+      });
+      document.addEventListener("touchend", (event) => {
+        const delta = event.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(delta) < 40) return;
+        if (delta < 0) next();
+        else previous();
+      });
+
+      document.getElementById("langToggle").addEventListener("click", (event) => {
+        const button = event.target.closest("[data-lang]");
+        if (button) setLang(button.dataset.lang);
+      });
+
+      document.getElementById("themeToggle").addEventListener("click", (event) => {
+        const button = event.target.closest("[data-theme-value]");
+        if (!button) return;
+        document.documentElement.dataset.theme = button.dataset.themeValue;
+        document.querySelectorAll("[data-theme-value]").forEach((option) => {
+          option.classList.toggle("active", option === button);
+        });
+      });
+
+      updateChrome();
+      syncFragments(0);
+    </script>
+  </body>
+</html>

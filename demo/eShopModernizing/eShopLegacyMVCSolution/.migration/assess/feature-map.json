@@ -1,0 +1,47 @@
+{
+  "bounded_context": "Catalog Management",
+  "note": "extract_features.py heuristic misfired on this small single-context app (parsed GRAPH_REPORT prose); features refined manually from module docs per assess Step 3.",
+  "features": [
+    {
+      "name": "catalog-item-management",
+      "display": "Catalog Item Management",
+      "capability": "Browse, view, create, edit, and delete catalog products (CRUD admin UI with pagination and validation).",
+      "modules": ["web-controllers", "catalog-services", "domain-model", "views-and-static"],
+      "primary_code": ["Controllers/CatalogController.cs", "Services/CatalogService.cs", "Services/CatalogServiceMock.cs", "Models/CatalogItem.cs", "ViewModel/PaginatedItemsViewModel.cs"]
+    },
+    {
+      "name": "reference-data-brands-types",
+      "display": "Reference Data (Brands & Types) + Web API",
+      "capability": "Read catalog brands and types, expose them via Web API (api/Brands, api/Files), populate UI dropdowns.",
+      "modules": ["web-controllers", "catalog-services", "domain-model", "shared-utilities"],
+      "primary_code": ["Controllers/WebApi/BrandsController.cs", "Controllers/WebApi/FilesController.cs", "Models/CatalogBrand.cs", "Models/CatalogType.cs", "eShopLegacy.Utilities/Serializing.cs"]
+    },
+    {
+      "name": "product-imagery",
+      "display": "Product Imagery",
+      "capability": "Serve catalog item pictures over HTTP and import picture sets during seeding.",
+      "modules": ["web-controllers", "data-persistence-seeding"],
+      "primary_code": ["Controllers/PicController.cs", "Models/Infrastructure/CatalogDBInitializer.cs (AddCatalogItemPictures)"]
+    },
+    {
+      "name": "data-seeding-init",
+      "display": "Catalog Data Seeding & Initialization",
+      "capability": "Create the catalog database, run SQL sequences, and seed types/brands/items from hardcoded data or CSV/ZIP files.",
+      "modules": ["data-persistence-seeding", "domain-model"],
+      "primary_code": ["Models/Infrastructure/CatalogDBInitializer.cs", "Models/Infrastructure/PreconfiguredData.cs", "Models/CatalogItemHiLoGenerator.cs", "Setup/*.csv"]
+    },
+    {
+      "name": "application-platform",
+      "display": "Application Platform (cross-cutting)",
+      "capability": "Hosting, dependency injection, routing, configuration, logging, and telemetry that all features depend on.",
+      "modules": ["app-bootstrap-config", "shared-utilities"],
+      "primary_code": ["Global.asax.cs", "Modules/ApplicationModule.cs", "App_Start/*.cs", "Web.config"]
+    }
+  ],
+  "reference_target": {
+    "name": "eShopPorted",
+    "note": "In-repo ASP.NET Core 2.2 + EF Core port of the same context; concrete target-architecture reference for the migration.",
+    "module": "eshopported-variant"
+  },
+  "total_features": 5
+}

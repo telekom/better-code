@@ -1,0 +1,21 @@
+services:
+  catalog-service:
+    build:
+      context: .
+      dockerfile: eShopModernized.Catalog/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - UseMockData=false
+      - ConnectionStrings__CatalogDb=Server=mssql;Database=eShopModernizedCatalog;User Id=sa;Password=Your_strong_Pass123;TrustServerCertificate=true;MultipleActiveResultSets=true
+    depends_on:
+      - mssql
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Your_strong_Pass123
+    ports:
+      - "1433:1433"

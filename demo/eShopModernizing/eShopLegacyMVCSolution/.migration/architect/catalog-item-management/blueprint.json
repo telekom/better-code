@@ -1,0 +1,57 @@
+{
+  "feature": "catalog-item-management",
+  "version": "1.0",
+  "target_platform": "Cloud-native containers (.NET 8 ASP.NET Core, Azure App Service / Kubernetes)",
+  "tech_stack": {
+    "language": "C# (.NET 8)",
+    "framework": "ASP.NET Core MVC 8 + EF Core 8",
+    "database": "SQL Server (Azure SQL Database)",
+    "messaging": "none",
+    "api_style": "REST",
+    "deployment": "Docker container on Azure App Service / Kubernetes",
+    "testing": "xUnit + FluentAssertions + EF Core InMemory/Testcontainers",
+    "build_tool": "dotnet CLI / MSBuild SDK-style",
+    "observability": "OpenTelemetry + Azure Application Insights, ILogger structured logging"
+  },
+  "services": [
+    {
+      "name": "catalog-service",
+      "responsibility": "Owns the catalog product domain: browse/paginate, view, create, edit, and delete catalog items with validation and application-assigned id allocation. Server-rendered MVC admin UI plus the catalog data model.",
+      "owns_data": ["CatalogItem", "CatalogBrand", "CatalogType", "PaginatedItemsViewModel"],
+      "handles_flows": ["FLOW-001", "FLOW-002", "FLOW-003", "FLOW-004", "FLOW-005"],
+      "implements_rules": ["BR-001","BR-002","BR-003","BR-004","BR-005","BR-006","BR-007","BR-008","BR-009","BR-010","BR-011","BR-012","BR-013","BR-014","BR-015","BR-016","BR-017"],
+      "external_interfaces": ["Catalog table (SQL)", "catalog_hilo sequence (SQL)", "Catalog Razor views", "PicController pic route (URL gen)"],
+      "apis": [
+        {"method": "GET", "path": "/Catalog", "description": "Paginated catalog listing (Index)", "request_type": "pageSize:int, pageIndex:int", "response_type": "PaginatedItemsViewModel<CatalogItem> (HTML view)"},
+        {"method": "GET", "path": "/Catalog/Details/{id}", "description": "View item details", "request_type": "id:int", "response_type": "CatalogItem (HTML view)"},
+        {"method": "GET", "path": "/Catalog/Create", "description": "Create form", "request_type": "none", "response_type": "CatalogItem (HTML view)"},
+        {"method": "POST", "path": "/Catalog/Create", "description": "Create item", "request_type": "CatalogItemEditRequest", "response_type": "redirect /Catalog"},
+        {"method": "GET", "path": "/Catalog/Edit/{id}", "description": "Edit form", "request_type": "id:int", "response_type": "CatalogItem (HTML view)"},
+        {"method": "POST", "path": "/Catalog/Edit/{id}", "description": "Update item", "request_type": "CatalogItemEditRequest", "response_type": "redirect /Catalog"},
+        {"method": "GET", "path": "/Catalog/Delete/{id}", "description": "Delete confirm", "request_type": "id:int", "response_type": "CatalogItem (HTML view)"},
+        {"method": "POST", "path": "/Catalog/Delete/{id}", "description": "Delete item", "request_type": "id:int", "response_type": "redirect /Catalog"}
+      ],
+      "events_published": [],
+      "events_consumed": []
+    }
+  ],
+  "data_strategy": {
+    "migration_approach": "bulk-ETL",
+    "shared_data_pattern": "shared-schema",
+    "schemas": [
+      {"name": "CatalogDb", "owner_service": "catalog-service", "tables": ["Catalog", "CatalogBrand", "CatalogType", "catalog_hilo (sequence)"], "migration": "bulk-ETL — repoint EF Core at the existing CatalogDb or bulk-load rows; preserve current sequence values for id continuity"}
+    ]
+  },
+  "communication": {
+    "sync_protocol": "HTTP (in-process MVC; no cross-service calls for this feature)",
+    "async_protocol": "none",
+    "transaction_pattern": "none",
+    "service_mesh": false
+  },
+  "cross_cutting": {
+    "auth": "Deferred — admin UI; introduce ASP.NET Core authentication/authorization (e.g., Entra ID) as a platform concern",
+    "observability": "OpenTelemetry traces/metrics + Application Insights; ILogger structured logs replacing log4net",
+    "error_handling": "Global exception-handling middleware + ProblemDetails; FluentValidation for input; explicit 400/404 results",
+    "secrets": "Connection string and config via appsettings + environment variables + Azure Key Vault"
+  }
+}

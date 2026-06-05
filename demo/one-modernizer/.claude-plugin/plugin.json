@@ -1,0 +1,16 @@
+{
+  "name": "one-modernizer",
+  "version": "0.1.0",
+  "description": "Legacy code modernization — discover, document, and migrate any codebase. Pipeline: discover → assess → decompose → architect → implement → validate (each skill depends on prior output).",
+  "author": {
+    "name": "Demo-bettercode"
+  },
+  "license": "MIT",
+  "keywords": [
+    "modernization",
+    "migration",
+    "legacy",
+    "dotnet",
+    "knowledge-graph"
+  ]
+}

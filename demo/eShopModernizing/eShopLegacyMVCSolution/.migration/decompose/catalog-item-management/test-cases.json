@@ -1,0 +1,357 @@
+[
+  {
+    "id": "TC-001",
+    "description": "Create rejects an item with empty Name",
+    "covers_rules": [
+      "BR-001",
+      "BR-013"
+    ],
+    "covers_flow": "FLOW-003",
+    "input": {
+      "CatalogItem": {
+        "Name": "",
+        "Price": 10,
+        "CatalogBrandId": 2,
+        "CatalogTypeId": 1
+      }
+    },
+    "expected_output": {
+      "persisted": false,
+      "redisplays_form": true
+    },
+    "type": "negative",
+    "preconditions": "None"
+  },
+  {
+    "id": "TC-002",
+    "description": "Create accepts a valid item and assigns an Id",
+    "covers_rules": [
+      "BR-001",
+      "BR-002",
+      "BR-011"
+    ],
+    "covers_flow": "FLOW-003",
+    "input": {
+      "CatalogItem": {
+        "Name": "Test Mug",
+        "Price": 8.5,
+        "CatalogBrandId": 2,
+        "CatalogTypeId": 1,
+        "AvailableStock": 100
+      }
+    },
+    "expected_output": {
+      "persisted": true,
+      "id_assigned": true,
+      "redirect": "Index"
+    },
+    "type": "integration",
+    "preconditions": "Brand 2 and Type 1 exist"
+  },
+  {
+    "id": "TC-003",
+    "description": "Price with three decimals is rejected",
+    "covers_rules": [
+      "BR-002"
+    ],
+    "covers_flow": "FLOW-003",
+    "input": {
+      "CatalogItem": {
+        "Name": "X",
+        "Price": 9.999
+      }
+    },
+    "expected_output": {
+      "valid": false
+    },
+    "type": "negative",
+    "preconditions": "None"
+  },
+  {
+    "id": "TC-004",
+    "description": "Price above 1,000,000 is rejected (boundary)",
+    "covers_rules": [
+      "BR-002"
+    ],
+    "covers_flow": "FLOW-003",
+    "input": {
+      "CatalogItem": {
+        "Name": "X",
+        "Price": 1000000.01
+      }
+    },
+    "expected_output": {
+      "valid": false
+    },
+    "type": "boundary",
+    "preconditions": "None"
+  },
+  {
+    "id": "TC-005",
+    "description": "Price exactly 1,000,000 with two decimals is accepted (boundary)",
+    "covers_rules": [
+      "BR-002"
+    ],
+    "covers_flow": "FLOW-003",
+    "input": {
+      "CatalogItem": {
+        "Name": "X",
+        "Price": 1000000.0,
+        "CatalogBrandId": 2,
+        "CatalogTypeId": 1
+      }
+    },
+    "expected_output": {
+      "valid": true
+    },
+    "type": "boundary",
+    "preconditions": "Brand 2, Type 1 exist"
+  },
+  {
+    "id": "TC-006",
+    "description": "AvailableStock above 10,000,000 is rejected (boundary)",
+    "covers_rules": [
+      "BR-003"
+    ],
+    "covers_flow": "FLOW-003",
+    "input": {
+      "CatalogItem": {
+        "Name": "X",
+        "Price": 1,
+        "AvailableStock": 10000001
+      }
+    },
+    "expected_output": {
+      "valid": false
+    },
+    "type": "boundary",
+    "preconditions": "None"
+  },
+  {
+    "id": "TC-007",
+    "description": "RestockThreshold negative is rejected",
+    "covers_rules": [
+      "BR-004"
+    ],
+    "covers_flow": "FLOW-003",
+    "input": {
+      "CatalogItem": {
+        "Name": "X",
+        "Price": 1,
+        "RestockThreshold": -1
+      }
+    },
+    "expected_output": {
+      "valid": false
+    },
+    "type": "negative",
+    "preconditions": "None"
+  },
+  {
+    "id": "TC-008",
+    "description": "MaxStockThreshold above limit is rejected",
+    "covers_rules": [
+      "BR-005"
+    ],
+    "covers_flow": "FLOW-003",
+    "input": {
+      "CatalogItem": {
+        "Name": "X",
+        "Price": 1,
+        "MaxStockThreshold": 10000001
+      }
+    },
+    "expected_output": {
+      "valid": false
+    },
+    "type": "boundary",
+    "preconditions": "None"
+  },
+  {
+    "id": "TC-009",
+    "description": "Details with null id returns 400",
+    "covers_rules": [
+      "BR-006"
+    ],
+    "covers_flow": "FLOW-002",
+    "input": {
+      "id": null
+    },
+    "expected_output": {
+      "http_status": 400
+    },
+    "type": "negative",
+    "preconditions": "None"
+  },
+  {
+    "id": "TC-010",
+    "description": "Details with non-existent id returns 404",
+    "covers_rules": [
+      "BR-007"
+    ],
+    "covers_flow": "FLOW-002",
+    "input": {
+      "id": 99999
+    },
+    "expected_output": {
+      "http_status": 404
+    },
+    "type": "negative",
+    "preconditions": "Item 99999 does not exist"
+  },
+  {
+    "id": "TC-011",
+    "description": "Details with valid id returns the item with computed PictureUri",
+    "covers_rules": [
+      "BR-007",
+      "BR-010"
+    ],
+    "covers_flow": "FLOW-002",
+    "input": {
+      "id": 1
+    },
+    "expected_output": {
+      "http_status": 200,
+      "picture_uri_present": true
+    },
+    "type": "integration",
+    "preconditions": "Item 1 exists"
+  },
+  {
+    "id": "TC-012",
+    "description": "Index returns a page of at most pageSize items ordered by Id",
+    "covers_rules": [
+      "BR-008"
+    ],
+    "covers_flow": "FLOW-001",
+    "input": {
+      "pageSize": 10,
+      "pageIndex": 0
+    },
+    "expected_output": {
+      "max_items": 10,
+      "ordered_by_id": true
+    },
+    "type": "integration",
+    "preconditions": "At least 1 item exists"
+  },
+  {
+    "id": "TC-013",
+    "description": "TotalPages is ceil(count/pageSize): 12 items, pageSize 10 => 2 pages",
+    "covers_rules": [
+      "BR-009"
+    ],
+    "covers_flow": "FLOW-001",
+    "input": {
+      "count": 12,
+      "pageSize": 10
+    },
+    "expected_output": {
+      "TotalPages": 2
+    },
+    "type": "unit",
+    "preconditions": "None"
+  },
+  {
+    "id": "TC-014",
+    "description": "New CatalogItem defaults PictureFileName to dummy.png",
+    "covers_rules": [
+      "BR-014"
+    ],
+    "covers_flow": "FLOW-003",
+    "input": {
+      "CatalogItem": {}
+    },
+    "expected_output": {
+      "PictureFileName": "dummy.png"
+    },
+    "type": "unit",
+    "preconditions": "None"
+  },
+  {
+    "id": "TC-015",
+    "description": "Edit persists changes for a valid model and redirects",
+    "covers_rules": [
+      "BR-015",
+      "BR-013"
+    ],
+    "covers_flow": "FLOW-004",
+    "input": {
+      "CatalogItem": {
+        "Id": 1,
+        "Name": "Renamed",
+        "Price": 12,
+        "CatalogBrandId": 2,
+        "CatalogTypeId": 1
+      }
+    },
+    "expected_output": {
+      "persisted": true,
+      "redirect": "Index"
+    },
+    "type": "integration",
+    "preconditions": "Item 1 exists"
+  },
+  {
+    "id": "TC-016",
+    "description": "HiLo hands out 10 consecutive ids per sequence fetch",
+    "covers_rules": [
+      "BR-016"
+    ],
+    "covers_flow": "FLOW-003",
+    "input": {
+      "first_sequence_value": 100,
+      "allocations": 10
+    },
+    "expected_output": {
+      "ids": [
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109
+      ],
+      "db_fetches": 1
+    },
+    "type": "unit",
+    "preconditions": "catalog_hilo next value = 100"
+  },
+  {
+    "id": "TC-017",
+    "description": "Delete removes the item and redirects to Index",
+    "covers_rules": [
+      "BR-017"
+    ],
+    "covers_flow": "FLOW-005",
+    "input": {
+      "id": 1
+    },
+    "expected_output": {
+      "removed": true,
+      "redirect": "Index"
+    },
+    "type": "integration",
+    "preconditions": "Item 1 exists"
+  },
+  {
+    "id": "TC-018",
+    "description": "Create POST without a valid anti-forgery token is rejected",
+    "covers_rules": [
+      "BR-012"
+    ],
+    "covers_flow": "FLOW-003",
+    "input": {
+      "antiforgery": "missing"
+    },
+    "expected_output": {
+      "rejected": true
+    },
+    "type": "negative",
+    "preconditions": "None"
+  }
+]

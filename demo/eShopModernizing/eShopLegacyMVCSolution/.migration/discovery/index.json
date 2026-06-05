@@ -1,0 +1,77 @@
+{
+  "project": "eShopLegacyMVC",
+  "scope": "src/eShopLegacyMVC (primary); eShopPorted + eShopLegacy.Utilities documented for completeness",
+  "discovery_mode": "auto-detect (just figure it out)",
+  "graph_commit": "4ab40a4e",
+  "stack": {
+    "language": "C#",
+    "framework": "ASP.NET MVC 5 + Web API 2",
+    "target_framework": ".NET Framework 4.7.2 (compile) / 4.6.1 (httpRuntime)",
+    "di": "Autofac 6.1",
+    "orm": "Entity Framework 6 (code-first)",
+    "database": "SQL Server LocalDB (MSSQLLocalDB)",
+    "logging": "log4net",
+    "telemetry": "Azure Application Insights",
+    "hosting": "IIS / System.Web"
+  },
+  "statistics": {
+    "solution_source_files": 119,
+    "graph_nodes": 1330,
+    "graph_edges": 3572,
+    "graph_communities": 66,
+    "primary_csharp_files": 22,
+    "primary_csharp_loc": 1500,
+    "test_files": 0,
+    "coverage_pct": 99.2,
+    "accuracy_pct": 98.0
+  },
+  "entry_points": [
+    {"name": "MvcApplication.Application_Start", "type": "bootstrap", "location": "src/eShopLegacyMVC/Global.asax.cs:27"},
+    {"name": "CatalogController", "type": "online", "route": "Catalog/{action}/{id}", "location": "src/eShopLegacyMVC/Controllers/CatalogController.cs"},
+    {"name": "PicController.Index", "type": "online", "route": "items/{catalogItemId:int}/pic", "location": "src/eShopLegacyMVC/Controllers/PicController.cs:25"},
+    {"name": "BrandsController", "type": "service", "route": "api/Brands[/id]", "location": "src/eShopLegacyMVC/Controllers/WebApi/BrandsController.cs"},
+    {"name": "FilesController.Get", "type": "service", "route": "api/Files", "location": "src/eShopLegacyMVC/Controllers/WebApi/FilesController.cs"},
+    {"name": "CatalogController2.Index", "type": "service", "route": "api", "location": "src/eShopLegacyMVC/Controllers/Api/CatalogController.cs:6", "note": "static stub"},
+    {"name": "CatalogDBInitializer.Seed", "type": "batch", "trigger": "first DB access", "location": "src/eShopLegacyMVC/Models/Infrastructure/CatalogDBInitializer.cs:32"}
+  ],
+  "modules": [
+    {"name": "web-controllers", "doc": "modules/web-controllers.md", "files": 5, "complexity": "moderate"},
+    {"name": "catalog-services", "doc": "modules/catalog-services.md", "files": 3, "complexity": "simple"},
+    {"name": "domain-model", "doc": "modules/domain-model.md", "files": 6, "complexity": "simple"},
+    {"name": "data-persistence-seeding", "doc": "modules/data-persistence-seeding.md", "files": 9, "complexity": "complex"},
+    {"name": "app-bootstrap-config", "doc": "modules/app-bootstrap-config.md", "files": 9, "complexity": "moderate"},
+    {"name": "views-and-static", "doc": "modules/views-and-static.md", "files": 20, "complexity": "simple"},
+    {"name": "shared-utilities", "doc": "modules/shared-utilities.md", "files": 2, "complexity": "simple", "migration_risk": "high"},
+    {"name": "eshopported-variant", "doc": "modules/eshopported-variant.md", "files": 20, "complexity": "moderate", "note": "ASP.NET Core/EF Core reference port"}
+  ],
+  "external_interfaces": [
+    {"type": "DB", "target": "SQL Server LocalDB (CatalogDBContext)", "mechanism": "EF6 + raw SQL sequences"},
+    {"type": "File", "target": "~/Pics/*", "mechanism": "ReadAllBytes; wiped+unzipped on customization seed"},
+    {"type": "File", "target": "Setup/*.csv, CatalogItems.zip", "mechanism": "startup seed when UseCustomizationData=true"},
+    {"type": "HTTP", "target": "browser + API clients", "mechanism": "Razor HTML, JSON, BinaryFormatter stream"},
+    {"type": "Telemetry", "target": "Azure Application Insights", "mechanism": "HTTP modules"}
+  ],
+  "god_nodes": ["CatalogDBInitializer", "CatalogController", "CatalogService", "CatalogServiceMock", "ICatalogService"],
+  "config_switches": [
+    {"key": "UseMockData", "default": "false", "effect": "CatalogServiceMock vs CatalogService", "location": "src/eShopLegacyMVC/Web.config:19"},
+    {"key": "UseCustomizationData", "default": "false", "effect": "CSV/ZIP seed vs hardcoded", "location": "src/eShopLegacyMVC/Web.config:20"}
+  ],
+  "risk_areas": [
+    {"area": "eShopLegacy.Utilities.Serializing (BinaryFormatter)", "risk": "high", "reason": "obsolete/removed in modern .NET; insecure deserialization; api/Files contract break"},
+    {"area": "System.Web / Global.asax / IIS modules", "risk": "high", "reason": "no ASP.NET Core equivalent; full bootstrap rewrite"},
+    {"area": "CatalogDBInitializer", "risk": "medium", "reason": "raw SQL sequences, filesystem side effects, AppDomain-relative paths"},
+    {"area": "EF6 -> EF Core", "risk": "medium", "reason": "initializer vs migrations; SqlQuery API differences"},
+    {"area": "CatalogItemHiLoGenerator singleton", "risk": "medium", "reason": "process-local id cache; scale-out correctness"},
+    {"area": "PicController filesystem reads", "risk": "low-medium", "reason": "unguarded ReadAllBytes; local ~/Pics not cloud-friendly"}
+  ],
+  "tests": {"frameworks": [], "test_files": 0, "test_double_available": "CatalogServiceMock", "db_free_mode": "UseMockData=true"},
+  "outputs": {
+    "overview": "overview.md",
+    "unknowns": "unknowns.md",
+    "test_readiness": "test-readiness.md",
+    "architecture": "architecture.md",
+    "graph": "graphify-out/graph.json",
+    "graph_report": "graphify-out/GRAPH_REPORT.md",
+    "test_inventory": "test-inventory.json"
+  }
+}

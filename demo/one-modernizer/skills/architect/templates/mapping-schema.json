@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Spec-to-Target Mapping",
+  "description": "Maps every item from decompose spec.json to its target location in the architecture. Transform uses this to know which class/method/table to generate for each spec item.",
+  "type": "object",
+  "required": ["feature", "rules", "data_model", "flows", "errors"],
+  "properties": {
+    "feature": {
+      "type": "string"
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "spec_id",
+          "target_service",
+          "target_class",
+          "target_method"
+        ],
+        "properties": {
+          "spec_id": {
+            "type": "string",
+            "description": "BR-xxx from spec.json"
+          },
+          "target_service": { "type": "string" },
+          "target_class": { "type": "string" },
+          "target_method": { "type": "string" },
+          "layer": {
+            "type": "string",
+            "enum": [
+              "controller",
+              "service",
+              "domain",
+              "repository",
+              "validation",
+              "event"
+            ]
+          }
+        }
+      }
+    },
+    "data_model": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "spec_name",
+          "target_service",
+          "target_entity",
+          "target_table"
+        ],
+        "properties": {
+          "spec_name": {
+            "type": "string",
+            "description": "Structure name from spec.json data_model"
+          },
+          "target_service": { "type": "string" },
+          "target_entity": {
+            "type": "string",
+            "description": "Entity/model class name"
+          },
+          "target_table": {
+            "type": "string",
+            "description": "Database table name"
+          },
+          "migration": {
+            "type": "string",
+            "enum": ["CDC", "dual-write", "bulk-ETL", "event-sourcing", "new"]
+          }
+        }
+      }
+    },
+    "flows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["spec_id", "target_service", "target_handler"],
+        "properties": {
+          "spec_id": {
+            "type": "string",
+            "description": "FLOW-xxx from spec.json"
+          },
+          "target_service": { "type": "string" },
+          "target_endpoint": {
+            "type": "string",
+            "description": "HTTP method + path (e.g., POST /api/orders)"
+          },
+          "target_handler": {
+            "type": "string",
+            "description": "Class.method (e.g., OrderController.createOrder)"
+          },
+          "trigger_type": {
+            "type": "string",
+            "enum": ["http", "event", "schedule", "queue", "internal"]
+          }
+        }
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["spec_id", "target_exception"],
+        "properties": {
+          "spec_id": {
+            "type": "string",
+            "description": "ERR-xxx from spec.json"
+          },
+          "target_exception": {
+            "type": "string",
+            "description": "Exception class name"
+          },
+          "target_handler": {
+            "type": "string",
+            "description": "Handler class/method"
+          },
+          "http_status": { "type": "integer" },
+          "retry_policy": { "type": "string" }
+        }
+      }
+    },
+    "interfaces": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["spec_type", "spec_target", "target_component"],
+        "properties": {
+          "spec_type": { "type": "string" },
+          "spec_target": { "type": "string" },
+          "target_component": {
+            "type": "string",
+            "description": "Repository, client, adapter class"
+          },
+          "target_table": { "type": "string" },
+          "target_topic": { "type": "string" },
+          "target_url": { "type": "string" }
+        }
+      }
+    },
+    "test_cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["spec_id", "target_test_class", "target_test_method"],
+        "properties": {
+          "spec_id": {
+            "type": "string",
+            "description": "TC-xxx from spec.json"
+          },
+          "target_test_class": { "type": "string" },
+          "target_test_method": { "type": "string" },
+          "test_type": {
+            "type": "string",
+            "enum": ["unit", "integration", "e2e", "contract"]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,366 @@
+{
+  "feature": "catalog-item-management",
+  "total_tasks": 21,
+  "services": [
+    "catalog-service"
+  ],
+  "tasks": [
+    {
+      "id": "T-001",
+      "type": "entity",
+      "description": "Generate CatalogItem",
+      "target_file": "eShopModernized.Catalog/Models/CatalogItem.cs",
+      "spec_refs": [
+        "CatalogItem",
+        "BR-014",
+        "BR-001",
+        "BR-002",
+        "BR-003",
+        "BR-004",
+        "BR-005"
+      ],
+      "depends_on": [],
+      "service": "catalog-service",
+      "layer": "data",
+      "priority": 1
+    },
+    {
+      "id": "T-002",
+      "type": "entity",
+      "description": "Generate CatalogBrand",
+      "target_file": "eShopModernized.Catalog/Models/CatalogBrand.cs",
+      "spec_refs": [
+        "CatalogBrand"
+      ],
+      "depends_on": [],
+      "service": "catalog-service",
+      "layer": "data",
+      "priority": 1
+    },
+    {
+      "id": "T-003",
+      "type": "entity",
+      "description": "Generate CatalogType",
+      "target_file": "eShopModernized.Catalog/Models/CatalogType.cs",
+      "spec_refs": [
+        "CatalogType"
+      ],
+      "depends_on": [],
+      "service": "catalog-service",
+      "layer": "data",
+      "priority": 1
+    },
+    {
+      "id": "T-004",
+      "type": "dto",
+      "description": "Generate PaginatedItemsViewModel",
+      "target_file": "eShopModernized.Catalog/ViewModel/PaginatedItemsViewModel.cs",
+      "spec_refs": [
+        "PaginatedItemsViewModel",
+        "BR-009"
+      ],
+      "depends_on": [],
+      "service": "catalog-service",
+      "layer": "api",
+      "priority": 3
+    },
+    {
+      "id": "T-015",
+      "type": "middleware",
+      "description": "Generate GlobalExceptionHandlerMiddleware",
+      "target_file": "eShopModernized.Catalog/Middleware/GlobalExceptionHandlerMiddleware.cs",
+      "spec_refs": [
+        "ERR-004"
+      ],
+      "depends_on": [],
+      "service": "catalog-service",
+      "layer": "cross-cutting",
+      "priority": 4
+    },
+    {
+      "id": "T-017",
+      "type": "test",
+      "description": "Generate CatalogItemValidationTests",
+      "target_file": "eShopModernized.Catalog.Tests/CatalogItemValidationTests.cs",
+      "spec_refs": [
+        "TC-001",
+        "TC-003",
+        "TC-004",
+        "TC-005",
+        "TC-006",
+        "TC-007",
+        "TC-008",
+        "TC-014"
+      ],
+      "depends_on": [
+        "T-001"
+      ],
+      "service": "catalog-service",
+      "layer": "test",
+      "priority": 5
+    },
+    {
+      "id": "T-020",
+      "type": "test",
+      "description": "Generate PaginatedItemsViewModelTests",
+      "target_file": "eShopModernized.Catalog.Tests/PaginatedItemsViewModelTests.cs",
+      "spec_refs": [
+        "TC-013"
+      ],
+      "depends_on": [
+        "T-004"
+      ],
+      "service": "catalog-service",
+      "layer": "test",
+      "priority": 5
+    },
+    {
+      "id": "T-005",
+      "type": "config",
+      "description": "Generate CatalogItemConfig",
+      "target_file": "eShopModernized.Catalog/Models/Config/CatalogItemConfig.cs",
+      "spec_refs": [
+        "CatalogItem"
+      ],
+      "depends_on": [
+        "T-001"
+      ],
+      "service": "catalog-service",
+      "layer": "infrastructure",
+      "priority": 0
+    },
+    {
+      "id": "T-006",
+      "type": "config",
+      "description": "Generate CatalogBrandConfig",
+      "target_file": "eShopModernized.Catalog/Models/Config/CatalogBrandConfig.cs",
+      "spec_refs": [
+        "CatalogBrand"
+      ],
+      "depends_on": [
+        "T-002"
+      ],
+      "service": "catalog-service",
+      "layer": "infrastructure",
+      "priority": 0
+    },
+    {
+      "id": "T-007",
+      "type": "config",
+      "description": "Generate CatalogTypeConfig",
+      "target_file": "eShopModernized.Catalog/Models/Config/CatalogTypeConfig.cs",
+      "spec_refs": [
+        "CatalogType"
+      ],
+      "depends_on": [
+        "T-003"
+      ],
+      "service": "catalog-service",
+      "layer": "infrastructure",
+      "priority": 0
+    },
+    {
+      "id": "T-008",
+      "type": "config",
+      "description": "Generate PreconfiguredData",
+      "target_file": "eShopModernized.Catalog/Models/Infrastructure/PreconfiguredData.cs",
+      "spec_refs": [
+        "CatalogItem"
+      ],
+      "depends_on": [
+        "T-001",
+        "T-002",
+        "T-003"
+      ],
+      "service": "catalog-service",
+      "layer": "infrastructure",
+      "priority": 0
+    },
+    {
+      "id": "T-009",
+      "type": "config",
+      "description": "Generate CatalogDBContext",
+      "target_file": "eShopModernized.Catalog/Models/CatalogDBContext.cs",
+      "spec_refs": [
+        "CatalogItem",
+        "BR-016"
+      ],
+      "depends_on": [
+        "T-005",
+        "T-006",
+        "T-007"
+      ],
+      "service": "catalog-service",
+      "layer": "infrastructure",
+      "priority": 0
+    },
+    {
+      "id": "T-010",
+      "type": "repository",
+      "description": "Generate CatalogIdGenerator",
+      "target_file": "eShopModernized.Catalog/Models/Infrastructure/CatalogIdGenerator.cs",
+      "spec_refs": [
+        "BR-016"
+      ],
+      "depends_on": [
+        "T-009"
+      ],
+      "service": "catalog-service",
+      "layer": "data",
+      "priority": 1
+    },
+    {
+      "id": "T-011",
+      "type": "service",
+      "description": "Generate ICatalogService",
+      "target_file": "eShopModernized.Catalog/Services/ICatalogService.cs",
+      "spec_refs": [
+        "FLOW-002"
+      ],
+      "depends_on": [
+        "T-001",
+        "T-004"
+      ],
+      "service": "catalog-service",
+      "layer": "domain",
+      "priority": 2
+    },
+    {
+      "id": "T-012",
+      "type": "service",
+      "description": "Generate CatalogService",
+      "target_file": "eShopModernized.Catalog/Services/CatalogService.cs",
+      "spec_refs": [
+        "BR-008",
+        "FLOW-002",
+        "BR-011",
+        "BR-015",
+        "BR-017"
+      ],
+      "depends_on": [
+        "T-011",
+        "T-009",
+        "T-010"
+      ],
+      "service": "catalog-service",
+      "layer": "domain",
+      "priority": 2
+    },
+    {
+      "id": "T-013",
+      "type": "service",
+      "description": "Generate CatalogServiceMock",
+      "target_file": "eShopModernized.Catalog/Services/CatalogServiceMock.cs",
+      "spec_refs": [
+        "BR-008",
+        "BR-011",
+        "BR-015",
+        "BR-017"
+      ],
+      "depends_on": [
+        "T-011",
+        "T-008"
+      ],
+      "service": "catalog-service",
+      "layer": "domain",
+      "priority": 2
+    },
+    {
+      "id": "T-014",
+      "type": "controller",
+      "description": "Generate CatalogController",
+      "target_file": "eShopModernized.Catalog/Controllers/CatalogController.cs",
+      "spec_refs": [
+        "FLOW-001",
+        "BR-010",
+        "FLOW-002",
+        "BR-006",
+        "BR-007",
+        "ERR-001",
+        "ERR-002",
+        "FLOW-003",
+        "BR-012",
+        "BR-013",
+        "ERR-003",
+        "FLOW-004",
+        "FLOW-005",
+        "BR-017"
+      ],
+      "depends_on": [
+        "T-011",
+        "T-004"
+      ],
+      "service": "catalog-service",
+      "layer": "api",
+      "priority": 3
+    },
+    {
+      "id": "T-018",
+      "type": "test",
+      "description": "Generate CatalogServiceTests",
+      "target_file": "eShopModernized.Catalog.Tests/CatalogServiceTests.cs",
+      "spec_refs": [
+        "TC-002",
+        "TC-012",
+        "TC-015",
+        "TC-017"
+      ],
+      "depends_on": [
+        "T-012"
+      ],
+      "service": "catalog-service",
+      "layer": "test",
+      "priority": 5
+    },
+    {
+      "id": "T-019",
+      "type": "test",
+      "description": "Generate CatalogControllerTests",
+      "target_file": "eShopModernized.Catalog.Tests/CatalogControllerTests.cs",
+      "spec_refs": [
+        "TC-009",
+        "TC-010",
+        "TC-011",
+        "TC-018"
+      ],
+      "depends_on": [
+        "T-014"
+      ],
+      "service": "catalog-service",
+      "layer": "test",
+      "priority": 5
+    },
+    {
+      "id": "T-021",
+      "type": "test",
+      "description": "Generate CatalogIdGeneratorTests",
+      "target_file": "eShopModernized.Catalog.Tests/CatalogIdGeneratorTests.cs",
+      "spec_refs": [
+        "TC-016"
+      ],
+      "depends_on": [
+        "T-010"
+      ],
+      "service": "catalog-service",
+      "layer": "test",
+      "priority": 5
+    },
+    {
+      "id": "T-016",
+      "type": "config",
+      "description": "Generate Program",
+      "target_file": "eShopModernized.Catalog/Program.cs",
+      "spec_refs": [
+        "FLOW-001"
+      ],
+      "depends_on": [
+        "T-009",
+        "T-011",
+        "T-015"
+      ],
+      "service": "catalog-service",
+      "layer": "infrastructure",
+      "priority": 0
+    }
+  ]
+}

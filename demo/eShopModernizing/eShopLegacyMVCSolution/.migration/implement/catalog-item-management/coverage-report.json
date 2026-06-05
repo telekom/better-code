@@ -1,0 +1,42 @@
+{
+  "feature": "catalog-item-management",
+  "summary": {
+    "total_tasks": 21,
+    "completed": 21,
+    "failed": 0
+  },
+  "coverage": {
+    "rules": {
+      "covered": 17,
+      "total": 17,
+      "pct": 100.0
+    },
+    "flows": {
+      "covered": 5,
+      "total": 5,
+      "pct": 100.0
+    },
+    "tests": {
+      "covered": 18,
+      "total": 18,
+      "pct": 100.0
+    },
+    "data": {
+      "covered": 4,
+      "total": 4,
+      "pct": 100.0
+    },
+    "errors": {
+      "covered": 4,
+      "total": 4,
+      "pct": 100.0
+    }
+  },
+  "uncovered": {
+    "rules": [],
+    "flows": [],
+    "tests": [],
+    "data": [],
+    "errors": []
+  }
+}

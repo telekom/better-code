@@ -1,0 +1,24 @@
+@model CatalogItem
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <img src="@Model.PictureUri" alt="@Model.Name" width="120" />
+    <dl>
+        <dt>Name</dt><dd>@Model.Name</dd>
+        <dt>Description</dt><dd>@Model.Description</dd>
+        <dt>Price</dt><dd>@Model.Price.ToString("C")</dd>
+        <dt>Type</dt><dd>@Model.CatalogType?.Type</dd>
+        <dt>Brand</dt><dd>@Model.CatalogBrand?.Brand</dd>
+        <dt>Stock</dt><dd>@Model.AvailableStock</dd>
+        <dt>Restock</dt><dd>@Model.RestockThreshold</dd>
+        <dt>Max stock</dt><dd>@Model.MaxStockThreshold</dd>
+        <dt>On reorder</dt><dd>@Model.OnReorder</dd>
+    </dl>
+</div>
+
+<a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+<a asp-action="Index">Back to List</a>

@@ -1,0 +1,30 @@
+{
+  "edges": [],
+  "layers": [
+    {
+      "wave": 0,
+      "features": [
+        "application-platform",
+        "catalog-item-management",
+        "data-seeding-init",
+        "product-imagery",
+        "reference-data-brands-types"
+      ]
+    }
+  ],
+  "leaf_features": [
+    "application-platform",
+    "catalog-item-management",
+    "data-seeding-init",
+    "product-imagery",
+    "reference-data-brands-types"
+  ],
+  "root_features": [
+    "application-platform",
+    "catalog-item-management",
+    "data-seeding-init",
+    "product-imagery",
+    "reference-data-brands-types"
+  ],
+  "total_cross_feature_edges": 0
+}

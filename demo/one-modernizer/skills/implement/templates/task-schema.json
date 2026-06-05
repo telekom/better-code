@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Implementation Task List",
+  "description": "Ordered list of code generation tasks. Each task produces one file. Tasks execute sequentially respecting dependencies.",
+  "type": "object",
+  "required": ["feature", "tasks"],
+  "properties": {
+    "feature": { "type": "string" },
+    "total_tasks": { "type": "integer" },
+    "services": { "type": "array", "items": { "type": "string" } },
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "description",
+          "target_file",
+          "spec_refs",
+          "service",
+          "layer"
+        ],
+        "properties": {
+          "id": { "type": "string", "pattern": "^T-\\d{3}$" },
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity",
+              "repository",
+              "service",
+              "controller",
+              "dto",
+              "event",
+              "config",
+              "test",
+              "migration",
+              "infra",
+              "contract",
+              "exception",
+              "middleware"
+            ]
+          },
+          "description": { "type": "string" },
+          "target_file": {
+            "type": "string",
+            "description": "Relative path from project root"
+          },
+          "spec_refs": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "BR-xxx, FLOW-xxx, ERR-xxx, TC-xxx, or data model names"
+          },
+          "depends_on": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Task IDs that must complete before this one"
+          },
+          "service": { "type": "string" },
+          "layer": {
+            "type": "string",
+            "enum": [
+              "infrastructure",
+              "data",
+              "domain",
+              "api",
+              "cross-cutting",
+              "test",
+              "contract"
+            ]
+          },
+          "priority": {
+            "type": "integer",
+            "description": "Lower = earlier. Derived from layer order + dependencies."
+          }
+        }
+      }
+    }
+  }
+}

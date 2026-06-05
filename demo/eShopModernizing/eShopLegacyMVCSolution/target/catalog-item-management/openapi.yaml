@@ -1,0 +1,119 @@
+openapi: 3.0.3
+info:
+  title: eShopModernized Catalog — Catalog Item Management
+  version: "1.0"
+  description: >
+    Server-rendered ASP.NET Core MVC admin UI for catalog items. Endpoints return
+    HTML views (GET) or 302 redirects (POST). Documented for contract completeness;
+    this is not a JSON API.
+servers:
+  - url: https://localhost:8080
+paths:
+  /Catalog:
+    get:
+      summary: Paginated catalog listing (FLOW-001)
+      operationId: index
+      parameters:
+        - name: pageSize
+          in: query
+          schema: { type: integer, default: 10 }
+        - name: pageIndex
+          in: query
+          schema: { type: integer, default: 0 }
+      responses:
+        "200": { description: HTML listing page }
+  /Catalog/Details/{id}:
+    get:
+      summary: View item details (FLOW-002)
+      operationId: details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: HTML details page }
+        "400": { description: Missing id (BR-006/ERR-001) }
+        "404": { description: Item not found (BR-007/ERR-002) }
+  /Catalog/Create:
+    get:
+      summary: Create form
+      operationId: createForm
+      responses:
+        "200": { description: HTML create form }
+    post:
+      summary: Create item (FLOW-003)
+      operationId: create
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema: { $ref: '#/components/schemas/CatalogItem' }
+      responses:
+        "302": { description: Redirect to /Catalog on success }
+        "200": { description: Redisplayed form on validation failure (ERR-003) }
+  /Catalog/Edit/{id}:
+    get:
+      summary: Edit form
+      operationId: editForm
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: HTML edit form }
+        "400": { description: Missing id (BR-006) }
+        "404": { description: Item not found (BR-007) }
+    post:
+      summary: Update item (FLOW-004)
+      operationId: edit
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema: { $ref: '#/components/schemas/CatalogItem' }
+      responses:
+        "302": { description: Redirect to /Catalog on success }
+        "200": { description: Redisplayed form on validation failure (ERR-003) }
+  /Catalog/Delete/{id}:
+    get:
+      summary: Delete confirmation
+      operationId: deleteForm
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: HTML delete confirmation }
+        "400": { description: Missing id (BR-006) }
+        "404": { description: Item not found (BR-007) }
+    post:
+      summary: Delete item (FLOW-005)
+      operationId: delete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "302": { description: Redirect to /Catalog }
+        "404": { description: Item not found (BR-007) }
+components:
+  schemas:
+    CatalogItem:
+      type: object
+      required: [Name, Price, CatalogBrandId, CatalogTypeId]
+      properties:
+        Id: { type: integer }
+        Name: { type: string, maxLength: 50 }
+        Description: { type: string, nullable: true }
+        Price: { type: number, format: double, minimum: 0, maximum: 1000000 }
+        PictureFileName: { type: string, default: dummy.png }
+        CatalogBrandId: { type: integer }
+        CatalogTypeId: { type: integer }
+        AvailableStock: { type: integer, minimum: 0, maximum: 10000000 }
+        RestockThreshold: { type: integer, minimum: 0, maximum: 10000000 }
+        MaxStockThreshold: { type: integer, minimum: 0, maximum: 10000000 }
+        OnReorder: { type: boolean }

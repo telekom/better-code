@@ -1,0 +1,66 @@
+# GitLab CI for eShopModernized.Catalog (.NET 8)
+# Runs on GitLab runners with outbound network (unlike the sandboxed local container,
+# where NuGet restore failed with NU1301).
+
+stages:
+  - build
+  - test
+  - package
+
+variables:
+  # Cache NuGet inside the project dir so GitLab can cache it between runs.
+  NUGET_PACKAGES: "$CI_PROJECT_DIR/.nuget/packages"
+  DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "1"
+  # Directory containing the solution. Defaults to repo root for a standalone repo;
+  # overridden by the root .gitlab-ci.yml when this file is `include:`-d into a monorepo.
+  CATALOG_DIR: "."
+
+cache:
+  key: "$CI_COMMIT_REF_SLUG-nuget"
+  paths:
+    - .nuget/packages/
+
+# All catalog jobs run from the solution directory.
+default:
+  before_script:
+    - cd "$CATALOG_DIR"
+
+build:
+  stage: build
+  image: mcr.microsoft.com/dotnet/sdk:8.0
+  script:
+    - dotnet restore eShopModernized.Catalog.sln
+    - dotnet build eShopModernized.Catalog.sln -c Release --no-restore
+  artifacts:
+    paths:
+      - "**/bin/Release/"
+    expire_in: 1 hour
+
+test:
+  stage: test
+  image: mcr.microsoft.com/dotnet/sdk:8.0
+  script:
+    - dotnet restore eShopModernized.Catalog.sln
+    - dotnet test eShopModernized.Catalog.sln -c Release
+        --logger "junit;LogFilePath=$CI_PROJECT_DIR/test-results.xml"
+        --collect:"XPlat Code Coverage"
+  artifacts:
+    when: always
+    reports:
+      junit: test-results.xml
+    paths:
+      - "**/coverage.cobertura.xml"
+
+# Optional: build the runtime container image (needs Docker-in-Docker on the runner).
+package-image:
+  stage: package
+  image: docker:27
+  services:
+    - docker:27-dind
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  script:
+    - docker build -f eShopModernized.Catalog/Dockerfile -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" .
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
+    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
