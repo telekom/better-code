@@ -367,6 +367,22 @@
         pointer-events: none;
       }
 
+      .quote-only {
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .quote-only blockquote {
+        width: min(1160px, 100%);
+        margin: 0;
+        color: var(--text);
+        font-size: clamp(54px, 7vw, 112px);
+        font-weight: 850;
+        letter-spacing: 0;
+        line-height: 1.05;
+      }
+
       .ambient {
         position: absolute;
         inset: 0;
@@ -2296,7 +2312,7 @@
     </div>
 
     <div class="progress" id="progress"></div>
-    <div class="slide-counter" id="counter">01 / 26</div>
+    <div class="slide-counter" id="counter">01 / 27</div>
 
     <main class="deck" id="deck">
 <section class="slide active" data-slide="0">
@@ -2345,6 +2361,10 @@
           Methodology and frame are set; now we show how the technical agent
           harness makes this analysis repeatable.
         </aside>
+      </section>
+
+<section class="slide quote-only" data-slide="prompt-quote">
+        <blockquote>"Claude, migrate this legacy application into new modern one. Make no mistakes"</blockquote>
       </section>
 
 <section class="slide" data-slide="2">
@@ -3185,11 +3205,11 @@ auditable tool usage</pre>
       const progress = document.getElementById("progress");
       const fragmentState = new Array(slides.length).fill(0);
       const chapters = [
-        { label: "01 Frame", from: 1, to: 3 },
-        { label: "02 Context", from: 4, to: 7 },
-        { label: "03 Harness", from: 8, to: 15 },
-        { label: "04 Evidence", from: 16, to: 24 },
-        { label: "05 Takeaways", from: 25, to: 25 }
+        { label: "01 Frame", from: 1, to: 4 },
+        { label: "02 Context", from: 5, to: 8 },
+        { label: "03 Harness", from: 9, to: 16 },
+        { label: "04 Evidence", from: 17, to: 25 },
+        { label: "05 Takeaways", from: 26, to: 26 }
       ];
 
       slides.forEach((slide, index) => {
